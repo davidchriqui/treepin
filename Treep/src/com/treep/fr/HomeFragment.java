@@ -415,7 +415,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    			latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
 	    	      //Move the camera instantly to hamburg with a zoom of 15.
 	    			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15));
-	    			
 	    }
 	  };
     
