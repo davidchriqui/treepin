@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+   	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="?android:attr/actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+     
+
+	<com.google.android.gms.maps.MapView
+	
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/map" />
+	
+	  <TextView
+	    android:id="@+id/infobanner"
+	    android:background="@drawable/infobanner_bg"
+	    android:layout_width="match_parent"
+	    android:gravity="center"
+	    android:layout_height="wrap_content"
+	    android:textSize="18sp"
+	    android:textColor="#ffffff" />
+	  
+	  <TextView
+	    android:id="@+id/infobannercount"
+	    android:background="@drawable/infobanner_bg_green"
+	    android:layout_below="@id/infobanner"
+	    android:layout_width="match_parent"
+	    android:gravity="center"
+	    android:layout_height="wrap_content"
+	    android:textSize="18sp"
+	    android:textStyle="bold"
+	    android:textColor="#ffffff" />
+	  
+	  <TextView
+	    android:id="@+id/infobannerordered"
+	    android:background="@drawable/infobanner_corail_bg"
+	    android:layout_width="match_parent"
+	    android:gravity="center"
+	    android:layout_below="@id/infobannercount"
+	    android:layout_height="wrap_content"
+	    android:textSize="20sp"
+	    android:text="Recherche d'un driver \n Merci de patienter..."
+	    android:textColor="#ffffff"
+	    android:textStyle="bold" />
+	  
+	  
+	  
+	  <Button
+        android:id="@+id/mypositionbutton"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_below="@id/infobannerordered"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="5sp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/mypositionbutton" />
+	  
+	  
+	  
+ 	  	  <LinearLayout
+		      android:id="@+id/waitOrderLayout"
+		      android:layout_width="wrap_content"
+		      android:layout_height="wrap_content"
+		      android:layout_centerHorizontal="true"
+			  android:layout_alignParentBottom="true"
+			  android:layout_marginBottom="25dp"
+		      android:background="@drawable/editaddress_bg"
+		      android:orientation="vertical" >
+	    
+		    	  <TextView
+				    android:id="@+id/tvDepTitle"
+				   	android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textSize="14sp"
+				    android:textColor="#444444"
+				    android:layout_marginTop="5dp"
+				    android:layout_marginLeft="5dp"
+			  		android:layout_marginRight="5dp"
+				    android:singleLine="false"
+				    android:textStyle="bold"
+	      			android:layout_centerHorizontal="true"
+	      			android:layout_gravity="center_horizontal"
+			        android:gravity="center"
+				    android:text="Départ" />
+		    	  
+		    	  <TextView
+				    android:id="@+id/tvAddressDep"
+				   	android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textSize="16sp"
+				    android:layout_marginLeft="10dp"
+			    	android:layout_marginRight="10dp"
+				    android:textColor="#444444"
+	      			android:layout_centerHorizontal="true"
+	      			android:layout_gravity="center_horizontal"
+			        android:gravity="center"
+				    android:singleLine="false"
+				    android:text="" />
+		    	  
+		    	  <TextView
+				    android:id="@+id/tvDestTitle"
+				   	android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textSize="14sp"
+				    android:layout_marginLeft="5dp"
+			  		android:layout_marginRight="5dp"
+				    android:textColor="#444444"
+			        android:gravity="center"
+				    android:singleLine="true"
+	      			android:layout_centerHorizontal="true"
+	      			android:layout_gravity="center_horizontal"
+				    android:textStyle="bold"
+				    android:text="Destination" />
+		    	  
+		    	  <TextView
+				    android:id="@+id/tvAddressDest"
+				   	android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textSize="16sp"
+				    android:layout_marginLeft="10dp"
+					android:layout_marginRight="10dp"
+					android:layout_gravity="center_horizontal"
+				    android:textColor="#444444"
+	      			android:layout_centerHorizontal="true"
+			        android:gravity="center"
+				    android:singleLine="false"
+				    android:text="" />
+		    	  
+		    	  <Button
+			        android:id="@+id/cancelOrderButton"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentBottom="true"
+			        android:layout_gravity="center_horizontal"
+			        android:background="@drawable/button_no"
+			        android:text="   Annuler   "
+			        android:gravity="center"
+	      			android:layout_centerHorizontal="true"
+			        android:textColor="@color/corail"
+			        android:textSize="14sp"
+			        android:layout_marginBottom="5dp"
+			        android:textStyle="bold" />
+		      
+		    
+	      </LinearLayout>
+				
+	</RelativeLayout>
+ 

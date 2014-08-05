@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        Base application theme for API 11+. This theme completely replaces
+        AppBaseTheme from res/values/styles.xml on API 11+ devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+        <!-- API 11 theme customizations can go here. -->
+    </style>
+
+    <style name="FullscreenTheme" parent="android:Theme.Holo">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:calendarViewStyle">@style/Widget.CalendarView.Custom</item>
+
+    </style>
+    
+    <style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">
+	    <item name="android:unfocusedMonthDateColor">#999999</item>
+	    <item name="android:firstDayOfWeek">2</item>
+	    <item name="android:selectedWeekBackgroundColor">#66ff5310</item>
+	    <item name="android:focusedMonthDateColor">#000000</item>
+	    
+	    <item name="android:weekDayTextAppearance">@style/TextAppearance</item>
+	    <item name="android:dateTextAppearance">@style/TextAppearance</item>
+	    	     
+	</style>
+
+    
+    <style name="TextAppearance">
+		<item name="android:textColor">#ff5310</item>
+		<item name="android:textSize">16sp</item>
+	</style>
+	
+   
+
+   
+
+    <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
+        <item name="android:background">#ffffff</item>
+    </style>
+
+</resources>

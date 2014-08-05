@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?android:attr/actionBarSize">
+    
+    
+  
+    
+    
+    <TextView
+	        android:id="@+id/tvUsername"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:textColor="#000000"
+	        android:textSize="30dp"
+	        android:textStyle="bold" 
+	        />
+	
+	    <ImageView
+	        android:id="@+id/ivProfilePic"
+	        android:layout_width="150sp"
+	        android:layout_height="150sp"
+		    android:layout_centerHorizontal="true"
+		    android:gravity="center"
+	        android:layout_below="@id/tvUsername" />
+	    
+   		 <RelativeLayout
+		    android:id="@+id/infoslayout"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="5sp"
+		    android:layout_below="@id/ivProfilePic">
+    
+	        <LinearLayout 
+		        android:id="@+id/maillayout"
+				android:orientation="horizontal"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+    			android:layout_centerHorizontal="true"
+				android:showDividers="middle" >
+		    
+	        <ImageView
+		        android:id="@+id/ic_mail"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="5sp"
+		        android:src="@drawable/ic_mail" />
+	
+		    <Button
+		        android:id="@+id/bMail"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerHorizontal="true"
+		        android:background="@drawable/edittextstroke"
+		        android:layout_marginLeft="30sp"
+		        android:textColor="#000000"
+		        android:textSize="20dp" />
+	        
+	        </LinearLayout>
+	    
+	    
+	    
+	    
+	    <LinearLayout 
+	        android:id="@+id/tellayout"
+			android:orientation="horizontal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+	        android:layout_below="@id/maillayout"
+	        android:layout_marginTop="5sp"
+			android:layout_centerHorizontal="true"
+			android:showDividers="middle" >
+		    
+	        <ImageView
+		        android:id="@+id/ic_tel"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="5sp"
+		        android:src="@drawable/ic_tel" />
+	
+		    <Button
+		        android:id="@+id/bTel"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerHorizontal="true"
+		        android:background="@drawable/edittextstroke"
+		        
+		        android:layout_marginLeft="30sp"
+		        android:textColor="#000000"
+		        android:textSize="20dp" />
+	        
+	        </LinearLayout>
+
+	    
+	    </RelativeLayout>
+
+    
+     	<LinearLayout 
+	        android:id="@+id/ratingInfo"
+			android:orientation="horizontal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+	        android:layout_below="@id/infoslayout"
+	        android:layout_marginTop="5sp"
+	        android:background="@drawable/rounded_bg_grey"
+			android:padding="4dip"
+			android:layout_centerHorizontal="true"
+	        android:gravity="center"
+			 >
+		     <LinearLayout 
+		        android:id="@+id/Ratinglayout"
+				android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				 >
+			    
+		        
+			    <TextView
+			        android:id="@+id/tvRatingTitle"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="Ma note treep"
+			        android:textColor="#444444"
+			        android:textSize="30dp" />
+			    
+			    <ImageView
+			        android:id="@+id/ivRating"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="5sp"
+			        android:src="@drawable/rating5"/>
+		      </LinearLayout>
+		      
+		     <TextView
+			        android:id="@+id/tvTreepNb"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="5sp"
+			        android:textColor="#000000"
+			        android:layout_marginLeft="5sp"
+			        android:textSize="22dp"
+			        android:textStyle="bold" />
+		        
+		</LinearLayout>
+	        
+	    <LinearLayout 
+	        android:id="@+id/becomelayout"
+			android:orientation="horizontal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:divider="?android:dividerHorizontal"
+	        android:layout_below="@id/ratingInfo"
+			android:layout_centerHorizontal="true"
+			android:showDividers="middle" >
+		    
+	        <ImageView
+		        android:id="@+id/ic_become"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/bookicon" />
+	
+		    <Button
+		        android:id="@+id/bBecomeDriver"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentTop="true"
+		        android:layout_centerHorizontal="true"
+		        android:text="Devenir conducteur"
+		        android:layout_marginLeft="30sp"
+		        android:background="#FFFFFFFF"
+		        android:textColor="@drawable/myprofilebutton"
+		        android:textSize="20dp"
+		        android:textStyle="bold" />
+	        
+	        </LinearLayout>
+	       
+	     <RelativeLayout
+			    
+			    android:id="@+id/disconnectButtonLayout"
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:layout_alignParentBottom="true"
+	        	android:layout_below="@id/becomelayout"
+			    android:layout_marginBottom="6dip"
+			    android:layout_centerHorizontal="true"
+			    >     
+		     <Button
+		        android:id="@+id/bDisconnect"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerHorizontal="true"
+		        android:layout_gravity="center_horizontal"
+		        android:background="@drawable/requesttreepbuttoncorail"
+		        android:text="  Me déconnecter  "
+		        android:layout_marginTop="5sp"
+			    android:layout_alignParentBottom="true"
+		        android:textColor="#ffffff"
+		        android:textSize="36sp" />
+        </RelativeLayout>
+        
+	 
+</RelativeLayout>
+
+</ScrollView>

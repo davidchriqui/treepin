@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillAfter="true"
+    android:interpolator="@android:anim/linear_interpolator" >
+
+    <!-- Use startOffset to give delay between animations -->
+
+
+    <!-- Move -->
+    <translate
+        android:duration="30000"
+        android:fillAfter="true"
+        android:fromXDelta="-10%p"
+        android:startOffset="0"
+        android:toXDelta="110%p"
+        android:repeatCount="infinite" />
+    <alpha android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:duration="600"
+        android:repeatMode="reverse"
+        android:repeatCount="infinite"/>
+
+</set>

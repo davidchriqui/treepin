@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#EEEEEE"
+    android:layout_marginTop="?android:attr/actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/tvBecomeDriverTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Devenir conducteur treep"
+        android:textColor="#333333"
+        android:layout_marginTop="5sp"
+        android:textSize="27sp"
+        android:textStyle="bold" />
+    
+     
+     <LinearLayout
+        android:id="@+id/dividerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    android:layout_below="@id/tvBecomeDriverTitle"
+        android:orientation="horizontal" >
+       
+          
+	    <ImageView
+		     android:id="@+id/tvDividerRight"
+		     android:layout_width="match_parent"
+		     android:layout_height="1dp"
+		     android:layout_weight=".3"
+		     android:layout_marginLeft="20sp"
+		     android:layout_marginRight="10sp"
+		     android:layout_marginTop="10sp"
+		     android:background="#333333" />
+	     
+	     <ImageView
+	         android:id="@+id/ivCar"
+	         android:layout_width="20dip"
+	         android:layout_height="20dip"
+	         android:orientation="vertical"
+   			 android:layout_gravity="center_vertical"
+	         android:src="@drawable/pindriverlocation" />
+	     
+	     <ImageView
+		     android:id="@+id/tvDividerRight"
+		     android:layout_width="match_parent"
+		     android:layout_height="1dp"
+		     android:layout_weight=".3"
+		     android:layout_marginLeft="10sp"
+		     android:layout_marginRight="20sp"
+		     android:layout_marginTop="10sp"
+		     android:paddingTop="15dp"
+		     android:background="#333333" />
+	     
+	     </LinearLayout>
+     
+     <TextView
+        android:id="@+id/tvBecomeDriverSubTitle2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/dividerLayout"
+        android:gravity="center"
+        android:padding="5sp"
+        android:text="Pour devenir conducteur treep, veuillez remplir les informations ci-dessous :"
+        android:textColor="#000000"
+        android:textSize="25sp" />
+    
+    
+    <LinearLayout
+        android:id="@+id/formLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:layout_below="@id/tvBecomeDriverSubTitle2"
+        android:layout_marginTop="5sp"
+        android:weightSum="1" >
+
+        <EditText
+            android:id="@+id/etLicenceYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+	    	android:hint="Année obtention du permis"
+	    	android:textAllCaps="true"
+	    	android:inputType="number"
+		    android:textColorHint="#BBBBBB"
+		    android:textSize="28sp"
+		    android:textColor="#000000"
+		    android:textStyle="bold"
+		    android:layout_marginTop="5sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/rounded_edittext"
+             />
+        
+		<EditText
+            android:id="@+id/etCarModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+	    	android:hint="Modèle de ma voiture"
+	    	android:textAllCaps="true"
+	    	android:inputType="text"
+		    android:textColorHint="#BBBBBB"
+		    android:textSize="28sp"
+		    android:textColor="#000000"
+		    android:textStyle="bold"
+		    android:layout_marginTop="5sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/rounded_edittext"
+             />
+		
+		<EditText
+            android:id="@+id/etCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+	    	android:hint="Ma ville"
+	    	android:textAllCaps="true"
+	    	android:inputType="text"
+		    android:textColorHint="#BBBBBB"
+		    android:textSize="28sp"
+		    android:textColor="#000000"
+		    android:textStyle="bold"
+		    android:layout_marginTop="5sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/rounded_edittext"
+             />
+        
+    </LinearLayout>
+    
+	
+	
+	
+	
+	<Button
+        android:id="@+id/confirmButton"
+        android:layout_below="@id/formLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="6dip"
+        android:background="@drawable/requesttreepbutton"
+        android:text="   Confirmer   "
+        android:textColor="#ffffff"
+        android:textSize="36sp" />
+
+
+	
+</RelativeLayout>

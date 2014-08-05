@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ffffff"
+    android:id="@+id/treepcalendarlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?android:attr/actionBarSize" >
+
+    <TextView
+        android:id="@+id/tvplustard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="Vous souhaitez réserver un treep pour plus tard"
+        android:textColor="#999999"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/tvplustardsubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/tvplustard"
+        android:gravity="center"
+        android:text="Merci d'indiquer la date et l'heure"
+        android:textColor="#555555"
+        android:textSize="23sp"
+        android:textStyle="bold" />
+    
+	<RelativeLayout 
+	    android:background="#EEEEEE"
+	    android:id="@+id/calendarViewLayout"
+	    android:layout_below="@id/tvplustardsubtitle"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >	
+	    
+	    
+		<CalendarView
+		    android:id="@+id/calendarView"
+		    android:layout_width="match_parent"
+		    android:layout_height="230dp"
+	     />
+		
+	</RelativeLayout>
+	
+	
+	<RelativeLayout 
+	    android:background="@drawable/datepicker_bg"
+	    android:id="@+id/timePickerLayout"
+	    android:layout_below="@id/calendarViewLayout"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    	 >
+
+	    		<TimePicker
+	    		    android:id="@+id/timePicker"
+	    		    android:layout_width="wrap_content"
+	    		    android:layout_height="110sp"
+	    		     />
+	    		
+	</RelativeLayout>
+	
+	
+	<Button
+        android:id="@+id/nextbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="6dip"
+        android:background="@drawable/requesttreepbutton"
+        android:text="          Suivant          "
+        android:textColor="#ffffff"
+        android:textSize="36sp" />
+
+
+	
+</RelativeLayout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollViewLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:layout_marginTop="?android:attr/actionBarSize"
+	android:background="#ffffff"
+    > 
+	
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:background="#ffffff">
+	
+	    
+	    <TextView
+	       android:id="@+id/tvUsername"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:layout_alignParentTop="true"
+	       android:layout_centerHorizontal="true"
+	       android:layout_gravity="center_horizontal"
+	       android:textColor="#000000"
+	       android:textSize="30dp"
+	       />
+		
+	    <ImageView
+	       android:id="@+id/ivProfilePic"
+	       android:layout_width="match_parent"
+	       android:layout_height="170sp" />
+	    
+	    <TextView
+	       android:id="@+id/tvPriceToPayTitle"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:layout_centerHorizontal="true"
+	       android:layout_gravity="center_horizontal"
+	       android:textColor="#000000"
+	       android:textStyle="bold"
+	       android:textSize="25dp"
+	       android:text="Prix à payer :"
+	       />
+	    
+	    <TextView
+	       android:id="@+id/tvPriceToPay"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:layout_centerHorizontal="true"
+	       android:layout_gravity="center_horizontal"
+	       android:textColor="#ff0000"
+	       android:textStyle="bold"
+	       android:textSize="25dp"
+	       />
+	    
+	    
+	    <TextView
+	       android:id="@+id/tvRatingTitle"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:layout_centerHorizontal="true"
+	       android:textColor="#555555"
+	       android:text="Notez votre driver"
+	       android:layout_gravity="center_horizontal"
+	       android:textSize="30dp"
+	       />
+	    
+	    <RatingBar
+	        android:id="@+id/ratingBar"
+	        android:layout_marginTop="3dp"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_width="wrap_content"
+	        android:numStars="5"
+	        android:stepSize="0.5"
+	        android:layout_height="70dip"
+	        style="@style/CustomRatingBar" />
+	    
+	    <TextView
+	       android:id="@+id/tvRating"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:layout_centerHorizontal="true"
+	       android:layout_gravity="center_horizontal"
+	       android:textColor="#000000"
+	       android:layout_marginBottom="3dp"
+	       android:textStyle="bold"
+	       android:textSize="26dp"
+	       />
+	    
+	    
+	    <Button
+	        android:id="@+id/confirmRating"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="     Confirmer     "
+	        android:textColor="#ffffff"
+	        android:layout_centerHorizontal="true"
+	        android:gravity="center"
+			android:layout_marginLeft="5dip" 
+			android:layout_marginRight="5dip"
+			android:textSize="36sp"
+	        android:textStyle="bold"
+	        android:background="@drawable/requesttreepbuttoncorail"
+	        android:shadowColor="@color/darkcorail"
+		    android:shadowRadius="0.1"
+		    android:shadowDx="10"
+		    android:shadowDy="10" />
+	
+	</LinearLayout>
+</ScrollView>

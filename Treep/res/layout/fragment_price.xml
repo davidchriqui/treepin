@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff" >
+
+    <TextView
+        android:id="@+id/tvquelprix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:text="Quel prix souhaitez-vous payer ?"
+        android:textColor="#999999"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/prixsuggere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvquelprix"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:textColor="#555555"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:text="Prix suggéré pour le treep choisi : 15€" />
+
+
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/prixsuggere"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ff5310"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:text="15€"
+        android:layout_marginTop="30dp"
+         />
+    
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:max="100" 
+         android:layout_below="@id/price"
+        android:layout_marginTop="20dp" />
+    
+    
+    
+    <TextView
+        android:id="@+id/tvMinPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/seekbar"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:textColor="#ff5555"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+    
+    
+    
+    
+    
+   	<Button
+        android:id="@+id/confirmedbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="6dip"
+        android:background="@drawable/requesttreepbutton"
+        android:text="  Confirmer la réservation  "
+        android:textColor="#ffffff"
+        android:textSize="35sp" />
+
+</RelativeLayout>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?android:attr/actionBarSize"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    
+    <TextView
+        android:id="@+id/tvTreeperTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#666666"
+        android:textSize="21sp"
+        android:textStyle="bold" />
+    
+    <ImageView
+        android:id="@+id/ivTreeperProfilePic"
+        android:layout_width="match_parent"
+	      android:layout_height="170sp"  />
+    
+    <TextView
+        android:id="@+id/tvDepTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:text="Adresse départ : "
+        android:textColor="#666666"
+        android:textSize="16sp"/>
+    
+    <TextView
+        android:id="@+id/tvDep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#666666"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+    
+    <TextView
+        android:id="@+id/tvDestTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:text="Adresse destination : "
+        android:textColor="#666666"
+        android:textSize="16sp"/>
+    
+    <TextView
+        android:id="@+id/tvDest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#666666"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+    
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#47b132"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+
+
+
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/requesttreepbutton"
+            android:text="  OK  "
+	        android:layout_centerHorizontal="true"
+	        android:layout_gravity="center"
+            android:textColor="#ffffff"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+
+</LinearLayout>

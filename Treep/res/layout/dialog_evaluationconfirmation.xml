@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+	    <ImageView
+	        android:id="@+id/ivWarning"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_gravity="center"
+	        android:layout_marginTop="10dp"
+	        android:src="@drawable/merci"
+	        android:gravity="center" />
+    
+    <TextView
+        android:id="@+id/tvMerciTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Votre évaluation a bien été prise en compte."
+        android:textColor="#666666"
+        android:textSize="21sp"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/tvMerci"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Nous espérons que vous avez apprécié l'expérience."
+        android:textColor="#666666"
+        android:textSize="16sp"/>
+    
+    <TextView
+        android:id="@+id/tvMerci1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#666666"
+        android:text="À bientôt pour votre prochain treep !"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_yes"
+            android:text="  OK  "
+	        android:layout_centerHorizontal="true"
+	        android:layout_gravity="center"
+            android:textColor="#ffffff"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+
+</LinearLayout>

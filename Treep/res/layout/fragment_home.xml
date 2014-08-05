@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout 
+  	 xmlns:android="http://schemas.android.com/apk/res/android"
+  	 android:layout_marginTop="?android:attr/actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+     
+
+	<com.google.android.gms.maps.MapView
+	
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/map" />
+	
+	<TextView
+	    android:id="@+id/infobannermodedriver"
+	    android:background="@drawable/infobanner_corail_bg"
+	    android:layout_width="match_parent"
+	    android:gravity="center"
+	    android:layout_height="wrap_content"
+	    android:textSize="20sp"
+	    android:textColor="#ffffff"
+	    android:shadowColor="@color/darkcorail"
+	    android:shadowRadius="0.1"
+	    android:shadowDx="10"
+	    android:shadowDy="10"
+	    android:text="Mode driver activé"
+	    android:textStyle="bold"  />
+	
+	  <TextView
+	    android:id="@+id/infobanner"
+	    android:background="@drawable/infobanner_bg"
+	    android:layout_width="match_parent"
+	    android:layout_below="@id/infobannermodedriver"
+	    android:gravity="center"
+	    android:layout_height="wrap_content"
+	    android:textSize="18sp"
+	    android:textColor="#ffffff" />
+	  
+	  
+	  
+	  <TextView
+	    android:id="@+id/tvPrice"
+        android:layout_below="@id/infobanner"
+	    android:background="@drawable/infobanner_bg_green"
+	    android:layout_width="match_parent"
+	    android:gravity="center"
+	    android:layout_centerHorizontal="true"
+	    android:layout_height="wrap_content"
+	    android:textSize="18sp"
+	    android:textColor="#ffffff"
+	    android:textStyle="bold" />
+	  
+	  <LinearLayout
+	      android:id="@+id/addressLayout"
+	      android:layout_width="match_parent"
+	      android:layout_height="wrap_content"
+	      android:layout_centerHorizontal="true"
+		  android:layout_alignParentBottom="true"
+	      android:background="@drawable/editaddress_bg"
+	      android:orientation="vertical" >
+
+	    	  <AutoCompleteTextView
+			    android:id="@+id/acAddressdep"
+			    android:gravity="center"
+			   	android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textSize="22sp"
+			    android:textColor="#444444"
+			    android:background="@drawable/edittextstroke"
+			    android:layout_gravity="center_horizontal"
+			    android:layout_marginLeft="8dp"
+			    android:layout_marginRight="8dp"
+			    android:layout_marginBottom="4dp"
+			    android:layout_marginTop="5dp"
+			    android:singleLine="true"
+			    android:completionThreshold="5"
+			    android:dropDownWidth="match_parent"
+			    android:dropDownHorizontalOffset="20sp"
+			    android:hint="Départ : Lieu actuel" />
+	    	  
+    	  	  <AutoCompleteTextView
+				android:id="@+id/acAddressdest"
+			    android:gravity="center"
+			   	android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textSize="22sp"
+			    android:textColor="#444444"
+			    android:background="@drawable/edittextstroke"
+			    android:layout_gravity="center_horizontal"
+			    android:layout_marginLeft="8dp"
+			    android:layout_marginRight="8dp"
+			    android:layout_marginBottom="4dp"
+			    android:singleLine="true"
+			    android:completionThreshold="5"
+			    android:dropDownWidth="match_parent"
+			    android:dropDownHorizontalOffset="20sp"
+			    android:hint="Adresse de destination" />
+		      
+		    <Button
+		        android:id="@+id/requesttreepbutton"
+		        android:layout_width="300dp"
+		        android:layout_height="65dp"
+		        android:layout_centerHorizontal="true"
+		        android:layout_gravity="center_horizontal"
+		        android:layout_marginBottom="5dip"
+		        android:background="@drawable/button_driverrequest" />
+	      
+	      </LinearLayout>
+	      
+	  
+	  
+	  <Button
+        android:id="@+id/mypositionbutton"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_below="@id/tvPrice"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="5sp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/mypositionbutton" />
+	  
+	  <Button
+        android:id="@+id/pinkModeButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/mypositionbutton"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="5sp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/pinkmodeoff" />
+	  
+	  
+				
+	</RelativeLayout>
+
+   
+	   
+        
+      
+ 

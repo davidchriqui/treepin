@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff">
+ 
+   <TextView
+        android:id="@+id/tvVerificationCodeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Code de vérification"
+        android:textColor="#666666"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+   
+   <TextView
+        android:id="@+id/tvVerificationCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Veuillez entrer le code reçu par SMS"
+        android:textColor="#666666"
+        android:textSize="20sp" />
+   
+   <EditText
+	    android:id="@+id/etKeyCode"
+	   	android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:gravity="center_horizontal"
+	    android:textSize="25sp"
+	    android:textColor="#444444"
+	    android:singleLine="true"
+	    android:inputType="phone"
+	    android:hint="XXXXXX"
+	    android:textColorHint="#BBBBBB"
+	    android:textStyle="bold" />
+   
+   <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/requesttreepbutton"
+        android:text="   OK   "
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
+ 
+</LinearLayout>

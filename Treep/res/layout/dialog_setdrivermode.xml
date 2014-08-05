@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvDriverModeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="10sp"
+        android:text="Mode Driver"
+        android:textColor="#666666"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/tvDriverModeStateTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:text="Pour activer le mode driver, veuillez cocher les cases suivantes :"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:textColor="#555555"
+        android:text="Je certifie que mon permis de conduire est valide," />
+    
+    <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:textColor="#555555"
+        android:text="Je certifie que je ne suis pas sous l'emprise de l'alcool," />
+    
+    <CheckBox
+        android:id="@+id/checkBox3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:textColor="#555555"
+        android:text="Je certifie que je ne suis pas sous l'emprise de la drogue, de médicaments ou de toute autre substance légale ou illégale altérant mes facultés ou ma capacité à réagir." />
+    
+    <Button
+         android:id="@+id/confirmButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
+         android:background="@drawable/button_yes"
+         android:text="  Activer Mode Driver  "
+         android:layout_marginTop="10sp"
+         android:layout_marginBottom="5sp"
+         android:textColor="#ffffff"
+         android:textSize="26sp"
+         android:textStyle="bold"
+         />
+    
+    <Button
+         android:id="@+id/cancelButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
+         android:text="  Annuler  "
+         android:layout_marginTop="10sp"
+         android:layout_marginBottom="5sp"
+         android:background="@drawable/button_no"
+         android:textColor="@color/corail"
+         android:textSize="26sp"
+         android:textStyle="bold"
+         />
+
+</LinearLayout>

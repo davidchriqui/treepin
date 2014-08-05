@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.treep.fr.SlidingUpPanelLayout
+   xmlns:sothree="http://schemas.android.com/apk/res-auto"
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/sliding_layout"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:layout_marginTop="?android:attr/actionBarSize"
+   android:layout_gravity="bottom"
+   sothree:collapsedHeight="68dip"
+   sothree:shadowHeight="4dp"
+   android:clickable="true">
+
+		
+<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+     
+
+	<com.google.android.gms.maps.MapView
+	
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/map" />
+	
+	  <TextView
+	    android:id="@+id/infobanner"
+	    android:background="@drawable/infobanner_bg"
+	    android:layout_width="match_parent"
+	    android:gravity="center"
+	    android:layout_height="wrap_content"
+	    android:textSize="18sp"
+	    android:textColor="#ffffff" />
+	      
+	  
+	  <Button
+        android:id="@+id/mypositionbutton"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_below="@id/infobanner"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="5sp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/mypositionbutton" />
+	  
+	</RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/slidingPanelLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="false">
+
+           <RelativeLayout
+               android:id="@+id/spHeadLayout"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:background="@drawable/list_selector"
+			    android:orientation="horizontal"
+			    android:padding="8dip" >
+			 
+			    <!--  ListRow Left sied Thumbnail image -->
+			    <LinearLayout android:id="@+id/spHeadThumbnail"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:padding="3dip"
+			        android:layout_alignParentLeft="true"
+			        android:background="@drawable/image_bg"
+			        android:layout_marginRight="5dip">
+			 
+			        <ImageView
+			            android:id="@+id/spHeadListImage"
+			            android:layout_width="50dip"
+			            android:layout_height="50dip"
+			            android:layout_gravity="center" />
+			 
+			    </LinearLayout>
+			 
+			    <!-- username-->
+			    <TextView
+			        android:id="@+id/spHeadUsername"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignTop="@+id/spHeadThumbnail"
+			        android:layout_toRightOf="@+id/spHeadThumbnail"
+			        android:text=""
+			        android:textColor="#040404"
+			        android:typeface="sans"
+			        android:textSize="20dip"
+			        android:textStyle="bold"/>
+			    
+			    
+			
+			 
+			    <!-- carmodel -->
+			    <TextView
+			        android:id="@+id/spHeadCarModel"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_below="@id/spHeadUsername"
+			        android:textColor="#343434"
+			        android:textSize="12dip"
+			        android:layout_marginTop="1dip"
+			        android:layout_toRightOf="@+id/spHeadThumbnail"
+			        android:text="" />
+			    
+			    
+			    
+			    
+			 
+			    <!-- Rightend list_rating -->
+			    <ImageView
+			        android:id="@+id/spHeadRating"
+			        android:layout_width="100sp"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentRight="true"
+			        android:layout_alignTop="@id/spHeadUsername"
+			        android:gravity="right"
+			        android:text=""
+			        android:src="@drawable/rating4"
+			        android:layout_marginRight="5dip"
+			       	/>
+			 
+			     <!-- Rightend Arrow -->
+			     <ImageView android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:src="@drawable/arrow"
+			        android:layout_alignParentRight="true"
+			        android:layout_centerVertical="true"/>
+			 
+			</RelativeLayout>
+
+            
+	    <RelativeLayout
+		    
+		    android:id="@+id/spOrderedInfosLayout"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    >
+			    <RelativeLayout
+				    android:id="@+id/spOrderedDriverPictureLayout"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerHorizontal="true"
+				    >
+				
+			         <LinearLayout 
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal"
+				    	android:layout_centerHorizontal="true">
+			
+					    
+					    <ImageView
+					        android:id="@+id/spOrderedDriverProfilePic"
+					        android:layout_width="wrap_content"
+					        android:layout_height="140sp"
+					        android:layout_weight="50" 
+					        android:src="@drawable/profilepicture"/>
+					    
+					    <ImageView
+					        android:id="@+id/spOrderedDriverCarPic"
+					        android:layout_width="wrap_content"
+					        android:layout_height="140sp"
+					        android:layout_weight="50"
+					        android:src="@drawable/profilepicture" />
+				    
+				    </LinearLayout>
+				  
+			
+			    </RelativeLayout>
+				    
+			        
+			     <LinearLayout 
+			        android:id="@+id/spOrderedPricelayout"
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="5sp"
+			        android:layout_below="@id/spOrderedDriverPictureLayout"
+			        android:layout_centerHorizontal="true"
+			        android:padding="5dp"
+			        android:background="@drawable/rounded_bg_grey"
+					 >
+				    
+			         <TextView
+				        android:id="@+id/tvspOrderedDistanceTime"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:gravity="center"
+				        android:textColor="#ff0000"
+				        android:textStyle="italic|bold"
+				        android:textSize="25dp" />
+			         
+			      </LinearLayout>
+			        
+			     
+			     <LinearLayout 
+			        android:id="@+id/spOrderedAddressLayout"
+					android:orientation="vertical"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+			        android:layout_below="@id/spOrderedPricelayout"
+			        android:layout_marginTop="5sp"
+			        android:layout_marginLeft="10sp"
+					 >
+				    
+			        
+				    <TextView
+				        android:id="@+id/tvspOrderedDepTitle"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="à l'adresse suivante : "
+				        android:layout_gravity="center"
+				        android:textColor="#444444"
+				        android:textSize="16dp" />
+				    
+				    <TextView
+				        android:id="@+id/tvspOrderedAddressDep"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="0"
+				        android:textColor="#444444"
+				        android:layout_gravity="center"
+				        android:textStyle="bold"
+				        android:textSize="18dp" />
+				    <TextView
+				        android:id="@+id/tvspOrderedDestTitle"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_gravity="center"
+				        android:text="Destination : "
+				        android:textColor="#444444"
+				        android:textSize="16dp" />
+				    
+				    <TextView
+				        android:id="@+id/tvspOrderedAddressDest"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text=""
+				        android:layout_gravity="center"
+				        android:textStyle="bold"
+				        android:textColor="#444444"
+				        android:textSize="18dp" />
+				    
+			        
+			      </LinearLayout>
+			        
+			        
+					 
+					 <LinearLayout 
+				        android:id="@+id/spOrderedButtonLayout"
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+				        android:layout_alignParentBottom="true"
+				        android:layout_below="@id/spOrderedAddressLayout"
+				        android:gravity="center"
+						 >
+				    
+			        
+					    <Button
+					        android:id="@+id/spCallOrderedDriverButton"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:layout_alignParentBottom="true"
+					        android:background="@drawable/requesttreepbutton"
+					        android:text="   Appeler   "
+					        android:textColor="#ffffff"
+					        android:layout_marginTop="5dip"
+							android:layout_marginLeft="5dip" 
+							android:layout_marginRight="5dip"
+					        android:textSize="35sp"
+					        android:textStyle="bold" />
+					    
+					    <Button
+					        android:id="@+id/spCancelOrderedDriverButton"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:layout_alignParentBottom="true"
+					        android:background="@drawable/cancelbutton"
+					        android:text=" Annuler "
+					        android:textColor="#ffffff"
+					        android:layout_marginTop="5dip"
+							android:layout_marginLeft="5dip" 
+							android:layout_marginRight="5dip"
+					        android:textSize="30sp"
+					        android:textStyle="bold" />
+							    
+				  
+				    
+				    </LinearLayout>
+				    
+				</RelativeLayout>	
+           
+           
+        </LinearLayout>
+        
+        </com.treep.fr.SlidingUpPanelLayout>
+ 

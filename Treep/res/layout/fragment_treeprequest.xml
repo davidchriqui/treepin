@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="?android:attr/actionBarSize"
+    android:background="#ffffff" >
+    
+    
+    <TextView
+		    android:id="@+id/tvInfobanner"
+		    android:background="#777777"
+		    android:layout_width="match_parent"
+		    android:gravity="center"
+		    android:layout_height="wrap_content"
+		    android:textSize="25sp"
+		    android:textColor="#ffffff"
+		    android:text="Temps restant : 20 sec"
+		    android:textStyle="bold"  />
+  
+    
+     <RelativeLayout
+	   android:id="@+id/userProfileLayout"
+	   android:layout_width="wrap_content"
+	   android:layout_height="wrap_content"
+	   android:layout_marginTop="5sp"
+	   android:layout_centerHorizontal="true"
+	   android:paddingBottom="15dp"
+	   android:layout_below="@id/tvInfobanner"
+	   android:background="@drawable/grey_bg_frame"
+	   >
+		       
+			    <ImageView
+			        android:id="@+id/ivUserProfilePicture"
+			        android:layout_width="80sp"
+			        android:layout_height="80sp"
+			        android:layout_marginLeft="8sp"
+			        android:layout_marginTop="8sp"
+			        android:layout_gravity="center"
+			        android:src="@drawable/nopicture" />
+			    
+			    <TextView
+			        android:id="@+id/tvUsername"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center"
+			        android:layout_toRightOf="@id/ivUserProfilePicture"
+			        android:text="User N."
+			        android:layout_marginTop="8sp"
+			        android:layout_marginLeft="5sp"
+			        android:textColor="#111111"
+			        android:textSize="23dp"
+			        android:textStyle="bold" />
+			    
+		         
+		         <TextView
+			        android:id="@+id/tvPositionCompany"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="5sp"
+			        android:layout_toRightOf="@id/ivUserProfilePicture"
+			        android:layout_below="@id/tvUsername"
+			        android:text="Consultant chez SFR"
+			        android:textColor="#666666"
+			        android:textSize="16dp" />
+		         
+		         <ImageView
+			        android:id="@+id/ivUserRating"
+			        android:layout_width="100dp"
+			        android:layout_height="30sp"
+			        android:layout_alignParentRight="true"
+			        android:layout_marginTop="8sp"
+			        android:layout_marginRight="5sp"
+			        android:layout_marginLeft="5sp"
+			        android:src="@drawable/rating5"/>
+		      
+		    	
+		    	<ImageView
+			        android:id="@+id/ivLinkedIn"
+			        android:layout_width="30dp"
+			        android:layout_height="30dp"
+			        android:layout_toRightOf="@id/ivUserProfilePicture"
+			        android:layout_below="@id/tvPositionCompany"
+			        android:layout_marginLeft="5sp"
+			        android:layout_marginTop="2sp"
+			        android:layout_marginBottom="10sp"
+			        android:src="@drawable/linkedin"/>
+		    	
+		    	<TextView
+			        android:id="@+id/tvLinkedInConnections"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_toRightOf="@id/ivLinkedIn"
+			        android:layout_below="@id/tvPositionCompany"
+			        android:layout_marginLeft="5sp"
+			        android:text="500+ Connections"
+			        android:layout_marginTop="4sp"
+			        android:textColor="#000000"
+			        android:textSize="18dp"
+			        android:textStyle="bold" />
+		    	
+	 </RelativeLayout>
+	
+	      
+   <ScrollView 
+	    android:id="@+id/scrollViewLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@id/userProfileLayout"
+	    > 
+		    <LinearLayout
+	             android:layout_width="match_parent"
+	             android:layout_height="wrap_content"
+	             android:layout_centerHorizontal="true"
+	             android:gravity="center_horizontal"
+	             android:orientation="vertical" >
+			   
+	        
+	       
+			 	<LinearLayout
+			      android:id="@+id/addressLayout"
+			      android:layout_width="wrap_content"
+			      android:layout_height="wrap_content"
+			      android:layout_centerHorizontal="true"
+				  android:layout_alignParentBottom="true"
+				  android:layout_marginBottom="10dp"
+				  android:layout_marginTop="10dp"
+			      android:orientation="vertical" >
+		    
+			 	    <LinearLayout
+				      android:id="@+id/detourLayout"
+				      android:layout_width="wrap_content"
+				      android:layout_height="wrap_content"
+				      android:layout_centerHorizontal="true"
+	      			  android:layout_gravity="center_horizontal"
+					  android:layout_alignParentBottom="true"
+					  android:paddingTop="15dp"
+					  android:paddingBottom="15dp"
+					  android:paddingRight="10dp"
+					  android:paddingLeft="10dp"
+				      android:background="@drawable/dotted_frame"
+				      android:orientation="vertical" >
+				 	    
+				 	    
+				 	    <TextView
+						    android:id="@+id/tvDetour"
+						   	android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:textSize="20sp"
+						    android:textColor="@color/corail"
+						    android:singleLine="false"
+						    android:text="Détour : moins de 9 min"
+			      			android:layout_centerHorizontal="true"
+			      			android:layout_gravity="center_horizontal"
+					        android:gravity="center"/>
+			 	    
+			 	    </LinearLayout>
+			    	  <TextView
+					    android:id="@+id/tvDepTitle"
+					   	android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:textSize="12sp"
+					    android:textColor="#444444"
+					    android:layout_marginTop="5dp"
+					    android:layout_marginLeft="5dp"
+				  		android:layout_marginRight="5dp"
+					    android:singleLine="false"
+					    android:textStyle="bold"
+				        android:gravity="center"
+					    android:text="Départ" />
+			    	  
+			    	  <TextView
+					    android:id="@+id/tvAddressDep"
+					   	android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:textSize="14sp"
+					    android:layout_marginLeft="10dp"
+				    	android:layout_marginRight="10dp"
+					    android:textColor="#444444"
+				        android:gravity="center"
+					    android:singleLine="false"
+					    android:text="" />
+			    	  
+			    	  <TextView
+					    android:id="@+id/tvDestTitle"
+					   	android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:textSize="12sp"
+					    android:layout_marginLeft="5dp"
+				  		android:layout_marginRight="5dp"
+					    android:textColor="#444444"
+				        android:gravity="center"
+					    android:singleLine="true"
+					    android:textStyle="bold"
+					    android:text="Destination" />
+			    	  
+			    	  <TextView
+					    android:id="@+id/tvAddressDest"
+					   	android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:textSize="14sp"
+					    android:layout_marginLeft="10dp"
+						android:layout_marginRight="10dp"
+					    android:textColor="#444444"
+				        android:gravity="center"
+					    android:singleLine="false"
+					    android:text="" />
+			    	  
+			    	  <Button
+			            android:id="@+id/buttonItinerary"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_marginBottom="10dp"
+			            android:layout_marginTop="10dp"
+			            android:layout_alignParentBottom="true"
+			            android:background="@drawable/buttonitinerary"
+			            android:layout_below="@id/fbFriendLayout"
+			            android:layout_marginLeft="5dp"
+						android:layout_marginRight="5dp"
+				        android:layout_centerHorizontal="true"
+				        android:layout_gravity="center"/>   
+			      
+				        
+			    
+		      </LinearLayout>
+	        </LinearLayout>   
+	 </ScrollView>
+	 
+   <LinearLayout
+	   android:id="@+id/buttonLayout"
+	   android:layout_width="wrap_content"
+	   android:layout_height="wrap_content"
+	   android:layout_marginTop="5sp"
+	   android:layout_centerHorizontal="true"
+	   android:layout_alignParentBottom="true"
+	   android:orientation="horizontal"
+	   android:layout_marginBottom="5dp"
+	   >
+		    <Button
+	            android:id="@+id/buttonRefuse"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom="10dp"
+	            android:layout_marginTop="10dp"
+	            android:background="@drawable/cross"
+				android:layout_marginRight="15dp"
+		        android:layout_centerHorizontal="true"
+		        android:layout_gravity="center"/>  
+	      
+		    <Button
+	            android:id="@+id/buttonAccept"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom="10dp"
+	            android:layout_marginTop="10dp"
+	            android:background="@drawable/checkbox"
+	            android:layout_marginLeft="15dp"
+		        android:layout_centerHorizontal="true"
+		        android:layout_gravity="center"/>  
+	</LinearLayout>
+</RelativeLayout>

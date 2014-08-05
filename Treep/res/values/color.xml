@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="list_item_title">#333333</color>
+    <color name="list_background">@color/interface_background</color>
+    <color name="interface_background">#ffffff</color>
+    <color name="list_background_pressed">#ff8150</color>
+    <color name="list_divider">#999999</color>
+    <color name="counter_text_bg">#626262</color>
+    <color name="counter_text_color">#c5c4c4</color>
+    <color name="requesttreepbutton_bg">#68c87d</color>
+    <color name="requesttreepbutton_bg_pressed">#4e995e</color>
+    <color name="requesttreepbuttoncorail_bg">#ff3e11</color>
+    <color name="requesttreepbuttoncorail_bg_pressed">#8e1b0c</color>
+    <color name="cancelbutton_bg">#de5252</color>
+    <color name="cancelbutton_bg_pressed">#a93e3e</color>
+    <color name="red">#ff0000</color>
+    <color name="transparent">#00000000</color>
+    <color name="itinerary">#43a9ff</color>
+    <color name="corail">#ff2c11</color>
+    <color name="darkcorail">#cc240e</color>
+    <color name="white">#ffffff</color>
+    
+    
+</resources>
+
+

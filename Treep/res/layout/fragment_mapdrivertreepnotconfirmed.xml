@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>		
+<RelativeLayout 
+  	xmlns:android="http://schemas.android.com/apk/res/android"
+   	android:layout_marginTop="?android:attr/actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+     
+
+	<com.google.android.gms.maps.MapView
+	
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/map" />
+	
+	  <TextView
+	    android:id="@+id/infobanner"
+	    android:background="@drawable/infobanner_bg"
+	    android:layout_width="match_parent"
+	    android:gravity="center"
+	    android:layout_height="wrap_content"
+	    android:textSize="18sp"
+	    android:textColor="#ffffff" />
+	  
+	      
+	  
+	  <Button
+        android:id="@+id/mypositionbutton"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_below="@id/infobanner"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="5sp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/mypositionbutton" />
+	  
+	    
+	    
+	    
+			
+	    
+	    
+	    <LinearLayout
+			android:id="@+id/idleDriverLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			android:layout_marginBottom="10sp"
+			android:layout_gravity="center_horizontal"
+			android:orientation="vertical" >
+    	  	 
+    	  	 
+    	  	  
+		    <LinearLayout
+				android:id="@+id/idleDriverLayoutTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentBottom="true"
+				android:layout_centerHorizontal="true"
+				android:layout_gravity="center_horizontal"
+				android:orientation="vertical" >
+		 
+				
+		        <TextView
+				    android:id="@+id/tvtreepDriverResponseSentCount"
+				   	android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textSize="20sp"
+				    android:textColor="#444444"
+				    android:layout_gravity="center_horizontal"
+					android:layout_centerHorizontal="true"
+				    android:background="@drawable/ordernow_layout_bg"
+				    android:singleLine="false"
+				    android:text="" />
+			        
+		        <Button
+			        android:id="@+id/treepListButton"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentBottom="true"
+			        android:layout_centerHorizontal="true"
+			        android:layout_gravity="center_horizontal"
+			        android:layout_marginBottom="6dip"
+			        android:background="@drawable/requesttreepbuttoncorail"
+			        android:text=" Liste des treeps "
+			        android:textColor="#ffffff"
+			        android:textSize="33sp" />
+	
+			</LinearLayout>
+	      </LinearLayout>
+	    
+	    
+			
+				
+	</RelativeLayout>
+
+ 

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ 
+    <string name="app_name">treep</string>
+    <string name="app_version_code">5</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+    <string name="fbwarning">Nous ne posterons rien sur Facebook\n sans votre accord.</string>
+	<string name="cgu">Conditions d\'utilisation</string>
+	<string name="help">Aide</string>
+	<string name="warningaddressdest">"Veuillez indiquer une adresse de destination valide"</string>
+	<string name="warningaddressdep">"Veuillez indiquer une adresse de depart valide, ou laissez vide pour indiquer votre position actuelle"</string>
+    <string name="treepResponseListEmpty">treep vous recherche un conducteur\.\.\.</string>
+    <string name="responseListEmpty">Vous n\'avez aucune réservation de treep en cours.</string>
+    <string name="myTreeperListEmpty">Vous n\'avez effectué aucun treep.</string>
+    <string name="httpTimeOut">Problème de connexion. Veuillez réessayer plus tard.</string>
+    
+   
+    
+    <string name="login">Login</string>
+    <string name="instructions">Login to create a link to fetch account data</string>
+    <string name="logout">Log out</string>
+    <string name="app_id">717543918274179</string>
+    
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item >Home</item>
+        <item >Mon profil</item>
+        <item >Mes treeps</item>
+        <item >Hotline</item>
+        <item >Aide</item>
+        <item >Mode Driver</item>
+    </string-array>
+    
+    
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_subtitles">
+        <item >Réservez votre Treep.</item>
+        <item >Vos infos personnelles.</item>
+        <item >Vos trajets déjà effectués.</item>
+        <item >Disponible à toute heure.</item>
+        <item >Comment ça marche ?</item>
+        <item >Drive safe !</item>
+    </string-array>
+     
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/bookicon</item>
+        <item>@drawable/ic_myprofile</item>
+        <item>@drawable/ic_fav</item>
+        <item>@drawable/ic_hotline</item>
+        <item>@drawable/ic_help</item>
+        <item>@drawable/drivermodeon</item>
+        <item>@drawable/drivermodeoff</item>
+    </array>
+     
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+    
+    
+    <!-- Ice breaker items -->
+    <string-array name="icebreaker_items">
+        <item>2 vérités, 1 mensonge. Dis 3 phrases à propos de toi à ton conducteur. A lui/elle de deviner lequel est le mensonge :)</item>
+		<item>Tu te transformes en légume : tu choisis d\'être lequel?</item>
+		<item>Tu peux te téléporter dans ton film préféré! Lequel est-il? Tu y joues quel rôle?</item>
+		<item>Si tu pouvais rencontrer un personnage célèbre décédé, tu choisirais qui ?</item>
+		<item>Quels sont tes 5 plats préférés ?</item>
+		<item>Si tu pouvais changer ton prénom, tu choisirais lequel ? Pourquoi ?</item>
+		<item>Quels sont les 5 objets que tu possèdes et dont tu ne pourrais pas te passer ?</item>
+		<item>Quel objet que tu ne possèdes pas encore voudrais-tu avoir ?</item>
+		<item>Quel événement t’as le plus marqué dans ta vie cette semaine ?</item>
+		<item>Quelle est la chose la plus folle que tu aies  faite dans ta vie ?</item>
+		<item>Quel est le plus beau jour de ta vie ? Pourquoi ?</item>
+		<item>Si tu pouvais changer une chose à propos de toi, ce serait quoi ?</item>
+		<item>Si tu pouvais changer une chose à propos de toi, ce serait quoi ?</item>
+		<item>Quel est ton signe astrologique? En quoi il influence ta personnalité?</item>
+		<item>Ce soir, c\'est un diner presque parfait chez toi ! Tu nous prépares quoi?</item>
+		<item>Quelle est LA phrase que tu détestes le plus entendre?</item>
+		<item>Quelle est ta plus grosse phobie? Raconte a ton conducteur/treeper une histoire montrant vraiment à quel point tu as peur.</item>
+		<item>La star c\'est toi ! Chante à ton treeper/conducteur un extrait de la chanson que tu as dans la tête en ce moment.</item>
+		<item>3 mots, pas de geste : tu as 2 min pour faire deviner à ton treeper/conducteur le mot "choucroute"</item>
+		<item>3 mots, pas de geste : tu as 2 min pour faire deviner à ton treeper/conducteur le mot "chocolat"</item>
+		<item>Jusqu\'où es tu prêt à aller pour une vie supplémentaire dans Candy Crush?</item>
+		<item>Quel est le sport que tu pratiques ? Raconte ta meilleur expérience en le pratiquant.</item>
+		<item>Tu es plutôt clubber/clubbeuse ou bar détente ?</item>
+		<item>Tu es plutôt Game of Thrones ou How I met You Mother?</item>
+        <item >Si tu te réveilles demain matin dans la peau d’un animal, lequel tu choisirais et pourquoi ?</item>
+        <item >Si tu pouvais être dans le film de ton choix, quel serait-il et quel rôle choisirais-tu de jouer ?</item>
+        <item >Si tu pouvais rencontrer un personnage célèbre décédé, tu choisirais qui ?</item>
+        <item >Quels sont tes 5 plats préférés ?</item>
+        <item >Si tu pouvais changer ton prénom, tu choisirais lequel ? Pourquoi ?</item>
+        <item >Quels sont les 5 objets que tu possèdes et dont tu ne pourrais pas te passer ?</item>
+        <item >Quel objet que tu ne possède pas encore voudrais-tu avoir ?</item>
+        <item >Quel événement t’as le plus marqué dans ta vie cette semaine ?</item>
+        <item >Quelle est la chose la plus folle que tu aies jamais faite dans ta vie ?</item>
+        <item >Quel est le plus beau jour de ta vie ? Pourquoi ?</item>
+        <item >Si tu pouvais changer une chose à propos de toi, ce serait quoi ?</item>
+        <item >Tu es coincée dans une île déserte et tu peux faire venir une personne. Qui choisis-tu? Pourquoi?</item>
+        <item >Lorsque tu étais petit/petite  tu voulais devenir quoi?</item>
+    </string-array>
+ 
+</resources>

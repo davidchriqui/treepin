@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/corail"
+    android:layout_marginTop="?android:attr/actionBarSize"
+    > 
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Nous avons besoin des informations suivantes pour activer le mode Driver : "
+        android:textColor="#ffffff"
+        android:layout_marginTop="10sp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+    
+    
+    <LinearLayout
+        android:id="@+id/brandLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/tvTitle"
+        android:layout_marginTop="10sp"
+        android:weightSum="1" >
+
+        <TextView
+            android:id="@+id/tvCarBrandTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+            android:textColor="#ffffff"
+	        android:textSize="20sp"
+            android:text="Marque du véhicule"
+		    android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etCarBrand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+	    	android:hint="Renault, Nissan, Peugeot, etc"
+		    android:textColorHint="#BBBBBB"
+		    android:textSize="22sp"
+		    android:inputType="text"
+		    android:textColor="#000000"
+		    android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_edittext"
+             />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/modelLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/tvTitle"
+        android:layout_marginTop="10sp"
+        android:weightSum="1" >
+
+        <TextView
+            android:id="@+id/tvCarModelTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+            android:textColor="#ffffff"
+	        android:textSize="20sp"
+            android:text="Modèle du véhicule"
+		    android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etCarModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+	    	android:hint="Clio, Micra, 206, etc"
+		    android:textColorHint="#BBBBBB"
+		    android:textSize="22sp"
+		    android:inputType="text"
+		    android:textColor="#000000"
+		    android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_edittext"
+             />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/colorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/tvTitle"
+        android:layout_marginTop="10sp"
+        android:weightSum="1" >
+
+        <TextView
+            android:id="@+id/tvCarColorTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+            android:textColor="#ffffff"
+	        android:textSize="20sp"
+            android:text="Couleur du véhicule"
+		    android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etCarColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+	    	android:hint="Grise, Rouge, Noire, etc"
+		    android:textColorHint="#BBBBBB"
+		    android:textSize="22sp"
+		    android:inputType="text"
+		    android:textColor="#000000"
+		    android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_edittext"
+             />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/seatLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/tvTitle"
+        android:layout_marginTop="10sp"
+        android:weightSum="1" >
+
+        <TextView
+            android:id="@+id/tvCarSeatTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+            android:textColor="#ffffff"
+	        android:textSize="20sp"
+            android:text="Nombre de places passagers"
+		    android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etCarSeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+	    	android:hint="1, 2, 3 ou 4"
+		    android:textColorHint="#BBBBBB"
+		    android:textSize="22sp"
+		    android:inputType="number"
+		    android:textColor="#000000"
+		    android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_edittext"
+             />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/driverInfoCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:text="Je certifie être en possession d'un permis de conduire et d'une assurance en cours de validité (voir les CGU)" />
+    
+		<Button
+		    android:id="@+id/saveButton"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="20sp"
+		    android:background="@drawable/white_corail_button"
+		    android:gravity="center_horizontal|center_vertical"
+		    android:text="  Activer Mode Driver  "
+		    android:textColor="@color/corail"
+		    android:textSize="27sp"
+		    android:textStyle="bold" />
+
+</LinearLayout>
+
+</ScrollView>

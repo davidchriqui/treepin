@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/corail"
+    android:layout_marginTop="?android:attr/actionBarSize"
+    > 
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    
+    
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Pour utiliser le mode driver vous devez nous envoyer les scans ou photos des documents suivants : "
+        android:textColor="#ffffff"
+        android:layout_marginTop="10sp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="left"
+        android:text="- Permis de conduire, "
+        android:textColor="#ffffff"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="10sp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="left"
+        android:text="- Assurance, "
+        android:textColor="#ffffff"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="10sp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+    
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="left"
+        android:text="- Carte grise. "
+        android:textColor="#ffffff"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="10sp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="left"
+        android:text="à l'adresse suivante :"
+        android:textColor="#ffffff"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="10sp"
+        android:textSize="20sp" />
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="driver@treep.fr"
+        android:textColor="#ffffff"
+        android:layout_marginTop="10sp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+    
+   	 <ImageView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="20sp"
+		    android:src="@drawable/pindriverlocation" />
+    
+    
+		<Button
+		    android:id="@+id/saveButton"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="20sp"
+		    android:background="@drawable/white_corail_button"
+		    android:gravity="center_horizontal|center_vertical"
+		    android:text="  Retour  "
+		    android:textColor="@color/corail"
+		    android:textSize="27sp"
+		    android:textStyle="bold" />
+
+</LinearLayout>
+
+</ScrollView>

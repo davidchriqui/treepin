@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="horizontal"
+     >
+ 
+    <!--  ListRow Left sied Thumbnail image -->
+    <ImageView
+         android:id="@+id/thumbpic"
+         android:layout_width="20dip"
+         android:layout_height="20dip"
+         android:layout_gravity="center"
+         android:src="@drawable/profilepicture" />
+ 
+    
+    <LinearLayout android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignTop="@+id/thumbpic"
+        android:layout_toRightOf="@+id/thumbpic"
+        android:layout_marginRight="5dip">
+ 
+    <!-- username-->
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Firstname L."
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textSize="10dip"
+        android:layout_marginRight="3dip"
+        android:textStyle="bold"/>
+    
+    <ImageView
+        android:id="@+id/list_rating"
+        android:layout_width="50sp"
+        android:layout_height="30sp"
+        android:layout_marginRight="3dip"
+        android:src="@drawable/rating4"
+       	/>
+    
+    </LinearLayout>
+
+ 
+ 
+</RelativeLayout>

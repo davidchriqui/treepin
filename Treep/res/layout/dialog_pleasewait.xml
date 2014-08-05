@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:padding="10dp"
+    android:orientation="horizontal" >
+    
+    <ImageView
+        android:id="@+id/ivRefresh"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_refreshbig" />
+    
+    <TextView
+        android:id="@+id/tvPleaseWait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fbconnect"
+        android:layout_gravity="center_vertical"
+        android:text="Chargement... Veuillez patienter"
+        android:textColor="#000000" />
+
+</LinearLayout>

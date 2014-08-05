@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	      android:layout_width="match_parent"
+	      android:layout_height="match_parent"
+	      android:layout_marginTop="?android:attr/actionBarSize">
+	      
+	    <TextView
+		    android:id="@+id/title"
+		    android:layout_width="match_parent"
+		    android:gravity="center"
+		    android:layout_marginTop="20dp"
+		    android:layout_height="wrap_content"
+		    android:textSize="25sp"
+		    android:text="Nous vous recherchons un treeper..."
+		    android:textColor="@color/corail"
+		    android:textStyle="bold" />
+	    
+	    
+	    <RelativeLayout
+	      android:id="@+id/refreshBigLayout"
+	      android:layout_width="match_parent"
+	      android:layout_height="match_parent"
+	      android:layout_centerInParent="true">
+		  
+	        <ImageView
+		          android:id="@+id/ring"
+		          android:layout_width="190dp"
+		          android:layout_height="190dp"
+		          android:layout_centerInParent="true"
+		          android:background="@drawable/ring_corail"
+		          android:gravity="center" />
+		      <ImageView
+		          android:id="@+id/refreshBig"
+		          android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"
+		          android:layout_gravity="center"
+		          android:layout_centerInParent="true"
+		          android:background="@drawable/ic_refreshbig" />
+      	</RelativeLayout>
+      	
+	    <Button
+	        android:id="@+id/cancelOrderButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_gravity="center_horizontal"
+	        android:background="@drawable/button_no"
+	        android:text="   Annuler   "
+	        android:gravity="center"
+     		android:layout_centerHorizontal="true"
+	        android:textColor="@color/corail"
+	        android:textSize="20sp"
+	        android:layout_marginBottom="10dp"
+	        android:textStyle="bold" />
+
+     </RelativeLayout>
