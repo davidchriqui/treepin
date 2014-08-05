@@ -28,19 +28,5 @@ public class EmptyList extends Fragment {
 	 
 			return v;
 				
-	}
-	        
-				
-	
-		
-		
-	
-	
-
-	
-
-	
-	
-
- 
+	} 
 }
