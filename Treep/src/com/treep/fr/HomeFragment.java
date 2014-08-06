@@ -44,11 +44,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager.BadTokenException;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -61,6 +65,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -88,13 +93,13 @@ public class HomeFragment extends Fragment implements LocationListener {
     URL url;
     
     private Marker myMarker;
- 	
- 	private LinearLayout addressLayout;
+    private LinearLayout addressDepLayout;
+ 	private LinearLayout addressDestLayout;
  	private AutoCompleteTextView acAddressdep;
  	private String addressDep;
  	private String addressDest;
  	private AutoCompleteTextView acAddressdest;
- 	private boolean departIsOk=false;
+ 	static boolean departIsOk=false;
  	private boolean destIsOk=false;
  	
  	private boolean nightHour = false;
@@ -166,14 +171,21 @@ public class HomeFragment extends Fragment implements LocationListener {
  	}
  	
 	
- 	private Button requesttreepbutton;
+ 	private Button buttonRequestDep;
+ 	private Button buttonRequestDest;
+ 	private Button buttonBackToDep;
+ 	
+ 	private Animation layoutSlideOutAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_out_layout_toptobottom);
+ 	
+	 
+ 	private Animation layoutSlideInAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_in_layout_bottomtotop);
  	
  	
-    //OnClickListener for the "Request a Treep" button
-    private OnClickListener clickListenerRequestTreepButton = new View.OnClickListener() {
+ 	//OnClickListener for the "Request a Treep" button
+    private OnClickListener clickListenerRequestTreepDepButton = new View.OnClickListener() {
 	    @Override
 	    public void onClick(View v) {
-	    	if(acAddressdep.getText().toString().length() == 0 && addressDep == null ){
+	    	if(acAddressdep.getText().toString().length() == 0){
 		    	
 	    		acAddressdep.setTextColor(0xff444444);
 	    		acAddressdep.setHintTextColor(0xff4cc3ef);
@@ -181,13 +193,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    		addressDep = "Ma position actuelle";
 	    		departIsOk = true;
     		}
-	    	else if(acAddressdep.getText().toString().length() == 0 && addressDep != null){
-	    		acAddressdep.setTextColor(0xff444444);
-	    		acAddressdep.setHintTextColor(0xff4cc3ef);
-	    		//acAddressdep.setBackgroundColor(0x00000000);
-	    		addressDep = "Ma position actuelle";
-	    		departIsOk = true;
-	    	}
 	    	else if(acAddressdep.getText().toString().length() != 0 && addressDep == null){
 	    		departIsOk = false;
 	    		acAddressdep.setTypeface(null,Typeface.BOLD);
@@ -211,6 +216,57 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    			departIsOk=true;
 	    		}
 	    	}
+	    	if(departIsOk){
+				MainActivity.initposition = 0;
+	    		
+	    		//hideSoftKeyboard(getActivity());
+				layoutSlideOutAnim.setAnimationListener(new Animation.AnimationListener(){
+				    @Override
+				    public void onAnimationStart(Animation arg0) {
+				    }           
+				    @Override
+				    public void onAnimationRepeat(Animation arg0) {
+				    }           
+				    @Override
+				    public void onAnimationEnd(Animation arg0) {
+				    	addressDepLayout.clearAnimation();
+				    }
+				});
+				layoutSlideOutAnim.setAnimationListener(new Animation.AnimationListener(){
+				    @Override
+				    public void onAnimationStart(Animation arg0) {
+				    }           
+				    @Override
+				    public void onAnimationRepeat(Animation arg0) {
+				    }           
+				    @Override
+				    public void onAnimationEnd(Animation arg0) {
+				    	addressDestLayout.clearAnimation();
+				    }
+				});
+				addressDestLayout.setVisibility(View.VISIBLE);
+				 addressDepLayout.startAnimation(layoutSlideOutAnim);
+				 
+				 addressDestLayout.startAnimation(layoutSlideInAnim);
+	    	}
+	    }
+	  };
+	  
+	//OnClickListener for the "Request a Treep" button
+    private OnClickListener clickListenerRequestBackToDepButton = new View.OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+	    	addressDestLayout.startAnimation(layoutSlideOutAnim);
+		 	addressDepLayout.startAnimation(layoutSlideInAnim);
+		 	addressDestLayout.setVisibility(View.GONE);
+		 	
+	    }
+	  };
+ 	
+    //OnClickListener for the "Request a Treep" button
+    private OnClickListener clickListenerRequestTreepDestButton = new View.OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
 	    	if(acAddressdest.getText().toString().length() == 0 && addressDest == null ){
 	    		destIsOk = false;
 	    		acAddressdest.setTypeface(null,Typeface.BOLD);
@@ -272,9 +328,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    	}
 	    }
 	  };
- 	
-
-	  
+		  
 	  private TextWatcher textWatcherDep = new TextWatcher() {
 
 		    @Override
@@ -411,10 +465,14 @@ public class HomeFragment extends Fragment implements LocationListener {
     	
 	    @Override
 	    public void onClick(View v) {
-	                // Creating a LatLng object for the current location
-	    			latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
-	    	      //Move the camera instantly to hamburg with a zoom of 15.
-	    			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15));
+            // Creating a LatLng object for the current location
+			latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
+	      //Move the camera instantly to hamburg with a zoom of 15.
+			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
+			mMap.animateCamera(cameraUpdate);
+			//mMap.moveCamera(cameraUpdate);
+			 //Move the camera instantly to my position with a zoom of 15.
+			
 	    			
 	    }
 	  };
@@ -576,13 +634,16 @@ public class HomeFragment extends Fragment implements LocationListener {
 				}
 				tvPrice = (TextView) v.findViewById(R.id.tvPrice);
 				tvPrice.setVisibility(View.GONE);
-				addressLayout = (LinearLayout)v.findViewById(R.id.addressLayout);
+				addressDepLayout = (LinearLayout)v.findViewById(R.id.addressDepLayout);
+				addressDestLayout = (LinearLayout)v.findViewById(R.id.addressDestLayout);
+				addressDestLayout.setVisibility(View.GONE);
 				
 				if(!MainActivity.CheckInternet(ApplicationContextProvider.getContext())){
 					
 					pinkModeButton.setVisibility(View.GONE);
 					infobanner.setVisibility(View.GONE);
-					addressLayout.setVisibility(View.GONE);
+					addressDepLayout.setVisibility(View.GONE);
+					addressDestLayout.setVisibility(View.GONE);
 					getActivity().setProgressBarIndeterminateVisibility(false);
 					this.showSettingsAlert();
 				}
@@ -596,7 +657,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 					catch(NullPointerException e){
 						pinkModeButton.setVisibility(View.GONE);
 						infobanner.setVisibility(View.GONE);
-						addressLayout.setVisibility(View.GONE);
+						addressDepLayout.setVisibility(View.GONE);
+						addressDestLayout.setVisibility(View.GONE);
 						getActivity().setProgressBarIndeterminateVisibility(false);
 					}
 					mapView = (MapView) v.findViewById(R.id.map);
@@ -610,7 +672,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 					mMap.clear();
 					
 					mMap.getUiSettings().setZoomControlsEnabled(false);
-					
+					mMap.setMyLocationEnabled(true);
+					mMap.getUiSettings().setMyLocationButtonEnabled(false);
 					
 					//nightHour = Boolean.parseBoolean(mapUserInfo.get(MainActivity.KEY_NIGHTHOUR));
 					
@@ -634,20 +697,25 @@ public class HomeFragment extends Fragment implements LocationListener {
 					acAddressdep.setHintTextColor(0xff4cc3ef);
 					
 					acAddressdest = (AutoCompleteTextView) v.findViewById(R.id.acAddressdest);
+					
 					acAddressdest.setAdapter(new PlacesAutoCompleteAdapter(ApplicationContextProvider.getContext(), R.layout.list_item));
 					acAddressdest.setOnItemClickListener(itemClickListenerAddressdest);
 					acAddressdest.addTextChangedListener(textWatcherDest);
 					
-					requesttreepbutton = (Button) v.findViewById(R.id.requesttreepbutton);
-					requesttreepbutton.setTypeface(fb);
-					if(MainActivity.driverMode){
-						//requesttreepbutton.setText("   Prendre un Treeper   ");
-					}
+					buttonRequestDep = (Button) v.findViewById(R.id.buttonRequestDep);
+					buttonRequestDest = (Button) v.findViewById(R.id.buttonRequestDest);
+					buttonBackToDep = (Button) v.findViewById(R.id.buttonBackToDep);
 					
-					requesttreepbutton.setOnClickListener(clickListenerRequestTreepButton);
+					buttonRequestDep.setOnClickListener(clickListenerRequestTreepDepButton);
+					buttonRequestDest.setOnClickListener(clickListenerRequestTreepDestButton);
+					buttonBackToDep.setOnClickListener(clickListenerRequestBackToDepButton);
 					
 					myLocationButton = (Button) v.findViewById(R.id.mypositionbutton);
 					myLocationButton.setOnClickListener(clickListenerMyLocationButton);
+					
+					layoutSlideOutAnim.setFillAfter(true);
+					layoutSlideInAnim.setFillAfter(true);
+					
 					
 					
 					// Needs to call MapsInitializer before doing any CameraUpdateFactory calls
@@ -682,8 +750,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 			  		mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null); 
 			  		
 			  		
-					requesttreepbutton.setVisibility(View.VISIBLE);
-					addressLayout.setVisibility(View.VISIBLE);
+					
 					infobanner.setVisibility(View.VISIBLE);
 					
 					if(driverMarkerList != null){
