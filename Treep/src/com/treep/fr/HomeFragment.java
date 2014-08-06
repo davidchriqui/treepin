@@ -220,7 +220,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 				MainActivity.initposition = 0;
 	    		
 	    		//hideSoftKeyboard(getActivity());
-				layoutSlideOutAnim.setAnimationListener(new Animation.AnimationListener(){
+				layoutSlideInAnim.setAnimationListener(new Animation.AnimationListener(){
 				    @Override
 				    public void onAnimationStart(Animation arg0) {
 				    }           
@@ -230,6 +230,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 				    @Override
 				    public void onAnimationEnd(Animation arg0) {
 				    	addressDepLayout.clearAnimation();
+				    	addressDepLayout.setVisibility(View.GONE);
 				    }
 				});
 				layoutSlideOutAnim.setAnimationListener(new Animation.AnimationListener(){
@@ -242,6 +243,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 				    @Override
 				    public void onAnimationEnd(Animation arg0) {
 				    	addressDestLayout.clearAnimation();
+				    	
 				    }
 				});
 				addressDestLayout.setVisibility(View.VISIBLE);
@@ -256,9 +258,24 @@ public class HomeFragment extends Fragment implements LocationListener {
     private OnClickListener clickListenerRequestBackToDepButton = new View.OnClickListener() {
 	    @Override
 	    public void onClick(View v) {
+	    	layoutSlideInAnim.setAnimationListener(new Animation.AnimationListener(){
+			    @Override
+			    public void onAnimationStart(Animation arg0) {
+
+				 	addressDepLayout.setVisibility(View.VISIBLE);
+			    }           
+			    @Override
+			    public void onAnimationRepeat(Animation arg0) {
+			    }           
+			    @Override
+			    public void onAnimationEnd(Animation arg0) {
+			    	addressDepLayout.clearAnimation();
+			    }
+			});
 	    	addressDestLayout.startAnimation(layoutSlideOutAnim);
 		 	addressDepLayout.startAnimation(layoutSlideInAnim);
 		 	addressDestLayout.setVisibility(View.GONE);
+		 	addressDepLayout.setVisibility(View.VISIBLE);
 		 	
 	    }
 	  };

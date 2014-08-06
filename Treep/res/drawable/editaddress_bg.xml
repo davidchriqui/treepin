@@ -5,10 +5,8 @@
     <shape>
         <solid android:color="#EEFFFFFF" />
         <stroke
-            android:dashGap="10px"
-            android:dashWidth="10px"
             android:width="1dp"
-            android:color="@color/corail" />
+            android:color="#EEEEEE" />
     </shape>
 </item>
 
