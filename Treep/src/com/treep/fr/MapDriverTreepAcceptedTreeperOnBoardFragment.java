@@ -341,7 +341,7 @@ public class MapDriverTreepAcceptedTreeperOnBoardFragment extends Fragment imple
 				   
 					        
 			        
-					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition, myMarker)).execute();
+					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition, myMarker, null)).execute();
 						
 			        //Move the camera instantly to my position with a zoom of 15.
 			  		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
@@ -513,7 +513,7 @@ public class MapDriverTreepAcceptedTreeperOnBoardFragment extends Fragment imple
         // Creating a LatLng object for the current location
         latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
         
-		(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker)).execute();
+		(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker, null)).execute();
 			
         //Move the camera instantly to my position with a zoom of 15.
   		//mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition,mMap.getCameraPosition().zoom));
@@ -722,7 +722,7 @@ public class MapDriverTreepAcceptedTreeperOnBoardFragment extends Fragment imple
 			        	ItineraireTask.polylineItinerary.remove();
 			        }
 			        
-					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition,myMarker)).execute();
+					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition,myMarker, null)).execute();
 					
 					userConfirmedMarker.setPosition(new LatLng(Double.parseDouble(result.get(MainActivity.KEY_LATDESTNOW)),Double.parseDouble(result.get(MainActivity.KEY_LNGDESTNOW))));
 					

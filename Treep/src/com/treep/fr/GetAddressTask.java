@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.AutoCompleteTextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -21,8 +22,10 @@ public class GetAddressTask extends AsyncTask<Void, Void, String> {
 	Double lng;
 	LatLng latLngMyPosition;
 	Marker myMarker;
+	AutoCompleteTextView acAddressdep;
 	
-	public GetAddressTask(Activity activity,Double lat, Double lng,LatLng latLngMyPosition,Marker myMarker) {
+	
+	public GetAddressTask(Activity activity,Double lat, Double lng,LatLng latLngMyPosition,Marker myMarker,AutoCompleteTextView acAddressdep) {
 	    super();
 	    this.activity=activity;
 	    mContext = ApplicationContextProvider.getContext();
@@ -30,6 +33,7 @@ public class GetAddressTask extends AsyncTask<Void, Void, String> {
 	    this.lng = lng;
 	    this.latLngMyPosition=latLngMyPosition;
 	    this.myMarker=myMarker;
+	    this.acAddressdep=acAddressdep;
 	}
 	
 	
@@ -103,6 +107,11 @@ public class GetAddressTask extends AsyncTask<Void, Void, String> {
 		if(latLngMyPosition != null){
 			myMarker.setPosition(latLngMyPosition);
 			myMarker.setSnippet(result);
+			if(acAddressdep !=null){
+				acAddressdep.setHint(result);
+			}
+			HomeFragment.addressDep = result;
+			//MainActivity.displayToast(HomeFragment.addressDep);
 		}
 		
 	}

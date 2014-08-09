@@ -15,11 +15,17 @@ import org.w3c.dom.NodeList;
 
 
 
+
+
+
+
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -32,14 +38,15 @@ import android.view.WindowManager.BadTokenException;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class DriverTreepRequestedNoTreeperFragment extends Fragment {
 
-	private RelativeLayout refreshBigLayout;
 	private Button cancelOrderButton;
 	private TextView title;
+	private ImageView refreshBig;
 	
 	 private OnClickListener clickListenerCancelButton = new View.OnClickListener() {
 	    	
@@ -60,18 +67,20 @@ public class DriverTreepRequestedNoTreeperFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_drivertreeprequestednotreeper, container, false);
 		
-		refreshBigLayout = (RelativeLayout) v.findViewById(R.id.refreshBigLayout);
 		cancelOrderButton = (Button) v.findViewById(R.id.cancelOrderButton);
 		title = (TextView) v.findViewById(R.id.title);
 
-		Animation blinkAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.blink);
-        
-		title.startAnimation(blinkAnim);
 		
 		cancelOrderButton.setOnClickListener(clickListenerCancelButton);
 
-		Animation rotationCenter = AnimationUtils.loadAnimation(getActivity(),R.anim.rotation_center);
-		refreshBigLayout.startAnimation(rotationCenter);
+		refreshBig = (ImageView) v.findViewById(R.id.refreshBig);
+		AnimationDrawable frameAnimation = (AnimationDrawable) refreshBig.getBackground();
+
+		 // Start the animation (looped playback by default).
+		 frameAnimation.start();
+		 
+		 Animation rotationCenter = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.rotation_center);
+		 refreshBig.startAnimation(rotationCenter);
 		
 		return v;
 	}
@@ -215,6 +224,7 @@ public class DriverTreepRequestedNoTreeperFragment extends Fragment {
 				if(result.get(MainActivity.KEY_ERRCODE).equals("000")){
 					Intent i = new Intent(ApplicationContextProvider.getContext(), MainActivity.class);
 		    		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		    		ApplicationContextProvider.getContext().startActivity(i);
 				}
 				else{
 					MainActivity.displayToast("Veuillez réessayer plus tard : "+result.get(MainActivity.KEY_ERRCODE));

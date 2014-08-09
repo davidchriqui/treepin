@@ -263,7 +263,7 @@ public class MapUserTreepAcceptedFragment extends Fragment implements LocationLi
 				   
 					        
 			        
-					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition, myMarker)).execute();
+					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition, myMarker, null)).execute();
 						
 			        //Move the camera instantly to my position with a zoom of 15.
 			  		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
@@ -738,7 +738,7 @@ public class MapUserTreepAcceptedFragment extends Fragment implements LocationLi
 			        	ItineraireTask.polylineItinerary.remove();
 			        }
 			        
-					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition,myMarker)).execute();
+					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition,myMarker, null)).execute();
 					
 					driverOrderedMarker.setPosition(new LatLng(Double.parseDouble(result.get(MainActivity.KEY_LATITUDE)),Double.parseDouble(result.get(MainActivity.KEY_LONGITUDE))));
 					driverOrderedMarker.setSnippet("Se trouve à " + result.get(MainActivity.KEY_DISTANCETIME) + " min"); 

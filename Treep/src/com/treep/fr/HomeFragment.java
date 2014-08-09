@@ -96,8 +96,8 @@ public class HomeFragment extends Fragment implements LocationListener {
     private LinearLayout addressDepLayout;
  	private LinearLayout addressDestLayout;
  	private AutoCompleteTextView acAddressdep;
- 	private String addressDep;
- 	private String addressDest;
+ 	static String addressDep;
+ 	static String addressDest;
  	private AutoCompleteTextView acAddressdest;
  	static boolean departIsOk=false;
  	private boolean destIsOk=false;
@@ -190,7 +190,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    		acAddressdep.setTextColor(0xff444444);
 	    		acAddressdep.setHintTextColor(0xff4cc3ef);
     			//acAddressdep.setBackgroundColor(0x00000000);
-	    		addressDep = "Ma position actuelle";
 	    		departIsOk = true;
     		}
 	    	else if(acAddressdep.getText().toString().length() != 0 && addressDep == null){
@@ -759,7 +758,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 				   
 					        
 			        
-					(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker)).execute();
+					(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker,acAddressdep)).execute();
 						
 			        //Move the camera instantly to my position with a zoom of 15.
 			  		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
@@ -767,6 +766,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 			  		mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null); 
 			  		
 			  		
+					
 					
 					infobanner.setVisibility(View.VISIBLE);
 					
@@ -935,7 +935,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         // Creating a LatLng object for the current location
         latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
         
-		(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker)).execute();
+		(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker,acAddressdep)).execute();
 			
         //Move the camera instantly to my position with a zoom of 15.
   		//mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition,mMap.getCameraPosition().zoom));

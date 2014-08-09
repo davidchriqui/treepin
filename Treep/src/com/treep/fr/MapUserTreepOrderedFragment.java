@@ -328,7 +328,7 @@ public class MapUserTreepOrderedFragment extends Fragment implements LocationLis
 			        MarkerOptions a = new MarkerOptions().position(latLngMyPosition);
 				    myMarker = mMap.addMarker(a.icon(BitmapDescriptorFactory.fromResource(R.drawable.pinmyposition)));
 				    
-					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition, myMarker)).execute();
+					(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition, myMarker, null)).execute();
 						
 			        //Move the camera instantly to my position with a zoom of 15.
 			  		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
@@ -787,7 +787,7 @@ public class MapUserTreepOrderedFragment extends Fragment implements LocationLis
 				        // Creating a LatLng object for the current location
 				        latLngMyPosition = new LatLng(myLatitude, myLongitude);
 				        
-						(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition, myMarker)).execute();
+						(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition, myMarker, null)).execute();
 							
 				        //Move the camera instantly to my position with a zoom of 15.
 				  		//mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition,mMap.getCameraPosition().zoom));
@@ -821,7 +821,7 @@ public class MapUserTreepOrderedFragment extends Fragment implements LocationLis
 					        latLngMyPosition = new LatLng(myLatitude, myLongitude);
 					        
 					        
-							(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition,myMarker)).execute();
+							(new GetAddressTask(getActivity(),myLatitude,myLongitude,latLngMyPosition,myMarker, null)).execute();
 								
 					        //Move the camera instantly to my position with a zoom of 15.
 					  		//mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));

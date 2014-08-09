@@ -324,6 +324,8 @@ public class MainActivity extends Activity{
   	static boolean isTreeperOnBoard = false;
   	static boolean isDriverAccepted = false;
   	
+  	static boolean isTreepOrderedByTreeper = false;
+  	
   	static final int distanceMax = 50;
   	static Boolean appQuit = true;
   	
@@ -2127,6 +2129,7 @@ public class MainActivity extends Activity{
 								PushService.unsubscribe(ApplicationContextProvider.getContext(), "drivers");
 								
 								if(Boolean.parseBoolean(mapResultTreepOrderInfo.get(MainActivity.KEY_ISTREEPORDERED))){
+									isTreepOrderedByTreeper = true;
 									if(Boolean.parseBoolean(mapResultTreepOrderInfo.get(MainActivity.KEY_ISTREEPNOWCONFIRMED))){
 										if(Boolean.parseBoolean(mapResultTreepOrderInfo.get(MainActivity.KEY_ISTREEPNOWCANCELEDBYDRIVER))){
 											
@@ -2204,7 +2207,7 @@ public class MainActivity extends Activity{
 										
 										CURRENT_STEP = STEP_USERTREEPORDERED;
 										
-										fragment = new MapUserTreepOrderedFragment();
+										fragment = new TreepRequestedNoMatchFragment();
 										Bundle extras = new Bundle();
 										extras.putSerializable("alDriverPosition",alMapDriverPosition);
 										extras.putSerializable("mapUserInfo",mapResultUserInfo);
@@ -2323,9 +2326,9 @@ public class MainActivity extends Activity{
 									}
 									else{
 										CURRENT_STEP = STEP_DRIVERTREEPREQUESTEDNOTREEPER;
-										fragment= new DriverTreepRequestedNoTreeperFragment();
-										//Bundle extras = new Bundle();
-										//extras.putSerializable("alDriverPosition",alMapDriverPosition);
+										fragment= new TreepRequestedNoMatchFragment();
+										Bundle extras = new Bundle();
+										extras.putSerializable("alDriverPosition",alMapDriverPosition);
 										
 										showFragment(0, fragment);
 										//DriverTreepRequestedNoTreeperFragment

@@ -251,7 +251,7 @@ public class MapDriverTreepNotConfirmedFragment extends Fragment implements Loca
 				   
 					        
 			        
-					(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker)).execute();
+					(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker, null)).execute();
 						
 			        //Move the camera instantly to my position with a zoom of 15.
 			  		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
@@ -395,7 +395,7 @@ public class MapDriverTreepNotConfirmedFragment extends Fragment implements Loca
         // Creating a LatLng object for the current location
         latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
         
-		(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker)).execute();
+		(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker, null)).execute();
 			
         //Move the camera instantly to my position with a zoom of 15.
   		//mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition,mMap.getCameraPosition().zoom));
@@ -598,7 +598,7 @@ public class MapDriverTreepNotConfirmedFragment extends Fragment implements Loca
 				        // Creating a LatLng object for the current location
 				        latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
 				        
-						(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker)).execute();
+						(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker, null)).execute();
 							
 				        //Move the camera instantly to my position with a zoom of 15.
 				  		//mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition,mMap.getCameraPosition().zoom));
@@ -630,7 +630,7 @@ public class MapDriverTreepNotConfirmedFragment extends Fragment implements Loca
 					        latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
 					        
 					        
-							(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition,myMarker)).execute();
+							(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition,myMarker, null)).execute();
 								
 					        //Move the camera instantly to my position with a zoom of 15.
 					  		//mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));

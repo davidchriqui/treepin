@@ -67,7 +67,7 @@
 			    android:gravity="center"
 			   	android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:textSize="20sp"
+			    android:textSize="17sp"
 			    android:textColor="#444444"
 			    android:background="@drawable/edittextstroke"
 			    android:layout_gravity="center_horizontal"
@@ -102,50 +102,60 @@
 	      android:layout_height="wrap_content"
 	      android:layout_centerHorizontal="true"
 		  android:layout_alignParentBottom="true"
-	      android:background="@drawable/editaddress_bg"
 	      android:orientation="vertical" >
-
-    	  	  <AutoCompleteTextView
-				android:id="@+id/acAddressdest"
-			    android:gravity="center"
-			   	android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textSize="20sp"
-			    android:textColor="#444444"
-			    android:background="@drawable/edittextstroke"
-			    android:layout_gravity="center_horizontal"
-			    android:layout_marginLeft="8dp"
-			    android:layout_marginRight="8dp"
-			    android:layout_marginBottom="4dp"
-			    android:layout_marginTop="5dp"
-			    android:singleLine="true"
-			    android:completionThreshold="5"
-			    android:dropDownWidth="match_parent"
-			    android:dropDownHorizontalOffset="20sp"
-			    android:hint="Adresse de destination" />
-		      
-		    <Button
-		        android:id="@+id/buttonRequestDest"
-		        android:layout_width="300dp"
-		        android:layout_height="65dp"
-		        android:layout_centerHorizontal="true"
-		        android:layout_gravity="center_horizontal"
-		        android:layout_marginBottom="5dip"
-		        android:background="@drawable/button_requestdest" />
 		    
-		    <Button
+	      <Button
 		        android:id="@+id/buttonBackToDep"
-		        android:layout_width="290dp"
+		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_centerHorizontal="true"
-		        android:text="Modifier le départ"
-		        android:textSize="15dp"
+		        android:text="   Modifier le départ   "
+		        android:textSize="13dp"
 		        android:layout_gravity="center_horizontal"
 		        android:layout_marginBottom="5dip"
 		        android:textStyle="bold"
 		        android:background="@drawable/button_no"
 		        android:textColor="@color/corail" />
-	      
+
+	      <LinearLayout
+		      android:id="@+id/addressDestLayoutBis"
+		      android:layout_width="match_parent"
+		      android:layout_height="wrap_content"
+		      android:layout_centerHorizontal="true"
+			  android:layout_alignParentBottom="true"
+		      android:background="@drawable/editaddress_bg"
+		      android:orientation="vertical" >
+		      
+	    	  	  <AutoCompleteTextView
+					android:id="@+id/acAddressdest"
+				    android:gravity="center"
+				   	android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textSize="17sp"
+				    android:textColor="#444444"
+				    android:background="@drawable/edittextstroke"
+				    android:layout_gravity="center_horizontal"
+				    android:layout_marginLeft="8dp"
+				    android:layout_marginRight="8dp"
+				    android:layout_marginBottom="4dp"
+				    android:layout_marginTop="5dp"
+				    android:singleLine="true"
+				    android:completionThreshold="5"
+				    android:dropDownWidth="match_parent"
+				    android:dropDownHorizontalOffset="20sp"
+				    android:hint="Adresse de destination" />
+			      
+			    <Button
+			        android:id="@+id/buttonRequestDest"
+			        android:layout_width="300dp"
+			        android:layout_height="65dp"
+			        android:layout_centerHorizontal="true"
+			        android:layout_gravity="center_horizontal"
+			        android:layout_marginBottom="5dip"
+			        android:background="@drawable/button_requestdest" />
+			    
+			    
+	      	</LinearLayout>
 	      </LinearLayout>
 	      
 	  

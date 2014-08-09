@@ -16,27 +16,13 @@
 		    android:textStyle="bold" />
 	    
 	    
-	    <RelativeLayout
-	      android:id="@+id/refreshBigLayout"
-	      android:layout_width="match_parent"
-	      android:layout_height="match_parent"
-	      android:layout_centerInParent="true">
-		  
-	        <ImageView
-		          android:id="@+id/ring"
-		          android:layout_width="190dp"
-		          android:layout_height="190dp"
-		          android:layout_centerInParent="true"
-		          android:background="@drawable/ring_corail"
-		          android:gravity="center" />
 		      <ImageView
 		          android:id="@+id/refreshBig"
-		          android:layout_width="wrap_content"
-		          android:layout_height="wrap_content"
+		          android:layout_width="150dp"
+		          android:layout_height="150dp"
 		          android:layout_gravity="center"
 		          android:layout_centerInParent="true"
-		          android:background="@drawable/ic_refreshbig" />
-      	</RelativeLayout>
+		          android:background="@drawable/loaderpin" />
       	
 	    <Button
 	        android:id="@+id/cancelOrderButton"

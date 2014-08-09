@@ -121,26 +121,6 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 			catch(NullPointerException e){
 				
 			}
-			if(addressDep == "Ma position actuelle"){
-				Geocoder geocoder;
-				List<Address> addresses;
-				geocoder = new Geocoder(ApplicationContextProvider.getContext());
-				try {
-					addresses = geocoder.getFromLocation(Double.parseDouble(latDep), Double.parseDouble(lngDep), 1);
-					
-					addressDep = addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1) + ", " + addresses.get(0).getAddressLine(2);
-					
-					
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				
-			}
 			
 			url.append("http://maps.googleapis.com/maps/api/distancematrix/json?origins=").append(latDep).append(",").append(lngDep).append("&destinations=");
 			
