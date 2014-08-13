@@ -5,10 +5,10 @@ android:fillAfter="true" >
 
     <translate
     android:fromXDelta="0" 
-    android:fromYDelta="0" 
+    android:fromYDelta="100%p" 
     android:toXDelta="0" 
-    android:toYDelta="-30%p" 
-    android:duration="600" 
+    android:toYDelta="0" 
+    android:duration="700" 
 />
     
 

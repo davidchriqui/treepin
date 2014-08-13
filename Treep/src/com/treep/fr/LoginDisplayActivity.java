@@ -30,6 +30,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +40,7 @@ import android.view.WindowManager.BadTokenException;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -57,18 +60,18 @@ import com.facebook.model.GraphUser;
 public class LoginDisplayActivity extends Activity {
 
 	private Button buttonLoginLogout;
+	private Button buttonLoginWithoutLinkedin;
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	//private TextView textInstructionsOrLink;
 	
 	
-	private Button cguButton = null;
-	private Button helpButton = null;
-	private ImageView splashscreenLogo = null;
+	private LinearLayout logoLayout;
+	private ImageView splashscreenlogo;
 	private ImageView pintreepin;
-	private TextView fbwarning = null;
 	private ImageView ivRefresh;
+	private ImageView divider;
 	private LinearLayout refreshLayout;
-	private LinearLayout cguLayout;
+	private ViewPager viewpager;
 	//private static final String URL_PREFIX_FRIENDS = "https://graph.facebook.com/me/fields=id,name?access_token=";
 	
 	private Boolean activityLaunched = false ;
@@ -81,22 +84,6 @@ public class LoginDisplayActivity extends Activity {
 	static Session session;
 	
 	
-		  
-	  private OnClickListener clickListenerCguButton = new View.OnClickListener() {
-	    @Override
-	    public void onClick(View v) {
-	    	Toast.makeText(getApplicationContext(), "CGU", Toast.LENGTH_SHORT).show();
-	    }
-	  };
-	  
-	  private OnClickListener clickListenerHelpButton = new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-		    	Intent intent = new Intent(LoginDisplayActivity.this, FragmentsSliderActivity.class);
-                startActivity(intent);
-		    }
-		  };
-	
 	
 	
 	
@@ -105,45 +92,80 @@ public class LoginDisplayActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.logindisplayactivity);
         
-        
-        Typeface fb = Typeface.createFromAsset(this.getAssets(), "fb.ttf");
-        
-        
         buttonLoginLogout = (Button)findViewById(R.id.buttonLoginLogout);
+        buttonLoginWithoutLinkedin = (Button)findViewById(R.id.buttonLoginWithoutLinkedin);
+        buttonLoginWithoutLinkedin.setText(Html.fromHtml("Pas de compte Linkedin? <font color='#0274b3'><u>Appuyez ici</u></font>"));
 
-        cguLayout = (LinearLayout) findViewById(R.id.cguLayout);
-        cguLayout.setVisibility(View.VISIBLE);
+        
+        viewpager = (ViewPager) findViewById(R.id.viewpager);
+        viewpager.setVisibility(View.GONE);
+        
+        ViewPagerAdapter adapter = new ViewPagerAdapter();
+        viewpager.setAdapter(adapter);
+        viewpager.setCurrentItem(0);
         
         refreshLayout = (LinearLayout) findViewById(R.id.refreshLayout);
         refreshLayout.setVisibility(View.GONE);
         ivRefresh = (ImageView) findViewById(R.id.ivRefresh);
         Animation rotationCenter = AnimationUtils.loadAnimation(this,R.anim.rotation_center);
         ivRefresh.startAnimation(rotationCenter);
-       
         
-        cguButton = (Button)findViewById(R.id.cgubutton);
-        helpButton = (Button)findViewById(R.id.helpbutton);     
-        splashscreenLogo = (ImageView)findViewById(R.id.splashscreenlogo);
-        Animation animationLogo = AnimationUtils.loadAnimation(this,R.anim.splashtranslatelogo);
-        splashscreenLogo.startAnimation(animationLogo);
-        
-        pintreepin = (ImageView)findViewById(R.id.pintreepin);
-        pintreepin.startAnimation(animationLogo);
-        
-        fbwarning = (TextView)findViewById(R.id.fbwarning);
-        fbwarning.setTypeface(fb);
-        
+
+        divider = (ImageView) findViewById(R.id.divider);
+        divider.setVisibility(View.GONE);
+         
         
         Animation animationFbconnect = AnimationUtils.loadAnimation(this,R.anim.fbconnectfadein);
         
         buttonLoginLogout.startAnimation(animationFbconnect); 
         buttonLoginLogout.setVisibility(View.GONE);
-        fbwarning.startAnimation(animationFbconnect);
+        
+        buttonLoginWithoutLinkedin.startAnimation(animationFbconnect);
+        
+        logoLayout = (LinearLayout) findViewById(R.id.logoLayout);
+        pintreepin = (ImageView) findViewById(R.id.pintreepin);
+        splashscreenlogo = (ImageView) findViewById(R.id.splashscreenlogo);
+        
+        Animation animationPin = AnimationUtils.loadAnimation(this,R.anim.splashtranslatepin);
+        pintreepin.startAnimation(animationPin);
+        
+        Animation animationLogo = AnimationUtils.loadAnimation(this,R.anim.splashtranslatelogo);
+        splashscreenlogo.startAnimation(animationLogo);
+        
+        animationPin.setAnimationListener(new Animation.AnimationListener(){
+		    @Override
+		    public void onAnimationStart(Animation arg0) {
+
+		    }           
+		    @Override
+		    public void onAnimationRepeat(Animation arg0) {
+		    }           
+		    @Override
+		    public void onAnimationEnd(Animation arg0) {
+		    	Animation animationLogo = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.splashtranslatelogolayout);
+		        logoLayout.startAnimation(animationLogo);
+		        animationLogo.setAnimationListener(new Animation.AnimationListener(){
+				    @Override
+				    public void onAnimationStart(Animation arg0) {
+
+				    }           
+				    @Override
+				    public void onAnimationRepeat(Animation arg0) {
+				    }           
+				    @Override
+				    public void onAnimationEnd(Animation arg0) {
+				    	Animation animationHelp = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.fbconnectfadein);
+				    	viewpager.setVisibility(View.VISIBLE);
+				    	divider.setVisibility(View.VISIBLE);
+				    	viewpager.startAnimation(animationHelp);
+				    	divider.startAnimation(animationHelp);
+				        
+				    }
+				});
+		    }
+		});
         
         
-        //buttonLoginLogout.setOnClickListener(clickListenerFbConnectButton);
-        cguButton.setOnClickListener(clickListenerCguButton);
-        helpButton.setOnClickListener(clickListenerHelpButton);
         
         if(!CheckInternet(this)){
 			
@@ -214,7 +236,6 @@ public class LoginDisplayActivity extends Activity {
     	if(!CheckInternet(this)){
 			
     		buttonLoginLogout.setVisibility(View.VISIBLE);
-    		cguLayout.setVisibility(View.VISIBLE);
 			//this.showSettingsAlert();
     		buttonLoginLogout.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) { 
@@ -237,7 +258,6 @@ public class LoginDisplayActivity extends Activity {
     	else{
 	        session = Session.getActiveSession();
 	        buttonLoginLogout.setVisibility(View.GONE);
-	        cguLayout.setVisibility(View.GONE);
 	        if (session.isOpened()) {
 	        	 //Retrieve Facebook userId
 	        	
@@ -274,7 +294,6 @@ public class LoginDisplayActivity extends Activity {
 								|| userLastname == "" || userLastname == null){
 							
 							buttonLoginLogout.setVisibility(View.VISIBLE);
-				        	cguLayout.setVisibility(View.VISIBLE);
 				            buttonLoginLogout.setOnClickListener(new OnClickListener() {
 				                public void onClick(View view) { 
 				                	
@@ -285,7 +304,6 @@ public class LoginDisplayActivity extends Activity {
 				                    }
 				                	else{
 				                		buttonLoginLogout.setVisibility(View.GONE);
-				                		cguLayout.setVisibility(View.GONE);
 				                		onClickLogin();
 				                	}
 				                }
@@ -328,7 +346,6 @@ public class LoginDisplayActivity extends Activity {
 	                  }
 	                  else{
 	                	  	buttonLoginLogout.setVisibility(View.VISIBLE);
-				        	cguLayout.setVisibility(View.VISIBLE);
 				            buttonLoginLogout.setOnClickListener(new OnClickListener() {
 				                public void onClick(View view) { 
 				                	
@@ -339,7 +356,6 @@ public class LoginDisplayActivity extends Activity {
 				                    }
 				                	else{
 				                		buttonLoginLogout.setVisibility(View.GONE);
-				                		cguLayout.setVisibility(View.GONE);
 				                		onClickLogin();
 				                	}
 				                }
@@ -363,7 +379,6 @@ public class LoginDisplayActivity extends Activity {
 	        }
 	        else {
 	        	buttonLoginLogout.setVisibility(View.VISIBLE);
-	        	cguLayout.setVisibility(View.VISIBLE);
 	            buttonLoginLogout.setOnClickListener(new OnClickListener() {
 	                public void onClick(View view) { 
 	                	
@@ -374,7 +389,6 @@ public class LoginDisplayActivity extends Activity {
 	                    }
 	                	else{
 	                		buttonLoginLogout.setVisibility(View.GONE);
-	                		cguLayout.setVisibility(View.GONE);
 	                		onClickLogin();
 	                	}
 	                }
@@ -399,7 +413,6 @@ public class LoginDisplayActivity extends Activity {
     	}
     	Session session = Session.getActiveSession();
         buttonLoginLogout.setVisibility(View.GONE);
-        cguLayout.setVisibility(View.GONE);
         if (!session.isOpened() && !session.isClosed()) {
             session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
         } else {
@@ -558,7 +571,6 @@ public class LoginDisplayActivity extends Activity {
 				this.cancel(true);
 			}
     		buttonLoginLogout.setVisibility(View.GONE);
-    		cguLayout.setVisibility(View.GONE);
     		refreshLayout.setVisibility(View.VISIBLE);
     		
     		nameValuePairs.add(new BasicNameValuePair("fbaccesstoken", fbaccesstoken));
@@ -656,7 +668,6 @@ public class LoginDisplayActivity extends Activity {
 	                    }
 	                	else{
 	                		buttonLoginLogout.setVisibility(View.GONE);
-	                		cguLayout.setVisibility(View.GONE);
 	                		onClickLogin();
 	                	}
 	                }
@@ -687,7 +698,6 @@ public class LoginDisplayActivity extends Activity {
 	      	                    }
 	      	                	else{
 	      	                		buttonLoginLogout.setVisibility(View.GONE);
-	      	                		cguLayout.setVisibility(View.GONE);
 	      	                		updateView();
 	      	                	}
 	      	                }

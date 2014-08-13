@@ -72,14 +72,7 @@
             android:windowSoftInputMode="adjustResize" >
             
         </activity>
-        <activity
-            android:name="com.treep.fr.LoginDisplayActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait" >
-            
-        </activity>
+        
         
         <activity
             android:name="com.treep.fr.FragmentsSliderActivity"
@@ -95,7 +88,7 @@
                   android:label="@string/app_name" />
         
         <activity
-            android:name="com.treep.fr.SplashScreen"
+            android:name="com.treep.fr.LoginDisplayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

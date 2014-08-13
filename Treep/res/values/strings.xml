@@ -7,7 +7,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="drawer_open">Slider Menu Opened</string>
     <string name="drawer_close">Slider Menu Closed</string>
-    <string name="fbwarning">Nous ne posterons rien sur Facebook\n sans votre accord.</string>
+    <string name="fbwarning">Nous ne postons rien sur Linkedin.</string>
 	<string name="cgu">Conditions d\'utilisation</string>
 	<string name="help">Aide</string>
 	<string name="warningaddressdest">"Veuillez indiquer une adresse de destination valide"</string>
