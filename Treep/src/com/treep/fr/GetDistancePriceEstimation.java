@@ -206,8 +206,14 @@ public class GetDistancePriceEstimation extends AsyncTask<Void, Void, Double> {
 				
 			}
 			
-    		price = (Double.parseDouble(alMapDistanceDuration.get(0).get(MainActivity.KEY_DURATION))/60);
-			//price = Math.ceil(price);
+			try{
+				price = (Double.parseDouble(alMapDistanceDuration.get(0).get(MainActivity.KEY_DURATION))/60);
+				//price = Math.ceil(price);
+			}
+			catch(IndexOutOfBoundsException e){
+				price = 0;
+			}
+    		
 	    
 		
 			

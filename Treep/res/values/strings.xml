@@ -10,8 +10,8 @@
     <string name="fbwarning">Nous ne postons rien sur Linkedin.</string>
 	<string name="cgu">Conditions d\'utilisation</string>
 	<string name="help">Aide</string>
-	<string name="warningaddressdest">"Veuillez indiquer une adresse de destination valide"</string>
-	<string name="warningaddressdep">"Veuillez indiquer une adresse de depart valide, ou laissez vide pour indiquer votre position actuelle"</string>
+	<string name="warningaddressdest">"Veuillez indiquer une adresse de destination valide, ou laissez tel quel pour indiquer la position affichée."</string>
+	<string name="warningaddressdep">"Veuillez indiquer une adresse de depart valide, ou laissez tel quel pour indiquer la position affichée."</string>
     <string name="treepResponseListEmpty">treep vous recherche un conducteur\.\.\.</string>
     <string name="responseListEmpty">Vous n\'avez aucune réservation de treep en cours.</string>
     <string name="myTreeperListEmpty">Vous n\'avez effectué aucun treep.</string>

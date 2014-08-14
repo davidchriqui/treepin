@@ -105,7 +105,7 @@ public class GetAddressTask extends AsyncTask<Void, Void, String> {
 		//Toast.makeText(ApplicationContextProvider.getContext(), "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
 		
 		if(latLngMyPosition != null){
-			myMarker.setPosition(latLngMyPosition);
+			
 			myMarker.setSnippet(result);
 			if(acAddressdep !=null){
 				acAddressdep.setHint(result);
@@ -113,6 +113,6 @@ public class GetAddressTask extends AsyncTask<Void, Void, String> {
 			HomeFragment.addressDep = result;
 			//MainActivity.displayToast(HomeFragment.addressDep);
 		}
-		
+		//MainActivity.displayToast("pos : " + latLngMyPosition.latitude + " - " + latLngMyPosition.longitude);
 	}
 }

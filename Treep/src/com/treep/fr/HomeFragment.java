@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +62,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -68,9 +70,11 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -88,11 +92,14 @@ public class HomeFragment extends Fragment implements LocationListener {
 	private TextView tvPrice ;
 	private StringBuilder infobannertxt;
 	private GPSTracker gps;
+	
+	private ImageView ivMyPosition;
     
  // All static variables
     URL url;
     
-    private Marker myMarker;
+    static Marker myMarkerDep;
+    static Marker myMarkerDest;
     private LinearLayout addressDepLayout;
  	private LinearLayout addressDestLayout;
  	private AutoCompleteTextView acAddressdep;
@@ -109,20 +116,21 @@ public class HomeFragment extends Fragment implements LocationListener {
  	
  	static String price;
  	
- 	private double latdep;
- 	private double lngdep;
- 	private double latdest;
- 	private double lngdest;
+ 	static double latdep;
+ 	static double lngdep;
+ 	static double latdest;
+ 	static double lngdest;
  	
  	
+ 	private boolean isSetDep = false;
  	//private CountDownTimer updateDriverPositionListTimer;
 
  	private UIUpdater driverPositionListUpdater;
  	private UIUpdater setUserPositionUpdater;
  	
- 	private LatLng latLngMyPosition;
- 	private LatLng latLngDep;
- 	private LatLng latLngDest;
+ 	static LatLng latLngMyPosition;
+ 	static LatLng latLngDep;
+ 	static LatLng latLngDest;
  	
  
  	private static int acAddressdepLength = 0;
@@ -185,39 +193,40 @@ public class HomeFragment extends Fragment implements LocationListener {
     private OnClickListener clickListenerRequestTreepDepButton = new View.OnClickListener() {
 	    @Override
 	    public void onClick(View v) {
-	    	if(acAddressdep.getText().toString().length() == 0){
-		    	
-	    		acAddressdep.setTextColor(0xff444444);
-	    		acAddressdep.setHintTextColor(0xff4cc3ef);
-    			//acAddressdep.setBackgroundColor(0x00000000);
-	    		departIsOk = true;
-    		}
-	    	else if(acAddressdep.getText().toString().length() != 0 && addressDep == null){
-	    		departIsOk = false;
-	    		acAddressdep.setTypeface(null,Typeface.BOLD);
-	    		acAddressdep.setTextColor(0xffffffff);
-	    		acAddressdep.setHintTextColor(0xff000000);
-	    		acAddressdep.setText("");
-	    		MainActivity.displayToast(R.string.warningaddressdep);
-	    	}
-	    	else if(acAddressdep.getText().toString().length() != 0 && addressDep != null){
-	    		if(acAddressdep.getText().toString().length() != acAddressdepLength){
-	    			departIsOk = false;
-	    			acAddressdep.setTypeface(null,Typeface.BOLD);
-		    		acAddressdep.setTextColor(0xffffffff);
-		    		acAddressdep.setHintTextColor(0xff000000);
-		    		acAddressdep.setText("");
-		    		MainActivity.displayToast(R.string.warningaddressdep);
-	    		}
-	    		else{
-	    			//acAddressdep.setBackgroundColor(0x00000000);
-	    			acAddressdep.setTextColor(0xff444444);
+	    	
+		    if(Double.toString(latdep) != "0" && Double.toString(lngdep) != "0" && Double.toString(latdep) != "0.0" && Double.toString(lngdep) != "0.0"){
+		    	if(addressDep != null){
+		    		acAddressdep.setTextColor(0xff444444);
 	    			departIsOk=true;
-	    		}
-	    	}
+		    	}
+		    	else{
+		    		departIsOk = false;
+		    		acAddressdep.setText("");
+		    		onCameraChangeDep();
+		    		MainActivity.displayToast(R.string.warningaddressdep);
+		    	}
+		    }
+		    else{
+		    	departIsOk = false;
+	    		acAddressdep.setText("");
+	    		onCameraChangeDep();
+	    		MainActivity.displayToast(R.string.warningaddressdep);
+		    }
 	    	if(departIsOk){
 				MainActivity.initposition = 0;
 	    		
+				isSetDep = true;
+				
+				if(myMarkerDep != null){
+					myMarkerDep.remove();
+				}
+				
+				MarkerOptions a = new MarkerOptions().position(latLngDep);
+				myMarkerDep = mMap.addMarker(a.title("Adresse de départ").snippet(addressDep).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinmyposition)));
+				
+				ivMyPosition.setImageDrawable(getResources().getDrawable(R.drawable.pindestination));
+				mMap.animateCamera(CameraUpdateFactory.zoomOut());
+				
 	    		//hideSoftKeyboard(getActivity());
 				layoutSlideInAnim.setAnimationListener(new Animation.AnimationListener(){
 				    @Override
@@ -253,10 +262,22 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    }
 	  };
 	  
+	  
+	  
+	  
 	//OnClickListener for the "Request a Treep" button
     private OnClickListener clickListenerRequestBackToDepButton = new View.OnClickListener() {
 	    @Override
 	    public void onClick(View v) {
+	    	
+	    	isSetDep = false;
+	    	
+	    	if(myMarkerDep != null){
+				myMarkerDep.remove();
+			}
+			
+			ivMyPosition.setImageDrawable(getResources().getDrawable(R.drawable.pinmyposition));
+	    	
 	    	layoutSlideInAnim.setAnimationListener(new Animation.AnimationListener(){
 			    @Override
 			    public void onAnimationStart(Animation arg0) {
@@ -283,45 +304,26 @@ public class HomeFragment extends Fragment implements LocationListener {
     private OnClickListener clickListenerRequestTreepDestButton = new View.OnClickListener() {
 	    @Override
 	    public void onClick(View v) {
-	    	if(acAddressdest.getText().toString().length() == 0 && addressDest == null ){
-	    		destIsOk = false;
-	    		acAddressdest.setTypeface(null,Typeface.BOLD);
-	    		acAddressdest.setTextColor(0xffffffff);
-	    		acAddressdest.setHintTextColor(0xff000000);
+	    	
+	    	if(latdest != 0 && lngdest != 0){
+		    	if(addressDest != null){
+		    		acAddressdest.setTextColor(0xff444444);
+		    		destIsOk=true;
+		    	}
+		    	else{
+		    		destIsOk = false;
+		    		acAddressdest.setText("");
+		    		onCameraChangeDest();
+		    		MainActivity.displayToast(R.string.warningaddressdest);
+		    	}
+		    }
+		    else{
+		    	destIsOk = false;
 	    		acAddressdest.setText("");
+	    		onCameraChangeDest();
 	    		MainActivity.displayToast(R.string.warningaddressdest);
-    		}
-	    	else if(acAddressdest.getText().toString().length() == 0 && addressDest != null){
-	    		destIsOk = false;
-	    		acAddressdest.setTypeface(null,Typeface.BOLD);
-	    		acAddressdest.setTextColor(0xffffffff);
-	    		acAddressdest.setHintTextColor(0xff000000);
-	    		acAddressdest.setText("");
-	    		MainActivity.displayToast(R.string.warningaddressdest);
-	    	}
-	    	else if(acAddressdest.getText().toString().length() != 0 && addressDest == null){
-	    		destIsOk = false;
-	    		acAddressdest.setTypeface(null,Typeface.BOLD);
-	    		acAddressdest.setTextColor(0xffffffff);
-	    		acAddressdest.setHintTextColor(0xff000000);
-	    		acAddressdest.setText("");
-	    		MainActivity.displayToast(R.string.warningaddressdest);
-	    	}
-	    	else if(acAddressdest.getText().toString().length() != 0 && addressDest != null){
-	    		if(acAddressdest.getText().toString().length() != acAddressdestLength){
-	    			destIsOk = false;
-	    			acAddressdest.setTypeface(null,Typeface.BOLD);
-	    			acAddressdest.setTextColor(0xffffffff);
-	    			acAddressdest.setHintTextColor(0xff000000);
-	    			acAddressdest.setText("");
-	    			MainActivity.displayToast(R.string.warningaddressdest);
-	    		}
-	    		else{
-	    			//acAddressdest.setBackgroundColor(0x00000000);
-	    			acAddressdest.setTextColor(0xff444444);
-	    			destIsOk=true;
-	    		}
-	    	}
+		    }
+	    	
 	    	if(departIsOk && destIsOk){
 				MainActivity.initposition = 0;
 	    		
@@ -350,20 +352,15 @@ public class HomeFragment extends Fragment implements LocationListener {
 		    @Override
 		    public void onTextChanged(CharSequence s, int start, int before, int count) {
 		    	if(s.length() == 0){
-		    		latdep = MainActivity.myLatitude;
-			        lngdep = MainActivity.myLongitude;
+		    		//latdep = MainActivity.myLatitude;
+			        //lngdep = MainActivity.myLongitude;
 			        acAddressdep.setHintTextColor(0xff4cc3ef);
 			    	//acAddressdep.setBackgroundResource(R.drawable.edittextstroke);
-	    			acAddressdep.setTextColor(0xff444444);
+	    			//acAddressdep.setTextColor(0xff444444);
 	    			
-	    			if(addressDest != null){
-						GetDistancePriceEstimation getDistancePriceEstimation = new GetDistancePriceEstimation(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest), tvPrice);
-						getDistancePriceEstimation.execute();
-					}
 	    			
 		    	}
 		    	else{
-
 			        addressDep = null;
 		    		latdep = 0;
 			        lngdep=0;
@@ -381,10 +378,20 @@ public class HomeFragment extends Fragment implements LocationListener {
 
 		    @Override
 		    public void onTextChanged(CharSequence s, int start, int before, int count) {
-		    	addressDest = null;
-		    	//acAddressdest.setBackgroundResource(R.drawable.edittextstroke);
-    			acAddressdest.setTextColor(0xff444444);
-    			tvPrice.setVisibility(View.GONE);
+		    	if(s.length() == 0){
+		    		//latdep = MainActivity.myLatitude;
+			        //lngdep = MainActivity.myLongitude;
+			        acAddressdest.setHintTextColor(0xff4cc3ef);
+			    	//acAddressdep.setBackgroundResource(R.drawable.edittextstroke);
+	    			//acAddressdep.setTextColor(0xff444444);
+	    			
+	    			
+		    	}
+		    	else{
+			        addressDest = null;
+		    		latdest = 0;
+			        lngdest=0;
+		    	}
 		    }
 		    @Override
 		    public void beforeTextChanged(CharSequence s, int start, int count,
@@ -410,14 +417,12 @@ public class HomeFragment extends Fragment implements LocationListener {
 			        	List<Address> addresses = gcDep.getFromLocationName(addressDep, 5);
 			        	Address x = addresses.get(0);
 						//on récupère la latitude et longitude correspondante à l'adresse
-						latdep  = x.getLatitude();
-						lngdep = x.getLongitude();
+						//latdep  = x.getLatitude();
+						//lngdep = x.getLongitude();
 						latLngDep = new LatLng(latdep,lngdep);
 						
-						if(addressDest != null){
-							GetDistancePriceEstimation getDistancePriceEstimation = new GetDistancePriceEstimation(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest), tvPrice);
-							getDistancePriceEstimation.execute();
-						}
+						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngDep, 15);
+						mMap.animateCamera(cameraUpdate);
 						
 		        	}
 		        	else{
@@ -432,7 +437,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-    			MainActivity.displayToast(addressDep);
+    			//MainActivity.displayToast(addressDep);
 		    }
 		  };
 			  
@@ -453,9 +458,11 @@ public class HomeFragment extends Fragment implements LocationListener {
 			        	List<Address> addresses = gcDest.getFromLocationName(addressDest, 5);
 			        	Address x = addresses.get(0);
 						//on récupère la latitude et longitude correspondante à l'adresse
-						latdest  = x.getLatitude();
-						lngdest = x.getLongitude();
+						
 						latLngDest = new LatLng(latdest,lngdest);
+						
+						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngDest, 15);
+						mMap.animateCamera(cameraUpdate);
 						
 						GetDistancePriceEstimation getDistancePriceEstimation = new GetDistancePriceEstimation(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest), tvPrice);
 						getDistancePriceEstimation.execute();
@@ -611,7 +618,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 		 	if(setUserPositionUpdater != null){
 		 		setUserPositionUpdater.stopUpdates();
 		 	}
-		 	
 	    }
 
 	    @Override
@@ -653,6 +659,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 				addressDepLayout = (LinearLayout)v.findViewById(R.id.addressDepLayout);
 				addressDestLayout = (LinearLayout)v.findViewById(R.id.addressDestLayout);
 				addressDestLayout.setVisibility(View.GONE);
+				
+				ivMyPosition = (ImageView) v.findViewById(R.id.ivMyPosition);
 				
 				if(!MainActivity.CheckInternet(ApplicationContextProvider.getContext())){
 					
@@ -710,7 +718,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 					acAddressdep.setAdapter(new PlacesAutoCompleteAdapter(ApplicationContextProvider.getContext(), R.layout.list_item));
 					acAddressdep.setOnItemClickListener(itemClickListenerAddressdep);
 					acAddressdep.addTextChangedListener(textWatcherDep);
-					acAddressdep.setHintTextColor(0xff4cc3ef);
 					
 					acAddressdest = (AutoCompleteTextView) v.findViewById(R.id.acAddressdest);
 					
@@ -751,14 +758,12 @@ public class HomeFragment extends Fragment implements LocationListener {
 			        // Creating a LatLng object for the current location
 			        latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
 			        
-			        latdep = MainActivity.myLatitude;
-			        lngdep=MainActivity.myLongitude;
-			        MarkerOptions a = new MarkerOptions().position(latLngMyPosition);
-				    myMarker = mMap.addMarker(a.title("Moi").icon(BitmapDescriptorFactory.fromResource(R.drawable.pinmyposition)));
+			        //MarkerOptions a = new MarkerOptions().position(latLngMyPosition);
+				    //myMarker = mMap.addMarker(a.title("Moi").icon(BitmapDescriptorFactory.fromResource(R.drawable.pinmyposition)));
 				   
 					        
 			        
-					(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker,acAddressdep)).execute();
+					//(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker,acAddressdep)).execute();
 						
 			        //Move the camera instantly to my position with a zoom of 15.
 			  		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
@@ -766,8 +771,21 @@ public class HomeFragment extends Fragment implements LocationListener {
 			  		mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null); 
 			  		
 			  		
-					
-					
+			  		
+		  			mMap.setOnCameraChangeListener(new OnCameraChangeListener() {
+				  	       
+						@Override
+						public void onCameraChange(CameraPosition arg0) {
+							if(!isSetDep){
+								onCameraChangeDep();
+							}
+							else{
+								onCameraChangeDest();
+							}
+							
+						}
+		  			});
+			  		
 					infobanner.setVisibility(View.VISIBLE);
 					
 					if(driverMarkerList != null){
@@ -927,15 +945,15 @@ public class HomeFragment extends Fragment implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		// create class object
-        gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
+        //gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
 	        // Getting latitude of the current location
 	        // Getting longitude of the current location
-        MainActivity.myLatitude = gps.getLatitude();
-        MainActivity.myLongitude = gps.getLongitude();
+        //MainActivity.myLatitude = gps.getLatitude();
+        //MainActivity.myLongitude = gps.getLongitude();
         // Creating a LatLng object for the current location
-        latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
+        //latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
         
-		(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker,acAddressdep)).execute();
+		//(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker,acAddressdep)).execute();
 			
         //Move the camera instantly to my position with a zoom of 15.
   		//mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition,mMap.getCameraPosition().zoom));
@@ -980,8 +998,95 @@ public class HomeFragment extends Fragment implements LocationListener {
 		 }
 		 
 	 }
-	 
 	
+	 
+	 
+	public void onCameraChangeDep(){
+
+		// TODO Auto-generated method stub
+		getActivity().setProgressBarIndeterminateVisibility(true);
+		
+		//myMarker.setPosition(center);
+		Geocoder geocoderDep;
+		List<Address> addresses;
+		geocoderDep = new Geocoder(ApplicationContextProvider.getContext(), Locale.getDefault());
+		
+		try {
+			addresses = geocoderDep.getFromLocation(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude, 1);
+			
+			if(addresses != null){
+				try{
+					String address = addresses.get(0).getAddressLine(0);
+					String city = addresses.get(0).getAddressLine(1);
+					String country = addresses.get(0).getAddressLine(2);
+					
+					latLngDep = mMap.getCameraPosition().target;
+					
+					latdep = latLngDep.latitude;
+					lngdep = latLngDep.longitude;
+					acAddressdep.setText("");
+					//acAddressdep.setFocusableInTouchMode(false);
+					
+					acAddressdep.setHint(address + ", " + city + ", " + country);
+					addressDep = address + ", " + city + ", " + country;
+					//MainActivity.displayToast("DEP : " + latdep + ", " + lngdep +"\nDEST : " + latdest + ", " + lngdest);
+						
+				}
+				catch(IndexOutOfBoundsException e){
+					
+				}
+				
+			}
+		} 
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	 
+	public void onCameraChangeDest(){
+		getActivity().setProgressBarIndeterminateVisibility(true);
+		
+		//myMarker.setPosition(center);
+		Geocoder geocoderDest;
+		List<Address> addresses;
+		geocoderDest = new Geocoder(ApplicationContextProvider.getContext(), Locale.getDefault());
+		try {
+			addresses = geocoderDest.getFromLocation(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude, 1);
+			
+			if(addresses != null){
+				
+				try{
+					String address = addresses.get(0).getAddressLine(0);
+					String city = addresses.get(0).getAddressLine(1);
+					String country = addresses.get(0).getAddressLine(2);
+					
+					latdest = mMap.getCameraPosition().target.latitude;
+					lngdest = mMap.getCameraPosition().target.longitude;
+					acAddressdest.setText("");
+					//acAddressdep.setFocusableInTouchMode(false);
+					
+					acAddressdest.setHint(address + ", " + city + ", " + country);
+					addressDest = address + ", " + city + ", " + country;
+					//MainActivity.displayToast("DEP : " + latdep + ", " + lngdep +"\nDEST : " + latdest + ", " + lngdest);
+	    			
+				}
+				catch(IndexOutOfBoundsException e){
+					
+				}
+				
+				if(addressDest != null){
+					GetDistancePriceEstimation getDistancePriceEstimation = new GetDistancePriceEstimation(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest), tvPrice);
+					getDistancePriceEstimation.execute();
+				}
+				
+			}
+		} 
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	 
 	 private class DialogSettingInternet extends Dialog implements
 	    android.view.View.OnClickListener {
