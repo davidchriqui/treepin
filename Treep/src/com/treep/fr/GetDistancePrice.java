@@ -243,7 +243,7 @@ public class GetDistancePrice extends AsyncTask<Void, Void, ArrayList<HashMap<St
 			 if(result.size() ==0){
 					
 					FragmentManager fragmentManager = activity.getFragmentManager();
-		            fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_toptobottom, R.anim.slide_out_toptobottom,0,0).replace(R.id.frame_container,new TreepDriverResponseListEmpty()).commit();
+		            //fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_toptobottom, R.anim.slide_out_toptobottom,0,0).replace(R.id.frame_container,new TreepDriverResponseListEmpty()).commit();
 				   
 			 }
 			 else{
@@ -260,7 +260,7 @@ public class GetDistancePrice extends AsyncTask<Void, Void, ArrayList<HashMap<St
 					FragmentManager fragmentManager = activity.getFragmentManager();
 					data.putSerializable("alTreepDriverResponseList",result);
 					MainActivity.fragment .setArguments(data);
-			        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_toptobottom, R.anim.slide_out_toptobottom,0,0).replace(R.id.frame_container,MainActivity.fragment).commit();
+			       // fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_toptobottom, R.anim.slide_out_toptobottom,0,0).replace(R.id.frame_container,MainActivity.fragment).commit();
 					
 				}
 			 }

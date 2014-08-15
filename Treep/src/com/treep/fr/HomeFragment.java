@@ -64,6 +64,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -145,6 +146,7 @@ public class HomeFragment extends Fragment implements LocationListener {
  	private Boolean pinkMode = false;
  	
  	
+ 	
  	static int indexDriverList=0;
 	static int indexUserList=0;
  	//DRIVER MODE
@@ -183,11 +185,59 @@ public class HomeFragment extends Fragment implements LocationListener {
  	private Button buttonRequestDest;
  	private Button buttonBackToDep;
  	
- 	private Animation layoutSlideOutAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_out_layout_toptobottom);
+ 	private boolean compareLayoutIsOpened = false;
+ 	private Animation tableLayoutInAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_in_compare_layout);
+ 	private Animation tableLayoutOutAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_out_compare_layout);
  	
-	 
+ 	private Animation layoutSlideOutAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_out_layout_toptobottom);
  	private Animation layoutSlideInAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_in_layout_bottomtotop);
  	
+ 	private TableLayout tableLayout;
+ 	
+ 	private Button compareButton;
+ 	private OnClickListener clickListenerCompareButton = new View.OnClickListener() {
+    	
+	    @Override
+	    public void onClick(View v) {
+	    	
+	    	if(!compareLayoutIsOpened){
+	    		// Creating a LatLng object for the current location
+		    	tableLayoutInAnim.setAnimationListener(new Animation.AnimationListener(){
+				    @Override
+				    public void onAnimationStart(Animation arg0) {
+				    	tableLayout.setVisibility(View.VISIBLE);
+				    	compareButton.bringToFront();
+				    }           
+				    @Override
+				    public void onAnimationRepeat(Animation arg0) {
+				    }           
+				    @Override
+				    public void onAnimationEnd(Animation arg0) {
+				    	
+				    }
+				});
+		    	tableLayout.startAnimation(tableLayoutInAnim);
+		    	compareLayoutIsOpened = true;
+	    	}
+	    	else{
+	    		tableLayoutOutAnim.setAnimationListener(new Animation.AnimationListener(){
+				    @Override
+				    public void onAnimationStart(Animation arg0) {
+				    	
+				    }           
+				    @Override
+				    public void onAnimationRepeat(Animation arg0) {
+				    }           
+				    @Override
+				    public void onAnimationEnd(Animation arg0) {
+				    	tableLayout.setVisibility(View.GONE);
+				    }
+				});
+		    	tableLayout.startAnimation(tableLayoutOutAnim);
+		    	compareLayoutIsOpened = false;
+	    	}		
+	    }
+	  };
  	
  	//OnClickListener for the "Request a Treep" button
     private OnClickListener clickListenerRequestTreepDepButton = new View.OnClickListener() {
@@ -489,12 +539,9 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    @Override
 	    public void onClick(View v) {
             // Creating a LatLng object for the current location
-			latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
-	      //Move the camera instantly to hamburg with a zoom of 15.
+			LatLng latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
 			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
 			mMap.animateCamera(cameraUpdate);
-			//mMap.moveCamera(cameraUpdate);
-			 //Move the camera instantly to my position with a zoom of 15.
 			
 	    			
 	    }
@@ -648,6 +695,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 				bellofont = Typeface.createFromAsset(getActivity().getAssets(), "bello.ttf");
 				fb = Typeface.createFromAsset(getActivity().getAssets(), "fb.ttf");
 				
+				tableLayout = (TableLayout)v.findViewById(R.id.tableLayout);
+				
 				pinkModeButton = (Button) v.findViewById(R.id.pinkModeButton);
 				infobanner = (TextView) v.findViewById(R.id.infobanner);
 				infobannermodedriver =  (TextView) v.findViewById(R.id.infobannermodedriver);
@@ -735,6 +784,10 @@ public class HomeFragment extends Fragment implements LocationListener {
 					
 					myLocationButton = (Button) v.findViewById(R.id.mypositionbutton);
 					myLocationButton.setOnClickListener(clickListenerMyLocationButton);
+					
+					compareButton = (Button) v.findViewById(R.id.compareButton);
+					compareButton.setOnClickListener(clickListenerCompareButton);
+					
 					
 					layoutSlideOutAnim.setFillAfter(true);
 					layoutSlideInAnim.setFillAfter(true);
@@ -944,20 +997,12 @@ public class HomeFragment extends Fragment implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		// create class object
-        //gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
-	        // Getting latitude of the current location
-	        // Getting longitude of the current location
-        //MainActivity.myLatitude = gps.getLatitude();
-        //MainActivity.myLongitude = gps.getLongitude();
-        // Creating a LatLng object for the current location
-        //latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
-        
-		//(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker,acAddressdep)).execute();
-			
-        //Move the camera instantly to my position with a zoom of 15.
-  		//mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition,mMap.getCameraPosition().zoom));
-  		// Zoom in, animating the camera.
+		
+		latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
+		//CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
+		//mMap.animateCamera(cameraUpdate);
+		
+		
 		
 	}
 
@@ -1131,6 +1176,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 			    }
 			  }
 		}
+	 
 	 
 	 
 	 private class DialogPinkModeOn extends Dialog implements

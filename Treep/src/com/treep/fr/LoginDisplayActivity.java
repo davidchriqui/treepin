@@ -115,7 +115,7 @@ public class LoginDisplayActivity extends Activity {
         divider.setVisibility(View.GONE);
          
         
-        Animation animationFbconnect = AnimationUtils.loadAnimation(this,R.anim.fbconnectfadein);
+        Animation animationFbconnect = AnimationUtils.loadAnimation(this,R.anim.fadein);
         
         buttonLoginLogout.startAnimation(animationFbconnect); 
         buttonLoginLogout.setVisibility(View.GONE);
@@ -154,7 +154,7 @@ public class LoginDisplayActivity extends Activity {
 				    }           
 				    @Override
 				    public void onAnimationEnd(Animation arg0) {
-				    	Animation animationHelp = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.fbconnectfadein);
+				    	Animation animationHelp = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.fadein);
 				    	viewpager.setVisibility(View.VISIBLE);
 				    	divider.setVisibility(View.VISIBLE);
 				    	viewpager.startAnimation(animationHelp);
