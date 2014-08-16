@@ -138,6 +138,10 @@ public class MainActivity extends Activity{
     
     static final String KEY_DRIVERMODETREEPSTATE = "drivermodetreepstate";
     
+
+    static final String KEY_STATUS = "status";
+    
+    
     //userdriverinfo (drivermode)
     static final String KEY_USERDRIVERINFO = "userdriverinfo";
     static final String KEY_ISAVAILABLE = "isavailable";

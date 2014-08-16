@@ -151,10 +151,6 @@ public class TreepRequestFragment extends Fragment {
 		final Animation buttonScaleOnTouchAcceptAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.button_scale_ontouch);
 		buttonScaleOnTouchAcceptAnim.setFillAfter(true);
 		
-		
-		
-		
-		
 		OnTouchListener onTouchListenerButtonAccept = new View.OnTouchListener() {
 		    @Override
 		    public boolean onTouch(View v, MotionEvent event) {

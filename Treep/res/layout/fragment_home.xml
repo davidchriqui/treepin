@@ -361,7 +361,6 @@
 	        </LinearLayout>
 	        <TextView
 	            android:id="@+id/ptPrice"
-	            android:text="3€"
 		        android:layout_centerHorizontal="true"
 		        android:textSize="17dp"
 		        android:textStyle="bold"
@@ -370,7 +369,6 @@
 	 
 	        <TextView
 	            android:id="@+id/ptTime"
-	            android:text="32 min"
 		        android:layout_centerHorizontal="true"
 		        android:textSize="17dp"
 		        android:textStyle="bold"

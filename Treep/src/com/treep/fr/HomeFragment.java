@@ -3,17 +3,28 @@ package com.treep.fr;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,16 +94,27 @@ import com.google.android.gms.maps.model.MarkerOptions;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 public class HomeFragment extends Fragment implements LocationListener {
      
-	private Typeface bellofont;
+	
 	private Typeface fb;
 	
+	private Location location;
+	
 	private MapView mapView;
-	static GoogleMap mMap;
+	private GoogleMap mMap;
 	private TextView infobanner ;
 	private TextView infobannermodedriver;
 	private TextView tvPrice ;
 	private StringBuilder infobannertxt;
 	private GPSTracker gps;
+	
+	
+	private TextView treepinPrice;
+	private TextView treepintime;
+	private TextView ptPrice;
+	private TextView ptTime;
+	private TextView taxiPrice;
+	private TextView taxiTime;
+	
 	
 	private ImageView ivMyPosition;
     
@@ -186,6 +208,10 @@ public class HomeFragment extends Fragment implements LocationListener {
  	private Button buttonBackToDep;
  	
  	private boolean compareLayoutIsOpened = false;
+
+ 	private Animation buttonCompareScaleAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.button_compare_scale);
+ 	private Animation buttonCompareFadeOutAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.fadeout);
+ 	
  	private Animation tableLayoutInAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_in_compare_layout);
  	private Animation tableLayoutOutAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_out_compare_layout);
  	
@@ -195,10 +221,34 @@ public class HomeFragment extends Fragment implements LocationListener {
  	private TableLayout tableLayout;
  	
  	private Button compareButton;
+ 	
+ 	Animation buttonScaleOnReleaseCompareAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.button_scale_onrelease);
+	
+	Animation buttonScaleOnTouchCompareAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.button_scale_ontouch);
+	
+	
+	OnTouchListener onTouchListenerCompareButton = new View.OnTouchListener() {
+	    @Override
+	    public boolean onTouch(View v, MotionEvent event) {
+	    	if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+	    		compareButton.startAnimation(buttonScaleOnTouchCompareAnim);
+			     
+		    }
+		    else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+		    	compareButton.startAnimation(buttonScaleOnReleaseCompareAnim);
+		    
+		    }
+			return false;
+	    }
+
+	  };
+	  
  	private OnClickListener clickListenerCompareButton = new View.OnClickListener() {
     	
 	    @Override
 	    public void onClick(View v) {
+	    	
+	    	
 	    	
 	    	if(!compareLayoutIsOpened){
 	    		// Creating a LatLng object for the current location
@@ -218,6 +268,9 @@ public class HomeFragment extends Fragment implements LocationListener {
 				});
 		    	tableLayout.startAnimation(tableLayoutInAnim);
 		    	compareLayoutIsOpened = true;
+		    	
+		    	CompareDurationForPublicTransportWithGoogle compareDurationForPublicTransport = new CompareDurationForPublicTransportWithGoogle();
+		    	compareDurationForPublicTransport.execute();
 	    	}
 	    	else{
 	    		tableLayoutOutAnim.setAnimationListener(new Animation.AnimationListener(){
@@ -305,9 +358,26 @@ public class HomeFragment extends Fragment implements LocationListener {
 				    }
 				});
 				addressDestLayout.setVisibility(View.VISIBLE);
-				 addressDepLayout.startAnimation(layoutSlideOutAnim);
+				addressDepLayout.startAnimation(layoutSlideOutAnim);
 				 
-				 addressDestLayout.startAnimation(layoutSlideInAnim);
+				addressDestLayout.startAnimation(layoutSlideInAnim);
+				
+				
+				buttonCompareScaleAnim.setAnimationListener(new Animation.AnimationListener(){
+				    @Override
+				    public void onAnimationStart(Animation arg0) {
+				    	compareButton.setVisibility(View.VISIBLE);
+				    }           
+				    @Override
+				    public void onAnimationRepeat(Animation arg0) {
+				    }           
+				    @Override
+				    public void onAnimationEnd(Animation arg0) {
+				    	addressDestLayout.clearAnimation();
+				    	
+				    }
+				});
+				compareButton.startAnimation(buttonCompareScaleAnim);
 	    	}
 	    }
 	  };
@@ -345,6 +415,22 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    	addressDestLayout.startAnimation(layoutSlideOutAnim);
 		 	addressDepLayout.startAnimation(layoutSlideInAnim);
 		 	addressDestLayout.setVisibility(View.GONE);
+		 	
+		 	buttonCompareFadeOutAnim.setAnimationListener(new Animation.AnimationListener(){
+			    @Override
+			    public void onAnimationStart(Animation arg0) {
+
+				 	addressDepLayout.setVisibility(View.VISIBLE);
+			    }           
+			    @Override
+			    public void onAnimationRepeat(Animation arg0) {
+			    }           
+			    @Override
+			    public void onAnimationEnd(Animation arg0) {
+			    	compareButton.setVisibility(View.GONE);
+			    }
+			});
+		 	compareButton.startAnimation(buttonCompareFadeOutAnim);
 		 	addressDepLayout.setVisibility(View.VISIBLE);
 		 	
 	    }
@@ -467,8 +553,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 			        	List<Address> addresses = gcDep.getFromLocationName(addressDep, 5);
 			        	Address x = addresses.get(0);
 						//on récupère la latitude et longitude correspondante à l'adresse
-						//latdep  = x.getLatitude();
-						//lngdep = x.getLongitude();
+						latdep  = x.getLatitude();
+						lngdep = x.getLongitude();
 						latLngDep = new LatLng(latdep,lngdep);
 						
 						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngDep, 15);
@@ -501,14 +587,14 @@ public class HomeFragment extends Fragment implements LocationListener {
 		    	acAddressdestLength = acAddressdest.getText().toString().length();
 		        Geocoder gcDest = new Geocoder(ApplicationContextProvider.getContext());
 		        try {
-					
 					//une liste déroulante d'adresse possible pour qu'il sélectionne labonneadresse
 		        	//On vérifie que cette liste n'est pas vide et associe bien un LATLNG
 		        	if(gcDest.getFromLocationName(addressDest, 5).size() > 0){
 			        	List<Address> addresses = gcDest.getFromLocationName(addressDest, 5);
 			        	Address x = addresses.get(0);
 						//on récupère la latitude et longitude correspondante à l'adresse
-						
+			        	latdest  = x.getLatitude();
+						lngdest = x.getLongitude();
 						latLngDest = new LatLng(latdest,lngdest);
 						
 						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngDest, 15);
@@ -539,11 +625,18 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    @Override
 	    public void onClick(View v) {
             // Creating a LatLng object for the current location
-			LatLng latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
-			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
-			mMap.animateCamera(cameraUpdate);
-			
-	    			
+	    	location = mMap.getMyLocation();
+	    	if(location != null){
+	    		latLngMyPosition = new LatLng(location.getLatitude(), location.getLongitude());
+				CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
+				mMap.animateCamera(cameraUpdate);
+	    	}
+	    	else{
+	    		gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
+				latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
+				CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
+				mMap.animateCamera(cameraUpdate);
+	    	}		
 	    }
 	  };
     
@@ -692,7 +785,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 			else{
 				
 				//initilize the custom typefont
-				bellofont = Typeface.createFromAsset(getActivity().getAssets(), "bello.ttf");
 				fb = Typeface.createFromAsset(getActivity().getAssets(), "fb.ttf");
 				
 				tableLayout = (TableLayout)v.findViewById(R.id.tableLayout);
@@ -787,12 +879,21 @@ public class HomeFragment extends Fragment implements LocationListener {
 					
 					compareButton = (Button) v.findViewById(R.id.compareButton);
 					compareButton.setOnClickListener(clickListenerCompareButton);
+					compareButton.setOnTouchListener(onTouchListenerCompareButton);
+					buttonScaleOnTouchCompareAnim.setFillAfter(true);
+					buttonScaleOnReleaseCompareAnim.setFillAfter(true);
 					
+					compareButton.setVisibility(View.GONE);
 					
 					layoutSlideOutAnim.setFillAfter(true);
 					layoutSlideInAnim.setFillAfter(true);
 					
-					
+					treepinPrice  = (TextView) v.findViewById(R.id.treepinPrice);
+					treepintime = (TextView) v.findViewById(R.id.treepintime);
+					ptPrice = (TextView) v.findViewById(R.id.ptPrice);
+					ptTime = (TextView) v.findViewById(R.id.ptTime);
+					taxiPrice = (TextView) v.findViewById(R.id.taxiPrice);
+					taxiTime = (TextView) v.findViewById(R.id.taxiTime);
 					
 					// Needs to call MapsInitializer before doing any CameraUpdateFactory calls
 					try {
@@ -803,25 +904,37 @@ public class HomeFragment extends Fragment implements LocationListener {
 					
 					mMap.clear();
 					// create class object
-			        gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
+					
+					location = mMap.getMyLocation();
+					
+					
+
+			        if (location != null) {
+			        	
+						latLngMyPosition = new LatLng(location.getLatitude(), location.getLongitude());
+						
+						
+						mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
+				  		// Zoom in, animating the camera.
+				  		mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null); 
+					}
+			        else{
+			        	gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
+						latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
+						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
+						mMap.animateCamera(cameraUpdate);
+						
+						mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
+				  		// Zoom in, animating the camera.
+				  		mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null); 
+			        }
+			        //gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
 				        // Getting latitude of the current location
 				        // Getting longitude of the current location
-			        MainActivity.myLatitude = gps.getLatitude();
-			        MainActivity.myLongitude = gps.getLongitude();
+			        //MainActivity.myLatitude = gps.getLatitude();
+			        //MainActivity.myLongitude = gps.getLongitude();
 			        // Creating a LatLng object for the current location
-			        latLngMyPosition = new LatLng(MainActivity.myLatitude, MainActivity.myLongitude);
-			        
-			        //MarkerOptions a = new MarkerOptions().position(latLngMyPosition);
-				    //myMarker = mMap.addMarker(a.title("Moi").icon(BitmapDescriptorFactory.fromResource(R.drawable.pinmyposition)));
-				   
-					        
-			        
-					//(new GetAddressTask(getActivity(),MainActivity.myLatitude,MainActivity.myLongitude,latLngMyPosition, myMarker,acAddressdep)).execute();
-						
-			        //Move the camera instantly to my position with a zoom of 15.
-			  		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
-			  		// Zoom in, animating the camera.
-			  		mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null); 
+			       
 			  		
 			  		
 			  		
@@ -998,7 +1111,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		
-		latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
+		//latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
 		//CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
 		//mMap.animateCamera(cameraUpdate);
 		
@@ -1427,4 +1540,230 @@ public class HomeFragment extends Fragment implements LocationListener {
 				}
 			}
 		}
+		
+		
+		private class CompareDurationForPublicTransportWithGoogle extends AsyncTask<Void, Integer, HashMap<String,String>> {
+			
+			String json;
+			
+			public CompareDurationForPublicTransportWithGoogle(){
+				
+			}
+			
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+			 	
+				
+			}
+
+			@Override
+			protected void onProgressUpdate(Integer... values){
+				super.onProgressUpdate(values);
+				
+			}
+
+			@Override
+			protected HashMap<String,String> doInBackground(Void... arg0) {
+				
+				HashMap<String,String> mapDistanceDuration = new HashMap<String,String>();
+				
+				StringBuilder stringBuilder = new StringBuilder();
+				
+				
+				try {
+			        String url = "http://maps.googleapis.com/maps/api/directions/json?origin=" + latdep + "," + lngdep + "&destination=" + latdest  +","+ lngdest + "&sensor=false&region=fr&departure_time=" + System.currentTimeMillis()/1000 +"&mode=transit";
+			        //String url = "http://maps.googleapis.com/maps/api/directions/json?origin=1%20rue%20vidal%20de%20la%20blache%2075020%20paris&destination=2%20rue%20brochant%2075017%20paris&sensor=false&region=fr&departure_time=1408143996&mode=transit";	
+			
+			        HttpPost httppost = new HttpPost(url);
+			
+			        HttpClient client = new DefaultHttpClient();
+			        HttpResponse response;
+			        stringBuilder = new StringBuilder();
+			
+			
+			        response = client.execute(httppost);
+			        HttpEntity entity = response.getEntity();
+			        InputStream stream = entity.getContent();
+			        int b;
+			        while ((b = stream.read()) != -1) {
+			            stringBuilder.append((char) b);
+			        }
+		        }
+		        catch (ClientProtocolException e) {
+		        } 
+		        catch (IOException e) {
+		        }
+				
+				JSONObject jsonObject = new JSONObject();
+		        try {
+
+		            jsonObject = new JSONObject(stringBuilder.toString());
+		            
+		            json = stringBuilder.toString();
+		            
+		           // JSONObject JSONstatus = jsonObject.getJSONObject("status");
+		            mapDistanceDuration.put(MainActivity.KEY_STATUS, jsonObject.getString("status"));
+
+		            JSONArray JSONArrayRoutes = jsonObject.getJSONArray("routes");
+
+		            JSONObject JSONObjectRoutesElement = JSONArrayRoutes.getJSONObject(0);
+		            
+		            JSONArray JSONArrayLegs = JSONObjectRoutesElement.getJSONArray("legs");
+
+		            JSONObject JSONObjectLegsElement = JSONArrayLegs.getJSONObject(0);
+		            
+		            JSONObject JSONObjectDuration = JSONObjectLegsElement.getJSONObject("duration");
+		            
+		            mapDistanceDuration.put(MainActivity.KEY_DURATION, JSONObjectDuration.getString("value"));
+		            
+
+		        } catch (JSONException e) {
+		            // TODO Auto-generated catch block
+		            e.printStackTrace();
+		        }
+		        catch(NullPointerException e){
+		        	
+		        }
+		        catch(RuntimeException e){
+		        	
+		        }
+				
+				
+				
+				return mapDistanceDuration;
+				
+			}
+
+			
+			@SuppressLint("NewApi")
+			protected void onPostExecute(HashMap<String,String> result) {
+				
+				if(result == null){
+					ptTime.setTextColor(Color.parseColor("#CDCDCD"));
+					ptTime.setText("Indisp. status");
+					
+					//MainActivity.displayToast(json);
+				}
+				else{
+					if(!result.get(MainActivity.KEY_STATUS).contains("OK")){
+						ptTime.setTextColor(Color.parseColor("#CDCDCD"));
+						ptTime.setText("Indisp.");
+						
+						//MainActivity.displayToast(json);
+					}
+					else{
+						ptTime.setTextColor(Color.parseColor("#888888"));
+						long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
+					    if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
+					    	ptTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+						
+					    }
+					    else{
+					    	ptTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+						            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+						
+					    }    
+					}
+				}
+			}
+		}
+		
+		
+		private class CompareDistanceDuration extends AsyncTask<Void, Integer, HashMap<String, String>> {
+			
+			private Activity activity;
+			private String distanceForPublicTransport;
+			
+			
+			public CompareDistanceDuration(Activity activity, String distanceForPublicTransport){
+				this.activity=activity;
+				this.distanceForPublicTransport=distanceForPublicTransport;
+			}
+			
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+			 	
+				
+			}
+
+			@Override
+			protected void onProgressUpdate(Integer... values){
+				super.onProgressUpdate(values);
+				
+			}
+
+			@Override
+			protected HashMap<String, String> doInBackground(Void... arg0) {
+				HashMap<String, String> mapDistanceDuration = new HashMap<String, String>();
+				
+				StringBuilder stringBuilder = new StringBuilder();
+				
+				try {
+			        String url = "http://maps.googleapis.com/maps/api/distancematrix/json?origins=" + latdep + "," + lngdep + "&destinations=" + latdest  +","+ lngdest + "&mode=driving&sensor=false";
+			
+			        HttpPost httppost = new HttpPost(url);
+			
+			        HttpClient client = new DefaultHttpClient();
+			        HttpResponse response;
+			        stringBuilder = new StringBuilder();
+			
+			
+			        response = client.execute(httppost);
+			        HttpEntity entity = response.getEntity();
+			        InputStream stream = entity.getContent();
+			        int b;
+			        while ((b = stream.read()) != -1) {
+			            stringBuilder.append((char) b);
+			        }
+		        }
+		        catch (ClientProtocolException e) {
+		        } 
+		        catch (IOException e) {
+		        }
+				
+				JSONObject jsonObject = new JSONObject();
+		        try {
+
+		            jsonObject = new JSONObject(stringBuilder.toString());
+		            
+		           // JSONObject JSONstatus = jsonObject.getJSONObject("status");
+		            mapDistanceDuration.put(MainActivity.KEY_STATUS, jsonObject.getString("status"));
+
+		            JSONArray JSONArrayRows = jsonObject.getJSONArray("rows");
+
+		            JSONObject JSONelements = JSONArrayRows.getJSONObject(0);
+		            
+		            JSONArray JSONArrayElements = JSONelements.getJSONArray("elements");
+		            
+		            JSONObject JSONObjectdistanceDuration = JSONArrayElements.getJSONObject(0);
+		            
+		            JSONObject JSONObjectDistance1 = JSONObjectdistanceDuration.getJSONObject("distance");
+		            JSONObject JSONObjectDuration1 = JSONObjectdistanceDuration.getJSONObject("duration");
+		            
+		            mapDistanceDuration.put(MainActivity.KEY_DISTANCE, JSONObjectDistance1.getString("value"));
+		            mapDistanceDuration.put(MainActivity.KEY_DURATION, JSONObjectDuration1.getString("value"));
+		            
+
+		        } catch (JSONException e) {
+		            // TODO Auto-generated catch block
+		            e.printStackTrace();
+		        }
+				
+				return mapDistanceDuration;
+			}
+
+			
+			@SuppressLint("NewApi")
+			protected void onPostExecute(ArrayList<HashMap<String, String>> result) {
+				
+				if(result == null){
+					
+				}
+				else{
+				}
+			}
+		}
+		
 }
