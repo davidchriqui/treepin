@@ -40,7 +40,6 @@ public class SendTreepRequest extends AsyncTask<Void, Integer, HashMap<String, S
 	private String lngDest;
 	private String addressDep;
 	private String addressDest;
-	private Boolean pinkMode;
 	private ArrayList<String> alMatchedDrivers;
 	private ArrayList<String> alStoredMatchedDrivers;
 	private ArrayList<String> alNewMatchedDrivers = new ArrayList<String>();
@@ -62,7 +61,6 @@ public class SendTreepRequest extends AsyncTask<Void, Integer, HashMap<String, S
 			String lngDest,
 			String addressDep, 
 			String addressDest,
-			Boolean pinkMode,
 			ArrayList<String> alMatchedDrivers,
 			ArrayList<String> alMatchedDriverTreepRequestIdList,
 			ArrayList<String> alMatchedDetourList,
@@ -74,7 +72,6 @@ public class SendTreepRequest extends AsyncTask<Void, Integer, HashMap<String, S
 		this.lngDest=lngDest;
 		this.addressDep=addressDep;
 		this.addressDest=addressDest;
-		this.pinkMode=pinkMode;
 		this.alMatchedDrivers=alMatchedDrivers;
 		this.alMatchedDriverTreepRequestIdList=alMatchedDriverTreepRequestIdList;
 		this.alMatchedDetourList=alMatchedDetourList;
@@ -232,7 +229,6 @@ public class SendTreepRequest extends AsyncTask<Void, Integer, HashMap<String, S
 																	+ "&lngdest=" + lngDest 
 																	+ "&addressdep=" + URLEncoder.encode(addressDep, "UTF-8") 
 																	+ "&addressdest=" + URLEncoder.encode(addressDest, "UTF-8")
-																	+ "&pinkmode=" + String.valueOf(pinkMode)
 																	);
 		} catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block

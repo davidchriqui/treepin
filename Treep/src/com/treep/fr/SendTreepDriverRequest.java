@@ -34,8 +34,7 @@ public class SendTreepDriverRequest extends AsyncTask<Void, Integer, HashMap<Str
 			String latDep, 
 			String lngDep,
 			String latDest, 
-			String lngDest,
-			Boolean pinkMode){
+			String lngDest){
 		this.activity=activity;
 		this.latDep=latDep;
 		this.lngDep=lngDep;

@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,6 +84,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -164,8 +166,6 @@ public class HomeFragment extends Fragment implements LocationListener {
  	
   	static Boolean hasToUpdate = false;
  	
- 	private Button pinkModeButton;
- 	private Boolean pinkMode = false;
  	
  	
  	
@@ -173,24 +173,46 @@ public class HomeFragment extends Fragment implements LocationListener {
 	static int indexUserList=0;
  	//DRIVER MODE
  	
+	private Button myLocationButton;
+	Animation buttonScaleOnReleaseMyLocationAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.button_scale_onrelease);
+	
+	Animation buttonScaleOnTouchMyLocationAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.button_scale_ontouch);
+	
+    private OnClickListener clickListenerMyLocationButton = new View.OnClickListener() {
+    	
+	    @Override
+	    public void onClick(View v) {
+            // Creating a LatLng object for the current location
+	    	location = mMap.getMyLocation();
+	    	if(location != null){
+	    		latLngMyPosition = new LatLng(location.getLatitude(), location.getLongitude());
+				CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
+				mMap.animateCamera(cameraUpdate);
+	    	}
+	    	else{
+	    		gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
+				latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
+				CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
+				mMap.animateCamera(cameraUpdate);
+	    	}		
+	    }
+	  };
+	  
+	  OnTouchListener onTouchListenerMyLocationButton = new View.OnTouchListener() {
+		    @Override
+		    public boolean onTouch(View v, MotionEvent event) {
+		    	if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+		    		myLocationButton.startAnimation(buttonScaleOnTouchMyLocationAnim);
+				     
+			    }
+			    else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+			    	myLocationButton.startAnimation(buttonScaleOnReleaseMyLocationAnim);
+			    
+			    }
+				return false;
+		    }
+	  };
  	
- 	 private OnClickListener clickListenerPinkModeButton = new View.OnClickListener() {
- 	    @Override
- 	    public void onClick(View v) {
- 	    	if(!pinkMode){
- 	    		pinkMode = true;
- 	    		pinkModeButton.setBackgroundResource(R.drawable.pinkmodeon);
- 	    		DialogPinkModeOn dialogPinkModeOn = new DialogPinkModeOn(getActivity());
- 	    		dialogPinkModeOn.show();
- 	    	}
- 	    	else{
- 	    		pinkMode = false;
- 	    		pinkModeButton.setBackgroundResource(R.drawable.pinkmodeoff);
- 	    		MainActivity.displayToast("Mode Pink désactivé");
- 	    	}
- 	    }
- 	    	
- 	  };
 
  	private ArrayList<HashMap<String, String>> alMapDistanceTime = new ArrayList<HashMap<String, String>>();
  	private ArrayList<Integer>alDistanceTime = new ArrayList<Integer>();
@@ -243,52 +265,58 @@ public class HomeFragment extends Fragment implements LocationListener {
 
 	  };
 	  
+	  
+	  
  	private OnClickListener clickListenerCompareButton = new View.OnClickListener() {
     	
-	    @Override
+	    @SuppressWarnings("deprecation")
+		@Override
 	    public void onClick(View v) {
 	    	
 	    	
-	    	
-	    	if(!compareLayoutIsOpened){
-	    		// Creating a LatLng object for the current location
-		    	tableLayoutInAnim.setAnimationListener(new Animation.AnimationListener(){
-				    @Override
-				    public void onAnimationStart(Animation arg0) {
-				    	tableLayout.setVisibility(View.VISIBLE);
-				    	compareButton.bringToFront();
-				    }           
-				    @Override
-				    public void onAnimationRepeat(Animation arg0) {
-				    }           
-				    @Override
-				    public void onAnimationEnd(Animation arg0) {
-				    	
-				    }
-				});
-		    	tableLayout.startAnimation(tableLayoutInAnim);
-		    	compareLayoutIsOpened = true;
-		    	
-		    	CompareDurationForPublicTransportWithGoogle compareDurationForPublicTransport = new CompareDurationForPublicTransportWithGoogle();
-		    	compareDurationForPublicTransport.execute();
-	    	}
+	    	if(!MainActivity.driverMode){
+	    		if(!compareLayoutIsOpened){
+		    		// Creating a LatLng object for the current location
+			    	tableLayoutInAnim.setAnimationListener(new Animation.AnimationListener(){
+					    @Override
+					    public void onAnimationStart(Animation arg0) {
+					    	tableLayout.setVisibility(View.VISIBLE);
+					    }           
+					    @Override
+					    public void onAnimationRepeat(Animation arg0) {
+					    }           
+					    @Override
+					    public void onAnimationEnd(Animation arg0) {
+					    	
+					    }
+					});
+			    	compareButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.estimateiconfocused));
+			    	tableLayout.startAnimation(tableLayoutInAnim);
+			    	compareLayoutIsOpened = true;
+		    	}
+		    	else{
+		    		tableLayoutOutAnim.setAnimationListener(new Animation.AnimationListener(){
+					    @Override
+					    public void onAnimationStart(Animation arg0) {
+					    	
+					    }           
+					    @Override
+					    public void onAnimationRepeat(Animation arg0) {
+					    }           
+					    @Override
+					    public void onAnimationEnd(Animation arg0) {
+					    	tableLayout.setVisibility(View.GONE);
+					    }
+					});
+
+			    	compareButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.estimateicon));
+			    	tableLayout.startAnimation(tableLayoutOutAnim);
+			    	compareLayoutIsOpened = false;
+		    	}
+			}
 	    	else{
-	    		tableLayoutOutAnim.setAnimationListener(new Animation.AnimationListener(){
-				    @Override
-				    public void onAnimationStart(Animation arg0) {
-				    	
-				    }           
-				    @Override
-				    public void onAnimationRepeat(Animation arg0) {
-				    }           
-				    @Override
-				    public void onAnimationEnd(Animation arg0) {
-				    	tableLayout.setVisibility(View.GONE);
-				    }
-				});
-		    	tableLayout.startAnimation(tableLayoutOutAnim);
-		    	compareLayoutIsOpened = false;
-	    	}		
+	    		
+	    	}
 	    }
 	  };
  	
@@ -471,11 +499,11 @@ public class HomeFragment extends Fragment implements LocationListener {
 	    			//SetTreepBookFromXML setTreepBookFromXML = new SetTreepBookFromXML(getActivity(), latdep, lngdep, latdest, lngdest, pinkMode);
 		    		//setTreepBookFromXML.execute();
 	    			if(!MainActivity.driverMode){
-	    				GetMatchedDrivers getMatchedDrivers = new GetMatchedDrivers(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest), addressDep, addressDest, pinkMode, alMapDriverPosition);
+	    				GetMatchedDrivers getMatchedDrivers = new GetMatchedDrivers(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest), addressDep, addressDest, alMapDriverPosition);
 			    		getMatchedDrivers.execute();
 	    			}
 	    			else{
-	    				SendTreepDriverRequest sendTreepDriverRequest = new SendTreepDriverRequest(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest),pinkMode);
+	    				SendTreepDriverRequest sendTreepDriverRequest = new SendTreepDriverRequest(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest));
 	    				sendTreepDriverRequest.execute();
 	    			}
 	    		}
@@ -557,7 +585,9 @@ public class HomeFragment extends Fragment implements LocationListener {
 						lngdep = x.getLongitude();
 						latLngDep = new LatLng(latdep,lngdep);
 						
-						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngDep, 15);
+						hideSoftKeyboard(getActivity());
+						
+						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLngDep);
 						mMap.animateCamera(cameraUpdate);
 						
 		        	}
@@ -597,11 +627,12 @@ public class HomeFragment extends Fragment implements LocationListener {
 						lngdest = x.getLongitude();
 						latLngDest = new LatLng(latdest,lngdest);
 						
-						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngDest, 15);
+						hideSoftKeyboard(getActivity());
+						
+						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLngDest);
 						mMap.animateCamera(cameraUpdate);
 						
-						GetDistancePriceEstimation getDistancePriceEstimation = new GetDistancePriceEstimation(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest), tvPrice);
-						getDistancePriceEstimation.execute();
+					
 		        	}
 		        	else{
 		        		destIsOk = false;
@@ -619,27 +650,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 		    }
 		  };
 	  
-	private Button myLocationButton;
-    private OnClickListener clickListenerMyLocationButton = new View.OnClickListener() {
-    	
-	    @Override
-	    public void onClick(View v) {
-            // Creating a LatLng object for the current location
-	    	location = mMap.getMyLocation();
-	    	if(location != null){
-	    		latLngMyPosition = new LatLng(location.getLatitude(), location.getLongitude());
-				CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
-				mMap.animateCamera(cameraUpdate);
-	    	}
-	    	else{
-	    		gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
-				latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
-				CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
-				mMap.animateCamera(cameraUpdate);
-	    	}		
-	    }
-	  };
-    
+	
     
 	  
 	  private static final String LOG_TAG = "TREEP";
@@ -771,7 +782,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 		 	}
 	    }
 
-	  
+	    
 	  
 	@SuppressWarnings("unchecked")
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
@@ -789,7 +800,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 				
 				tableLayout = (TableLayout)v.findViewById(R.id.tableLayout);
 				
-				pinkModeButton = (Button) v.findViewById(R.id.pinkModeButton);
 				infobanner = (TextView) v.findViewById(R.id.infobanner);
 				infobannermodedriver =  (TextView) v.findViewById(R.id.infobannermodedriver);
 				if(!MainActivity.driverMode){
@@ -805,7 +815,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 				
 				if(!MainActivity.CheckInternet(ApplicationContextProvider.getContext())){
 					
-					pinkModeButton.setVisibility(View.GONE);
 					infobanner.setVisibility(View.GONE);
 					addressDepLayout.setVisibility(View.GONE);
 					addressDestLayout.setVisibility(View.GONE);
@@ -820,7 +829,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 						mapUserInfo = (HashMap<String, String>) bundle.getSerializable("mapUserInfo");
 					}
 					catch(NullPointerException e){
-						pinkModeButton.setVisibility(View.GONE);
 						infobanner.setVisibility(View.GONE);
 						addressDepLayout.setVisibility(View.GONE);
 						addressDestLayout.setVisibility(View.GONE);
@@ -841,16 +849,15 @@ public class HomeFragment extends Fragment implements LocationListener {
 					mMap.getUiSettings().setMyLocationButtonEnabled(false);
 					
 					//nightHour = Boolean.parseBoolean(mapUserInfo.get(MainActivity.KEY_NIGHTHOUR));
-					
-					
-					if(!Boolean.parseBoolean(mapUserInfo.get(MainActivity.KEY_USERSEXE))){
-						pinkModeButton.setVisibility(View.VISIBLE);
-						pinkModeButton.setOnClickListener(clickListenerPinkModeButton);
-					}
-					else{
-						pinkModeButton.setVisibility(View.GONE);
-					}
-					
+					mMap.setOnMapClickListener(new OnMapClickListener(){
+						
+						 @Override
+						 public void onMapClick(LatLng point) {
+							CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(point);
+							mMap.animateCamera(cameraUpdate);
+						 }
+					});
+						
 					
 					//infobanner.setTypeface(fb);
 					
@@ -876,6 +883,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 					
 					myLocationButton = (Button) v.findViewById(R.id.mypositionbutton);
 					myLocationButton.setOnClickListener(clickListenerMyLocationButton);
+					myLocationButton.setOnTouchListener(onTouchListenerMyLocationButton);
+					
 					
 					compareButton = (Button) v.findViewById(R.id.compareButton);
 					compareButton.setOnClickListener(clickListenerCompareButton);
@@ -1227,6 +1236,12 @@ public class HomeFragment extends Fragment implements LocationListener {
 					acAddressdest.setHint(address + ", " + city + ", " + country);
 					addressDest = address + ", " + city + ", " + country;
 					//MainActivity.displayToast("DEP : " + latdep + ", " + lngdep +"\nDEST : " + latdest + ", " + lngdest);
+					
+					CompareDurationForPublicTransportWithGoogle compareDurationForPublicTransport = new CompareDurationForPublicTransportWithGoogle();
+			    	compareDurationForPublicTransport.execute();
+			    	
+			    	CompareDistanceDurationByCar compareDistanceDurationByCar = new CompareDistanceDurationByCar();
+			    	compareDistanceDurationByCar.execute();
 	    			
 				}
 				catch(IndexOutOfBoundsException e){
@@ -1234,8 +1249,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 				}
 				
 				if(addressDest != null){
-					GetDistancePriceEstimation getDistancePriceEstimation = new GetDistancePriceEstimation(getActivity(),Double.toString(latdep), Double.toString(lngdep), Double.toString(latdest), Double.toString(lngdest), tvPrice);
-					getDistancePriceEstimation.execute();
+					
 				}
 				
 			}
@@ -1641,7 +1655,11 @@ public class HomeFragment extends Fragment implements LocationListener {
 				
 				if(result == null){
 					ptTime.setTextColor(Color.parseColor("#CDCDCD"));
-					ptTime.setText("Indisp. status");
+					ptTime.setText("Indisp.");
+					ptPrice.setTextColor(Color.parseColor("#CDCDCD"));
+					ptPrice.setText("Indisp.");
+					CompareDurationForPublicTransportWithNavitia compareDurationForPublicTransportWithNavitia = new CompareDurationForPublicTransportWithNavitia();
+					compareDurationForPublicTransportWithNavitia.execute();
 					
 					//MainActivity.displayToast(json);
 				}
@@ -1649,13 +1667,157 @@ public class HomeFragment extends Fragment implements LocationListener {
 					if(!result.get(MainActivity.KEY_STATUS).contains("OK")){
 						ptTime.setTextColor(Color.parseColor("#CDCDCD"));
 						ptTime.setText("Indisp.");
+						ptPrice.setTextColor(Color.parseColor("#CDCDCD"));
+						ptPrice.setText("Indisp.");
+						CompareDurationForPublicTransportWithNavitia compareDurationForPublicTransportWithNavitia = new CompareDurationForPublicTransportWithNavitia();
+						compareDurationForPublicTransportWithNavitia.execute();
 						
 						//MainActivity.displayToast(json);
 					}
 					else{
 						ptTime.setTextColor(Color.parseColor("#888888"));
-						long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
-					    if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
+						ptPrice.setTextColor(Color.parseColor("#888888"));
+					    if(result.get(MainActivity.KEY_DURATION) != null){
+					    	long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
+					    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
+						    	ptTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+							
+						    }
+						    else{
+						    	ptTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+							            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+							
+						    }
+					    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<2700){
+					    		ptPrice.setText("1,70-2.65€");
+					    	}
+					    	else{
+					    		if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<4500){
+					    			ptPrice.setText("2.65-5,80€");
+					    		}
+					    		else{
+					    			ptPrice.setText("5.80-9.75€");
+					    		}
+					    	}
+					    }
+					    else{
+					    	ptTime.setTextColor(Color.parseColor("#CDCDCD"));
+							ptTime.setText("Indisp.");
+							ptPrice.setTextColor(Color.parseColor("#CDCDCD"));
+							ptPrice.setText("Indisp.");
+							CompareDurationForPublicTransportWithNavitia compareDurationForPublicTransportWithNavitia = new CompareDurationForPublicTransportWithNavitia();
+							compareDurationForPublicTransportWithNavitia.execute();
+					    }
+					}
+				}
+			}
+		}
+		
+		
+		private class CompareDurationForPublicTransportWithNavitia extends AsyncTask<Void, Integer, HashMap<String,String>> {
+			
+			String json;
+			
+			public CompareDurationForPublicTransportWithNavitia(){
+				
+			}
+			
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+			 	
+				
+			}
+
+			@Override
+			protected void onProgressUpdate(Integer... values){
+				super.onProgressUpdate(values);
+				
+			}
+
+			@Override
+			protected HashMap<String,String> doInBackground(Void... arg0) {
+				
+				HashMap<String,String> mapDistanceDuration = new HashMap<String,String>();
+				
+				StringBuilder stringBuilder = new StringBuilder();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+				
+				try {
+			        String url = "https://api.navitia.io/v1/journeys?from=" + lngdep + ";" + latdep + "&to=" + lngdest + ";" + latdest + "&datetime=" + sdf.format(new Date()).toString() +"&type=fastest";
+			        //String url = "http://maps.googleapis.com/maps/api/directions/json?origin=1%20rue%20vidal%20de%20la%20blache%2075020%20paris&destination=2%20rue%20brochant%2075017%20paris&sensor=false&region=fr&departure_time=1408143996&mode=transit";	
+			        //String url = "https://api.navitia.io/v1/journeys?from=" + lngdep + ";" + latdep + "&to=" + lngdest + ";" + latdest + "&datetime=20140818&type=fastest";
+			        HttpGet httpget = new HttpGet(url);
+			        httpget.addHeader("Authorization", "cee66e9f-007b-4c79-b72f-6e7747c2ffcd");
+			        
+			        HttpClient client = new DefaultHttpClient();
+			        HttpResponse response;
+			        stringBuilder = new StringBuilder();
+			
+			
+			        response = client.execute(httpget);
+			        HttpEntity entity = response.getEntity();
+			        InputStream stream = entity.getContent();
+			        int b;
+			        while ((b = stream.read()) != -1) {
+			            stringBuilder.append((char) b);
+			        }
+		        }
+		        catch (ClientProtocolException e) {
+		        } 
+		        catch (IOException e) {
+		        }
+				
+				JSONObject jsonObject = new JSONObject();
+		        try {
+
+		            jsonObject = new JSONObject(stringBuilder.toString());
+		            
+		            json = stringBuilder.toString();
+		            
+		           // JSONObject JSONstatus = jsonObject.getJSONObject("status");
+
+		            JSONArray JSONArrayJourneys = jsonObject.getJSONArray("journeys");
+
+		            JSONObject JSONObjectJourneysElement = JSONArrayJourneys.getJSONObject(0);
+		            
+		            //JSONObject JSONObjectDuration = JSONObjectJourneysElement.getJSONObject("duration");
+		            
+		            
+		            mapDistanceDuration.put(MainActivity.KEY_DURATION, JSONObjectJourneysElement.getString("duration"));
+		            
+
+		        } catch (JSONException e) {
+		            // TODO Auto-generated catch block
+		            e.printStackTrace();
+		        }
+		        catch(NullPointerException e){
+		        	
+		        }
+		        catch(RuntimeException e){
+		        	
+		        }
+				
+				
+				
+				return mapDistanceDuration;
+				
+			}
+
+			
+			@SuppressLint("NewApi")
+			protected void onPostExecute(HashMap<String,String> result) {
+				//MainActivity.displayToast(json);
+				
+				if(result == null){
+					
+				}
+				else{
+					ptTime.setTextColor(Color.parseColor("#888888"));
+					ptPrice.setTextColor(Color.parseColor("#888888"));
+				    if(result.get(MainActivity.KEY_DURATION) != null){
+				    	long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
+				    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
 					    	ptTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
 						
 					    }
@@ -1663,22 +1825,31 @@ public class HomeFragment extends Fragment implements LocationListener {
 					    	ptTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
 						            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
 						
-					    }    
-					}
+					    }
+				    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<2700){
+				    		ptPrice.setText("1,70-2.65€");
+				    	}
+				    	else{
+				    		if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<4500){
+				    			ptPrice.setText("2.65-5,80€");
+				    		}
+				    		else{
+				    			ptPrice.setText("5.80-9.75€");
+				    		}
+				    	}
+				    }
+				    else{
+				    }
 				}
 			}
 		}
 		
 		
-		private class CompareDistanceDuration extends AsyncTask<Void, Integer, HashMap<String, String>> {
-			
-			private Activity activity;
-			private String distanceForPublicTransport;
+		private class CompareDistanceDurationByCar extends AsyncTask<Void, Integer, HashMap<String, String>> {
 			
 			
-			public CompareDistanceDuration(Activity activity, String distanceForPublicTransport){
-				this.activity=activity;
-				this.distanceForPublicTransport=distanceForPublicTransport;
+			
+			public CompareDistanceDurationByCar(){
 			}
 			
 			@Override
@@ -1739,11 +1910,11 @@ public class HomeFragment extends Fragment implements LocationListener {
 		            
 		            JSONObject JSONObjectdistanceDuration = JSONArrayElements.getJSONObject(0);
 		            
-		            JSONObject JSONObjectDistance1 = JSONObjectdistanceDuration.getJSONObject("distance");
-		            JSONObject JSONObjectDuration1 = JSONObjectdistanceDuration.getJSONObject("duration");
+		            JSONObject JSONObjectDistance = JSONObjectdistanceDuration.getJSONObject("distance");
+		            JSONObject JSONObjectDuration = JSONObjectdistanceDuration.getJSONObject("duration");
 		            
-		            mapDistanceDuration.put(MainActivity.KEY_DISTANCE, JSONObjectDistance1.getString("value"));
-		            mapDistanceDuration.put(MainActivity.KEY_DURATION, JSONObjectDuration1.getString("value"));
+		            mapDistanceDuration.put(MainActivity.KEY_DISTANCE, JSONObjectDistance.getString("value"));
+		            mapDistanceDuration.put(MainActivity.KEY_DURATION, JSONObjectDuration.getString("value"));
 		            
 
 		        } catch (JSONException e) {
@@ -1756,12 +1927,147 @@ public class HomeFragment extends Fragment implements LocationListener {
 
 			
 			@SuppressLint("NewApi")
-			protected void onPostExecute(ArrayList<HashMap<String, String>> result) {
+			protected void onPostExecute(HashMap<String, String> result) {
 				
 				if(result == null){
+					treepintime.setTextColor(Color.parseColor("#CDCDCD"));
+					treepintime.setText("Indisp.");
+					treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
+					treepinPrice.setText("Indisp.");
+					taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
+					taxiTime.setText("Indisp.");
+					taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
+					taxiPrice.setText("Indisp.");
 					
+					//MainActivity.displayToast(json);
 				}
 				else{
+					if(!result.get(MainActivity.KEY_STATUS).contains("OK")){
+						treepintime.setTextColor(Color.parseColor("#CDCDCD"));
+						treepintime.setText("Indisp.");
+						treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
+						treepinPrice.setText("Indisp.");
+						taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
+						taxiTime.setText("Indisp.");
+						taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
+						taxiPrice.setText("Indisp.");
+						
+						//MainActivity.displayToast(json);
+					}
+					else{
+						treepintime.setTextColor(Color.parseColor("#ff4cc3ef"));
+						taxiPrice.setTextColor(Color.parseColor("#888888"));
+						taxiTime.setTextColor(Color.parseColor("#888888"));
+					    if(result.get(MainActivity.KEY_DISTANCE) != null){
+					    	if(result.get(MainActivity.KEY_DURATION) != null){
+					    		treepinPrice.setTextColor(Color.parseColor("#ff4cc3ef"));
+					    		treepintime.setTextColor(Color.parseColor("#ff4cc3ef"));
+					    		taxiPrice.setTextColor(Color.parseColor("#888888"));
+								taxiTime.setTextColor(Color.parseColor("#888888"));
+								
+								treepinPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€");
+								
+								taxiPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*1.40 +(Double.parseDouble(result.get(MainActivity.KEY_DURATION))/60)*0.25 + 2) + "€");
+								
+								long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
+						    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
+						    		treepintime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+						    		taxiTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+						    		tvPrice.setText("Durée du trajet : " +
+						    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+						    				
+						    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
+						    				);
+									tvPrice.setVisibility(View.VISIBLE);
+							    }
+							    else{
+							    	treepintime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+								            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+							    	
+							    	
+							    	taxiTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+								            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+							    	
+							    	
+							    	tvPrice.setText("Durée du trajet : " +
+							    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+										            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+						    				
+						    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
+						    				);
+									tvPrice.setVisibility(View.VISIBLE);
+							    }
+					    	}
+					    	else{
+								treepinPrice.setTextColor(Color.parseColor("#ff4cc3ef"));
+								treepinPrice.setText((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE + "€");
+								
+								tvPrice.setText("PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
+					    				);
+								tvPrice.setVisibility(View.VISIBLE);
+								
+								treepintime.setTextColor(Color.parseColor("#CDCDCD"));
+								treepintime.setText("Indisp.");
+								taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
+								taxiTime.setText("Indisp.");
+								taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
+								taxiPrice.setText("Indisp.");
+					    	}
+					    }
+					    else{
+					    	if(result.get(MainActivity.KEY_DURATION) != null){
+					    		treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
+								treepinPrice.setText("Indisp.");
+					    		treepintime.setTextColor(Color.parseColor("#ff4cc3ef"));
+					    		taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
+								taxiPrice.setText("Indisp.");
+								taxiTime.setTextColor(Color.parseColor("#888888"));
+								
+								
+								long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
+						    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
+						    		treepintime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+						    		taxiTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+									
+						    		tvPrice.setText("Durée du trajet : " +
+						    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+						    				
+						    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
+						    				);
+									tvPrice.setVisibility(View.VISIBLE);
+							    }
+							    else{
+							    	treepintime.setText(
+							    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+								            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+								            
+							    			);
+							    	taxiTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+								            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+								
+							    	tvPrice.setText("Durée du trajet : " +
+							    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+										            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+						    				
+						    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
+						    				);
+									tvPrice.setVisibility(View.VISIBLE);
+							    }
+					    		
+					    	}
+					    	else{
+					    		
+								treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
+								treepinPrice.setText("Indisp.");
+								treepintime.setTextColor(Color.parseColor("#CDCDCD"));
+								treepintime.setText("Indisp.");
+								taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
+								taxiTime.setText("Indisp.");
+								taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
+								taxiPrice.setText("Indisp.");
+					    	}
+					    }
+					}
 				}
 			}
 		}

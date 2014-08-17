@@ -13,6 +13,7 @@
         android:background="#ffffff" />
 
  
+    
     <!-- Listview to display slider menu -->
     <ListView
         android:id="@+id/list_slidermenu"

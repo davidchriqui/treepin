@@ -204,6 +204,14 @@ public class MainActivity extends Activity{
     static final String KEY_NBSEAT = "nbseat";
     static final String KEY_TREEPRESPONSETIMEREMAINING = "treepresponsetimeremaining";
     
+    
+    static final String KEY_CONSTANTS = "constants";
+    static final String KEY_GAZOLPRICE = "gazolprice";
+    static final String KEY_GASOLINEPRICE = "gasolineprice";
+    
+    static String VALUE_GAZOLPRICE;
+    static String VALUE_GASOLINEPRICE;
+    
     static final String KEY_BASEPRICING = "basepricing";
     static final String KEY_NORMALDISTANCEPRICE = "normaldistanceprice";
     static final String KEY_NORMALTIMEPRICE = "normaltimeprice";
@@ -324,6 +332,8 @@ public class MainActivity extends Activity{
   	static final String KEY_SHAREDPREFTREEP = "treepapp";
   	static final String KEY_SHAREDPREFMATCHEDARRAY = "drivermatchedlist";
   	static final String KEY_DRIVERMATCHCOUNT="drivermatchcount";
+  	
+  	static final double VALUE_TREEPKMRATE = 0.45;
 
   	static boolean isTreeperOnBoard = false;
   	static boolean isDriverAccepted = false;
@@ -517,6 +527,8 @@ public class MainActivity extends Activity{
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
         navDrawerItems = new ArrayList<NavDrawerItem>();
  
+        
+        
         // adding nav drawer items to array
         // "réserver un treep"
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[0],navMenuSubTitles[0], navMenuIcons.getResourceId(0, -1)));
@@ -1602,7 +1614,7 @@ public class MainActivity extends Activity{
 		
 		private ArrayList<HashMap<String, String>> alMapDriverPosition;
 		
-		private HashMap<String, String> mapPricingBase = new HashMap<String, String>();
+		private HashMap<String, String> mapConstants = new HashMap<String, String>();
 		
 		private HashMap<String, String> mapResultUserInfo = new HashMap<String, String>();
 		private HashMap<String, String> mapResultTreepOrderInfo = new HashMap<String, String>();
@@ -1611,7 +1623,7 @@ public class MainActivity extends Activity{
 		private HashMap<String, String> mapResultTreepRequest = new HashMap<String, String>();
 		private HashMap<String, String> mapResultDriverTreepNow = new HashMap<String, String>();
 		
-		private HashMap<String, String> mapResultPricingBase = new HashMap<String, String>();
+		private HashMap<String, String> mapResultConstants = new HashMap<String, String>();
 		
 		private ArrayList<HashMap<String, String>> alUserPosition = new ArrayList<HashMap<String, String>>();
 		
@@ -1718,7 +1730,7 @@ public class MainActivity extends Activity{
 				mapDriverUserInfo = new HashMap<String, String>();
 				mapTreepRequest = new HashMap<String, String>();
 				mapDriverTreepNow = new HashMap<String, String>();
-				mapPricingBase = new HashMap<String, String>();
+				mapConstants = new HashMap<String, String>();
 				alMapDriverPosition = new ArrayList<HashMap<String, String>>();
 
 			}
@@ -1757,7 +1769,7 @@ public class MainActivity extends Activity{
 					mapDriverUserInfo.put(MainActivity.KEY_TIMEOUT, "1");
 					mapTreepRequest.put(MainActivity.KEY_TIMEOUT, "1");
 					mapDriverTreepNow.put(MainActivity.KEY_TIMEOUT, "1");	
-					mapPricingBase.put(MainActivity.KEY_TIMEOUT, "1");	
+					mapConstants.put(MainActivity.KEY_TIMEOUT, "1");	
 				}
 				
 				else{
@@ -1777,7 +1789,7 @@ public class MainActivity extends Activity{
 						mapDriverUserInfo = null;
 						mapTreepRequest = null;
 						mapDriverTreepNow = null;
-						mapPricingBase = null;
+						mapConstants = null;
 					}
 					else{
 						NodeList nl_User = doc.getElementsByTagName(MainActivity.KEY_USERINFO);
@@ -1989,19 +2001,15 @@ public class MainActivity extends Activity{
 							}
 						}
 						
-						NodeList nl_BasePricing = doc.getElementsByTagName(MainActivity.KEY_BASEPRICING);
+						NodeList nl_BasePricing = doc.getElementsByTagName(MainActivity.KEY_CONSTANTS);
 						// looping through all xml nodes <KEY_USER>
 						for (int i = 0; i < nl_BasePricing.getLength(); i++) {
 							// creating new HashMap
 							
 							Element e = (Element) nl_BasePricing.item(i);
 							// adding each child node to HashMap key => value
-							mapPricingBase.put(MainActivity.KEY_NORMALDISTANCEPRICE, parser.getValue(e, MainActivity.KEY_NORMALDISTANCEPRICE));
-							mapPricingBase.put(MainActivity.KEY_NORMALTIMEPRICE, parser.getValue(e, MainActivity.KEY_NORMALTIMEPRICE));
-							mapPricingBase.put(MainActivity.KEY_NORMALAPPROACHPRICE, parser.getValue(e, MainActivity.KEY_NORMALAPPROACHPRICE));
-							mapPricingBase.put(MainActivity.KEY_RUSHDISTANCEPRICE, parser.getValue(e, MainActivity.KEY_RUSHDISTANCEPRICE));
-							mapPricingBase.put(MainActivity.KEY_RUSHTIMEPRICE, parser.getValue(e, MainActivity.KEY_RUSHTIMEPRICE));
-							mapPricingBase.put(MainActivity.KEY_RUSHAPPROACHPRICE, parser.getValue(e, MainActivity.KEY_RUSHAPPROACHPRICE));
+							mapConstants.put(MainActivity.KEY_GAZOLPRICE, parser.getValue(e, MainActivity.KEY_GAZOLPRICE));
+							mapConstants.put(MainActivity.KEY_GASOLINEPRICE, parser.getValue(e, MainActivity.KEY_GASOLINEPRICE));
 							
 						}
 						
@@ -2012,7 +2020,7 @@ public class MainActivity extends Activity{
 						mapMainUserInfo.put("mapDriverUserInfo", mapDriverUserInfo);
 						mapMainUserInfo.put("mapTreepRequest", mapTreepRequest);
 						mapMainUserInfo.put("mapDriverTreepNow", mapDriverTreepNow);
-						mapMainUserInfo.put("mapPricingBase", mapPricingBase);
+						mapMainUserInfo.put("mapConstants", mapConstants);
 						
 						
 					}
@@ -2065,8 +2073,8 @@ public class MainActivity extends Activity{
 					mapResultDriverTreepNow = result.get("mapDriverTreepNow");
 				}
 				
-				if(result.containsKey("mapPricingBase")){
-					mapResultPricingBase = result.get("mapPricingBase");
+				if(result.containsKey("mapConstants")){
+					mapResultConstants = result.get("mapConstants");
 				}
 				
 				
@@ -2075,7 +2083,7 @@ public class MainActivity extends Activity{
 						|| mapResultTreepOrderDriverInfo== null || mapResultTreepOrderDriverInfo.containsKey(MainActivity.KEY_TIMEOUT)
 						|| mapResultDriverUserInfo== null || mapResultDriverUserInfo.containsKey(MainActivity.KEY_TIMEOUT)
 						|| mapResultDriverTreepNow== null || mapResultDriverTreepNow.containsKey(MainActivity.KEY_TIMEOUT)
-						|| mapResultPricingBase== null || mapResultPricingBase.containsKey(MainActivity.KEY_TIMEOUT)){
+						|| mapResultConstants== null || mapResultConstants.containsKey(MainActivity.KEY_TIMEOUT)){
 		    		
 					fragment = new BlankFragment();
 					showFragment(0, fragment);
@@ -2089,12 +2097,8 @@ public class MainActivity extends Activity{
 		    	}
 				else{
 					
-					VALUE_NORMALDISTANCEPRICE = mapResultPricingBase.get(MainActivity.KEY_NORMALDISTANCEPRICE);
-				    VALUE_NORMALTIMEPRICE = mapResultPricingBase.get(MainActivity.KEY_NORMALTIMEPRICE);
-				    VALUE_NORMALAPPROACHPRICE = mapResultPricingBase.get(MainActivity.KEY_NORMALAPPROACHPRICE);
-				    VALUE_RUSHDISTANCEPRICE = mapResultPricingBase.get(MainActivity.KEY_RUSHDISTANCEPRICE);
-				    VALUE_RUSHTIMEPRICE = mapResultPricingBase.get(MainActivity.KEY_RUSHTIMEPRICE);
-				    VALUE_RUSHAPPROACHPRICE = mapResultPricingBase.get(MainActivity.KEY_RUSHAPPROACHPRICE);
+					VALUE_GAZOLPRICE = mapResultConstants.get(MainActivity.KEY_GAZOLPRICE);
+					VALUE_GASOLINEPRICE = mapResultConstants.get(MainActivity.KEY_GASOLINEPRICE);
 					
 					MainActivity.driverMode=Boolean.parseBoolean(mapResultUserInfo.get(MainActivity.KEY_DRIVERMODE));
 					MainActivity.navDrawerItems.remove(MainActivity.navDrawerItems.size()-1);

@@ -845,7 +845,6 @@ public class MapUserTreepOrderedFragment extends Fragment implements LocationLis
 										mapTreepOrderInfo.get(MainActivity.KEY_LNGDESTNOW),
 										mapTreepOrderInfo.get(MainActivity.KEY_ADDRESSDEPNOW), 
 										mapTreepOrderInfo.get(MainActivity.KEY_ADDRESSDESTNOW),
-										false, 
 										result,
 										infobannercount);
 							getMatchedDrivers.execute();

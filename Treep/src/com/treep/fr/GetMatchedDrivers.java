@@ -41,7 +41,6 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 	private String lngDest;
 	private String addressDep;
 	private String addressDest;
-	private Boolean pinkMode;
 	private String status = "";
 	
 	
@@ -68,7 +67,6 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 								String lngDest, 
 								String addressDep, 
 								String addressDest,
-								Boolean pinkMode, 
 								ArrayList<HashMap<String,String>> alMapDriverPosition){
 		this.activity=activity;
 		this.latDep=latDep;
@@ -77,7 +75,6 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 		this.lngDest=lngDest;
 		this.addressDep=addressDep;
 		this.addressDest=addressDest;
-		this.pinkMode=pinkMode;
 		this.alMapDriverPosition=alMapDriverPosition;
 	}
 	
@@ -88,7 +85,6 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 			String lngDest, 
 			String addressDep, 
 			String addressDest,
-			Boolean pinkMode, 
 			ArrayList<HashMap<String,String>> alMapDriverPosition,
 			TextView infobannercount){
 		this.activity=activity;
@@ -98,7 +94,6 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 		this.lngDest=lngDest;
 		this.addressDep=addressDep;
 		this.addressDest=addressDest;
-		this.pinkMode=pinkMode;
 		this.alMapDriverPosition=alMapDriverPosition;
 		this.infobannercount=infobannercount;
 	}
@@ -366,7 +361,7 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 			
 			if(result.size() != 0){				
 				if(result.get(0) == "NODRIVERMATCHED" || result.get(0) == "NODRIVER"){
-					SendTreepRequest sendTreepRequest = new SendTreepRequest(activity, latDep, lngDep, latDest, lngDest,addressDep, addressDest,pinkMode, null, null, null, infobannercount);
+					SendTreepRequest sendTreepRequest = new SendTreepRequest(activity, latDep, lngDep, latDest, lngDest,addressDep, addressDest, null, null, null, infobannercount);
 					sendTreepRequest.execute();
 				}
 				else{
@@ -390,7 +385,7 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 								MainActivity.displayToast(alMatchedDriverList.get(i) + " - " + alMatchedDetourList.get(i) + " - " + alMatchedDriverTreepRequestIdList.get(i));
 							}
 							*/
-							SendTreepRequest sendTreepRequest = new SendTreepRequest(activity, latDep, lngDep, latDest, lngDest,addressDep, addressDest,pinkMode, alMatchedDriverList,alMatchedDriverTreepRequestIdList,alMatchedDetourList,infobannercount);
+							SendTreepRequest sendTreepRequest = new SendTreepRequest(activity, latDep, lngDep, latDest, lngDest,addressDep, addressDest, alMatchedDriverList,alMatchedDriverTreepRequestIdList,alMatchedDetourList,infobannercount);
 							sendTreepRequest.execute();
 						}
 					}

@@ -43,7 +43,7 @@
         android:layout_marginTop="20sp"
         android:layout_marginRight="5sp"
         android:layout_alignParentRight="true"
-        android:background="@drawable/mypositionbutton" />
+        android:background="@drawable/button_mylocation" />
 	  
 	  
 	  
