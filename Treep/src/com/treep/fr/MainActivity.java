@@ -131,6 +131,7 @@ public class MainActivity extends Activity{
     static final String KEY_ISDRIVER = "isdriver";
     static final String KEY_BECOMEDRIVER = "becomedriver";
     static final String KEY_DRIVERMODE = "drivermode";
+    static final String KEY_OILTYPE = "oiltype";
     static final String KEY_ISTREEPORDERED = "istreepordered";
     static final String KEY_TIMEREMAINING = "timeremaining";
     static final String KEY_DETOUR = "detour";
@@ -206,11 +207,18 @@ public class MainActivity extends Activity{
     
     
     static final String KEY_CONSTANTS = "constants";
-    static final String KEY_GAZOLPRICE = "gazolprice";
+    static final String KEY_GAZOLEPRICE = "gazoleprice";
     static final String KEY_GASOLINEPRICE = "gasolineprice";
     
     static String VALUE_GAZOLPRICE;
     static String VALUE_GASOLINEPRICE;
+    static double VALUE_CONSUMPTIONPRICEPERKM;
+    
+    static final String KEY_TREEPRATEKM="treepratekm";
+  	
+  	static  double VALUE_TREEPRATEKM = 0.45;
+  	
+  	static boolean VALUE_OILTYPE = false;
     
     static final String KEY_BASEPRICING = "basepricing";
     static final String KEY_NORMALDISTANCEPRICE = "normaldistanceprice";
@@ -333,7 +341,7 @@ public class MainActivity extends Activity{
   	static final String KEY_SHAREDPREFMATCHEDARRAY = "drivermatchedlist";
   	static final String KEY_DRIVERMATCHCOUNT="drivermatchcount";
   	
-  	static final double VALUE_TREEPKMRATE = 0.45;
+  	
 
   	static boolean isTreeperOnBoard = false;
   	static boolean isDriverAccepted = false;
@@ -527,8 +535,6 @@ public class MainActivity extends Activity{
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
         navDrawerItems = new ArrayList<NavDrawerItem>();
  
-        
-        
         // adding nav drawer items to array
         // "réserver un treep"
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[0],navMenuSubTitles[0], navMenuIcons.getResourceId(0, -1)));
@@ -1804,6 +1810,7 @@ public class MainActivity extends Activity{
 							mapUserInfo.put(MainActivity.KEY_USERSEXE, parser.getValue(e, MainActivity.KEY_USERSEXE));
 							mapUserInfo.put(MainActivity.KEY_ISDRIVER, parser.getValue(e, MainActivity.KEY_ISDRIVER));
 							mapUserInfo.put(MainActivity.KEY_DRIVERMODE, parser.getValue(e, MainActivity.KEY_DRIVERMODE));
+							mapUserInfo.put(MainActivity.KEY_OILTYPE, parser.getValue(e, MainActivity.KEY_OILTYPE));
 							mapUserInfo.put(MainActivity.KEY_HASTOUPDATE, parser.getValue(e, MainActivity.KEY_HASTOUPDATE));
 							mapTreepRequest.put(MainActivity.KEY_CURRENTPOSITION, parser.getValue(e, MainActivity.KEY_CURRENTPOSITION));
 							mapTreepRequest.put(MainActivity.KEY_CURRENTCOMPANY, parser.getValue(e, MainActivity.KEY_CURRENTCOMPANY));
@@ -2008,8 +2015,9 @@ public class MainActivity extends Activity{
 							
 							Element e = (Element) nl_BasePricing.item(i);
 							// adding each child node to HashMap key => value
-							mapConstants.put(MainActivity.KEY_GAZOLPRICE, parser.getValue(e, MainActivity.KEY_GAZOLPRICE));
+							mapConstants.put(MainActivity.KEY_GAZOLEPRICE, parser.getValue(e, MainActivity.KEY_GAZOLEPRICE));
 							mapConstants.put(MainActivity.KEY_GASOLINEPRICE, parser.getValue(e, MainActivity.KEY_GASOLINEPRICE));
+							mapConstants.put(MainActivity.KEY_TREEPRATEKM, parser.getValue(e, MainActivity.KEY_TREEPRATEKM));
 							
 						}
 						
@@ -2097,8 +2105,16 @@ public class MainActivity extends Activity{
 		    	}
 				else{
 					
-					VALUE_GAZOLPRICE = mapResultConstants.get(MainActivity.KEY_GAZOLPRICE);
-					VALUE_GASOLINEPRICE = mapResultConstants.get(MainActivity.KEY_GASOLINEPRICE);
+					if(mapResultConstants.get(MainActivity.KEY_TREEPRATEKM) != null){
+						VALUE_TREEPRATEKM = Double.parseDouble(mapResultConstants.get(MainActivity.KEY_TREEPRATEKM));
+					}
+					
+					if(mapResultUserInfo.get(MainActivity.KEY_OILTYPE) != null && Boolean.parseBoolean(mapResultUserInfo.get(MainActivity.KEY_OILTYPE))){
+					    VALUE_CONSUMPTIONPRICEPERKM = Double.parseDouble(mapResultConstants.get(MainActivity.KEY_GAZOLEPRICE));
+					}
+					else{
+						VALUE_CONSUMPTIONPRICEPERKM = Double.parseDouble(mapResultConstants.get(MainActivity.KEY_GASOLINEPRICE));
+					}
 					
 					MainActivity.driverMode=Boolean.parseBoolean(mapResultUserInfo.get(MainActivity.KEY_DRIVERMODE));
 					MainActivity.navDrawerItems.remove(MainActivity.navDrawerItems.size()-1);
@@ -2577,6 +2593,7 @@ public class UpdateUserInfoFromXML extends AsyncTask<Void, Integer, HashMap<Stri
 							mapUserInfo.put(MainActivity.KEY_USERSEXE, parser.getValue(e, MainActivity.KEY_USERSEXE));
 							mapUserInfo.put(MainActivity.KEY_ISDRIVER, parser.getValue(e, MainActivity.KEY_ISDRIVER));
 							mapUserInfo.put(MainActivity.KEY_DRIVERMODE, parser.getValue(e, MainActivity.KEY_DRIVERMODE));
+							mapUserInfo.put(MainActivity.KEY_OILTYPE, parser.getValue(e, MainActivity.KEY_OILTYPE));
 							mapUserInfo.put(MainActivity.KEY_HASTOUPDATE, parser.getValue(e, MainActivity.KEY_HASTOUPDATE));
 							mapUserInfo.put(MainActivity.KEY_APPVERSIONCODE, parser.getValue(e, MainActivity.KEY_APPVERSIONCODE));
 							mapTreepRequest.put(MainActivity.KEY_CURRENTPOSITION, parser.getValue(e, MainActivity.KEY_CURRENTPOSITION));

@@ -117,6 +117,10 @@ public class HomeFragment extends Fragment implements LocationListener {
 	private TextView taxiPrice;
 	private TextView taxiTime;
 	
+	private TextView drivertreeptime;
+	private TextView driverFuelPrice;
+	private TextView driverEarnPrice;
+	
 	
 	private ImageView ivMyPosition;
     
@@ -237,10 +241,15 @@ public class HomeFragment extends Fragment implements LocationListener {
  	private Animation tableLayoutInAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_in_compare_layout);
  	private Animation tableLayoutOutAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_out_compare_layout);
  	
+ 	private Animation tableLayoutDriverInAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_in_compare_layout);
+ 	private Animation tableLayoutDriverOutAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_out_compare_layout);
+ 	
  	private Animation layoutSlideOutAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_out_layout_toptobottom);
  	private Animation layoutSlideInAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.slide_in_layout_bottomtotop);
  	
  	private TableLayout tableLayout;
+ 	
+ 	private TableLayout tableLayoutDriver;
  	
  	private Button compareButton;
  	
@@ -315,7 +324,44 @@ public class HomeFragment extends Fragment implements LocationListener {
 		    	}
 			}
 	    	else{
-	    		
+	    		if(!compareLayoutIsOpened){
+		    		// Creating a LatLng object for the current location
+			    	tableLayoutDriverInAnim.setAnimationListener(new Animation.AnimationListener(){
+					    @Override
+					    public void onAnimationStart(Animation arg0) {
+					    	tableLayoutDriver.setVisibility(View.VISIBLE);
+					    }           
+					    @Override
+					    public void onAnimationRepeat(Animation arg0) {
+					    }           
+					    @Override
+					    public void onAnimationEnd(Animation arg0) {
+					    	
+					    }
+					});
+			    	compareButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.estimateiconfocused));
+			    	tableLayoutDriver.startAnimation(tableLayoutDriverInAnim);
+			    	compareLayoutIsOpened = true;
+		    	}
+		    	else{
+		    		tableLayoutDriverOutAnim.setAnimationListener(new Animation.AnimationListener(){
+					    @Override
+					    public void onAnimationStart(Animation arg0) {
+					    	
+					    }           
+					    @Override
+					    public void onAnimationRepeat(Animation arg0) {
+					    }           
+					    @Override
+					    public void onAnimationEnd(Animation arg0) {
+					    	tableLayoutDriver.setVisibility(View.GONE);
+					    }
+					});
+
+			    	compareButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.estimateicon));
+			    	tableLayoutDriver.startAnimation(tableLayoutDriverOutAnim);
+			    	compareLayoutIsOpened = false;
+		    	}
 	    	}
 	    }
 	  };
@@ -799,6 +845,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 				fb = Typeface.createFromAsset(getActivity().getAssets(), "fb.ttf");
 				
 				tableLayout = (TableLayout)v.findViewById(R.id.tableLayout);
+				tableLayoutDriver = (TableLayout)v.findViewById(R.id.tableLayoutDriver);
 				
 				infobanner = (TextView) v.findViewById(R.id.infobanner);
 				infobannermodedriver =  (TextView) v.findViewById(R.id.infobannermodedriver);
@@ -903,6 +950,10 @@ public class HomeFragment extends Fragment implements LocationListener {
 					ptTime = (TextView) v.findViewById(R.id.ptTime);
 					taxiPrice = (TextView) v.findViewById(R.id.taxiPrice);
 					taxiTime = (TextView) v.findViewById(R.id.taxiTime);
+					
+					drivertreeptime = (TextView) v.findViewById(R.id.drivertreeptime);
+					driverFuelPrice = (TextView) v.findViewById(R.id.driverFuelPrice);
+					driverEarnPrice = (TextView) v.findViewById(R.id.driverEarnPrice);
 					
 					// Needs to call MapsInitializer before doing any CameraUpdateFactory calls
 					try {
@@ -1237,11 +1288,18 @@ public class HomeFragment extends Fragment implements LocationListener {
 					addressDest = address + ", " + city + ", " + country;
 					//MainActivity.displayToast("DEP : " + latdep + ", " + lngdep +"\nDEST : " + latdest + ", " + lngdest);
 					
-					CompareDurationForPublicTransportWithGoogle compareDurationForPublicTransport = new CompareDurationForPublicTransportWithGoogle();
-			    	compareDurationForPublicTransport.execute();
-			    	
-			    	CompareDistanceDurationByCar compareDistanceDurationByCar = new CompareDistanceDurationByCar();
-			    	compareDistanceDurationByCar.execute();
+					if(!MainActivity.driverMode){
+						CompareDurationForPublicTransportWithGoogle compareDurationForPublicTransport = new CompareDurationForPublicTransportWithGoogle();
+				    	compareDurationForPublicTransport.execute();
+				    	
+				    	CompareDistanceDurationByCar compareDistanceDurationByCar = new CompareDistanceDurationByCar();
+				    	compareDistanceDurationByCar.execute();
+					}
+					else{
+						CompareDistanceDurationByCar compareDistanceDurationByCar = new CompareDistanceDurationByCar();
+				    	compareDistanceDurationByCar.execute();
+					}
+					
 	    			
 				}
 				catch(IndexOutOfBoundsException e){
@@ -1929,20 +1987,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 			@SuppressLint("NewApi")
 			protected void onPostExecute(HashMap<String, String> result) {
 				
-				if(result == null){
-					treepintime.setTextColor(Color.parseColor("#CDCDCD"));
-					treepintime.setText("Indisp.");
-					treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
-					treepinPrice.setText("Indisp.");
-					taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
-					taxiTime.setText("Indisp.");
-					taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
-					taxiPrice.setText("Indisp.");
-					
-					//MainActivity.displayToast(json);
-				}
-				else{
-					if(!result.get(MainActivity.KEY_STATUS).contains("OK")){
+				if(!MainActivity.driverMode){
+					if(result == null){
 						treepintime.setTextColor(Color.parseColor("#CDCDCD"));
 						treepintime.setText("Indisp.");
 						treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
@@ -1955,118 +2001,243 @@ public class HomeFragment extends Fragment implements LocationListener {
 						//MainActivity.displayToast(json);
 					}
 					else{
-						treepintime.setTextColor(Color.parseColor("#ff4cc3ef"));
-						taxiPrice.setTextColor(Color.parseColor("#888888"));
-						taxiTime.setTextColor(Color.parseColor("#888888"));
-					    if(result.get(MainActivity.KEY_DISTANCE) != null){
-					    	if(result.get(MainActivity.KEY_DURATION) != null){
-					    		treepinPrice.setTextColor(Color.parseColor("#ff4cc3ef"));
-					    		treepintime.setTextColor(Color.parseColor("#ff4cc3ef"));
-					    		taxiPrice.setTextColor(Color.parseColor("#888888"));
-								taxiTime.setTextColor(Color.parseColor("#888888"));
-								
-								treepinPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€");
-								
-								taxiPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*1.40 +(Double.parseDouble(result.get(MainActivity.KEY_DURATION))/60)*0.25 + 2) + "€");
-								
-								long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
-						    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
-						    		treepintime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
-						    		taxiTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
-						    		tvPrice.setText("Durée du trajet : " +
-						    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
-						    				
-						    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
-						    				);
-									tvPrice.setVisibility(View.VISIBLE);
-							    }
-							    else{
-							    	treepintime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
-								            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
-							    	
-							    	
-							    	taxiTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
-								            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
-							    	
-							    	
-							    	tvPrice.setText("Durée du trajet : " +
-							    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
-										            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
-						    				
-						    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
-						    				);
-									tvPrice.setVisibility(View.VISIBLE);
-							    }
-					    	}
-					    	else{
-								treepinPrice.setTextColor(Color.parseColor("#ff4cc3ef"));
-								treepinPrice.setText((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE + "€");
-								
-								tvPrice.setText("PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
-					    				);
-								tvPrice.setVisibility(View.VISIBLE);
-								
-								treepintime.setTextColor(Color.parseColor("#CDCDCD"));
-								treepintime.setText("Indisp.");
-								taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
-								taxiTime.setText("Indisp.");
-								taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
-								taxiPrice.setText("Indisp.");
-					    	}
-					    }
-					    else{
-					    	if(result.get(MainActivity.KEY_DURATION) != null){
-					    		treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
-								treepinPrice.setText("Indisp.");
-					    		treepintime.setTextColor(Color.parseColor("#ff4cc3ef"));
-					    		taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
-								taxiPrice.setText("Indisp.");
-								taxiTime.setTextColor(Color.parseColor("#888888"));
-								
-								
-								long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
-						    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
-						    		treepintime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
-						    		taxiTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+						if(!result.get(MainActivity.KEY_STATUS).contains("OK")){
+							treepintime.setTextColor(Color.parseColor("#CDCDCD"));
+							treepintime.setText("Indisp.");
+							treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
+							treepinPrice.setText("Indisp.");
+							taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
+							taxiTime.setText("Indisp.");
+							taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
+							taxiPrice.setText("Indisp.");
+							
+							//MainActivity.displayToast(json);
+						}
+						else{
+							treepintime.setTextColor(Color.parseColor("#ff4cc3ef"));
+							taxiPrice.setTextColor(Color.parseColor("#888888"));
+							taxiTime.setTextColor(Color.parseColor("#888888"));
+						    if(result.get(MainActivity.KEY_DISTANCE) != null){
+						    	if(result.get(MainActivity.KEY_DURATION) != null){
+						    		treepinPrice.setTextColor(Color.parseColor("#ff4cc3ef"));
+						    		treepintime.setTextColor(Color.parseColor("#ff4cc3ef"));
+						    		taxiPrice.setTextColor(Color.parseColor("#888888"));
+									taxiTime.setTextColor(Color.parseColor("#888888"));
 									
-						    		tvPrice.setText("Durée du trajet : " +
-						    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
-						    				
-						    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
+									treepinPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€");
+									
+									taxiPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*1.40 +(Double.parseDouble(result.get(MainActivity.KEY_DURATION))/60)*0.25 + 2) + "€");
+									
+									long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
+							    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
+							    		treepintime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+							    		taxiTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+							    		tvPrice.setText("Durée du trajet : " +
+							    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+							    				
+							    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
+							    				);
+										tvPrice.setVisibility(View.VISIBLE);
+								    }
+								    else{
+								    	treepintime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+									            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+								    	
+								    	
+								    	taxiTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+									            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+								    	
+								    	
+								    	tvPrice.setText("Durée du trajet : " +
+								    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+											            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+							    				
+							    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
+							    				);
+										tvPrice.setVisibility(View.VISIBLE);
+								    }
+						    	}
+						    	else{
+									treepinPrice.setTextColor(Color.parseColor("#ff4cc3ef"));
+									treepinPrice.setText((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM + "€");
+									
+									tvPrice.setText("PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
 						    				);
 									tvPrice.setVisibility(View.VISIBLE);
-							    }
-							    else{
-							    	treepintime.setText(
-							    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
-								            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
-								            
-							    			);
-							    	taxiTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
-								            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
-								
-							    	tvPrice.setText("Durée du trajet : " +
-							    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
-										            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
-						    				
-						    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPKMRATE) + "€"
-						    				);
-									tvPrice.setVisibility(View.VISIBLE);
-							    }
-					    		
-					    	}
-					    	else{
-					    		
-								treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
-								treepinPrice.setText("Indisp.");
-								treepintime.setTextColor(Color.parseColor("#CDCDCD"));
-								treepintime.setText("Indisp.");
-								taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
-								taxiTime.setText("Indisp.");
-								taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
-								taxiPrice.setText("Indisp.");
-					    	}
-					    }
+									
+									treepintime.setTextColor(Color.parseColor("#CDCDCD"));
+									treepintime.setText("Indisp.");
+									taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
+									taxiTime.setText("Indisp.");
+									taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
+									taxiPrice.setText("Indisp.");
+						    	}
+						    }
+						    else{
+						    	if(result.get(MainActivity.KEY_DURATION) != null){
+						    		treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
+									treepinPrice.setText("Indisp.");
+						    		treepintime.setTextColor(Color.parseColor("#ff4cc3ef"));
+						    		taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
+									taxiPrice.setText("Indisp.");
+									taxiTime.setTextColor(Color.parseColor("#888888"));
+									
+									
+									long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
+							    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
+							    		treepintime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+							    		taxiTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+										
+							    		tvPrice.setText("Durée du trajet : " +
+							    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+							    				
+							    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
+							    				);
+										tvPrice.setVisibility(View.VISIBLE);
+								    }
+								    else{
+								    	treepintime.setText(
+								    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+									            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+									            
+								    			);
+								    	taxiTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+									            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+									
+								    	tvPrice.setText("Durée du trajet : " +
+								    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+											            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+							    				
+							    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
+							    				);
+										tvPrice.setVisibility(View.VISIBLE);
+								    }
+						    		
+						    	}
+						    	else{
+						    		
+									treepinPrice.setTextColor(Color.parseColor("#CDCDCD"));
+									treepinPrice.setText("Indisp.");
+									treepintime.setTextColor(Color.parseColor("#CDCDCD"));
+									treepintime.setText("Indisp.");
+									taxiTime.setTextColor(Color.parseColor("#CDCDCD"));
+									taxiTime.setText("Indisp.");
+									taxiPrice.setTextColor(Color.parseColor("#CDCDCD"));
+									taxiPrice.setText("Indisp.");
+						    	}
+						    }
+						}
+					}
+				}
+				else{
+					if(result == null){
+						drivertreeptime.setTextColor(Color.parseColor("#CDCDCD"));
+						drivertreeptime.setText("Indisp.");
+						driverFuelPrice.setTextColor(Color.parseColor("#CDCDCD"));
+						driverFuelPrice.setText("Indisp.");
+						driverEarnPrice.setTextColor(Color.parseColor("#CDCDCD"));
+						driverEarnPrice.setText("Indisp.");
+						
+						//MainActivity.displayToast(json);
+					}
+					else{
+						if(!result.get(MainActivity.KEY_STATUS).contains("OK")){
+							drivertreeptime.setTextColor(Color.parseColor("#CDCDCD"));
+							drivertreeptime.setText("Indisp.");
+							driverFuelPrice.setTextColor(Color.parseColor("#CDCDCD"));
+							driverFuelPrice.setText("Indisp.");
+							driverEarnPrice.setTextColor(Color.parseColor("#CDCDCD"));
+							driverEarnPrice.setText("Indisp.");
+							
+							//MainActivity.displayToast(json);
+						}
+						else{
+							drivertreeptime.setTextColor(Color.parseColor("#888888"));
+							driverFuelPrice.setTextColor(Color.parseColor("#888888"));
+							driverEarnPrice.setTextColor(Color.parseColor("#888888"));
+						    if(result.get(MainActivity.KEY_DISTANCE) != null){
+						    	if(result.get(MainActivity.KEY_DURATION) != null){
+						    		drivertreeptime.setTextColor(Color.parseColor("#888888"));
+						    		driverFuelPrice.setTextColor(Color.parseColor("#888888"));
+						    		driverEarnPrice.setTextColor(Color.parseColor("#888888"));
+									
+						    		driverFuelPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_CONSUMPTIONPRICEPERKM) + "€");
+									
+						    		driverEarnPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€");
+						    		
+									long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
+							    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
+							    		drivertreeptime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+							    		tvPrice.setText("Durée du trajet : " +
+							    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+							    				);
+										tvPrice.setVisibility(View.VISIBLE);
+								    }
+								    else{
+								    	drivertreeptime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+									            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+								    	
+								    	tvPrice.setText("Durée du trajet : " +
+								    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+											            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+							    				);
+										tvPrice.setVisibility(View.VISIBLE);
+								    }
+						    	}
+						    	else{
+						    		driverFuelPrice.setTextColor(Color.parseColor("#888888"));
+						    		driverFuelPrice.setText((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_CONSUMPTIONPRICEPERKM + "€");
+						    		driverEarnPrice.setText((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM + "€");
+									
+									tvPrice.setVisibility(View.GONE);
+									
+									drivertreeptime.setTextColor(Color.parseColor("#CDCDCD"));
+									drivertreeptime.setText("Indisp.");
+						    	}
+						    }
+						    else{
+						    	if(result.get(MainActivity.KEY_DURATION) != null){
+						    		
+						    		driverFuelPrice.setTextColor(Color.parseColor("#CDCDCD"));
+						    		driverFuelPrice.setText("Indisp.");
+						    		driverEarnPrice.setTextColor(Color.parseColor("#CDCDCD"));
+						    		driverEarnPrice.setText("Indisp.");
+									drivertreeptime.setTextColor(Color.parseColor("#888888"));
+									
+									
+									long durationInMillis = Long.parseLong(result.get(MainActivity.KEY_DURATION))*1000;
+							    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
+							    		drivertreeptime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
+							    		
+							    		tvPrice.setText("Durée du trajet : " +
+							    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+							    				);
+										tvPrice.setVisibility(View.VISIBLE);
+								    }
+								    else{
+								    	drivertreeptime.setText(
+								    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+									            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+									            
+								    			);
+								    	tvPrice.setText("Durée du trajet : " +
+								    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
+											            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
+							    				);
+										tvPrice.setVisibility(View.VISIBLE);
+								    }
+						    		
+						    	}
+						    	else{
+						    		drivertreeptime.setTextColor(Color.parseColor("#CDCDCD"));
+									drivertreeptime.setText("Indisp.");
+									driverFuelPrice.setTextColor(Color.parseColor("#CDCDCD"));
+									driverFuelPrice.setText("Indisp.");
+									driverEarnPrice.setTextColor(Color.parseColor("#CDCDCD"));
+									driverEarnPrice.setText("Indisp.");
+						    	}
+						    }
+						}
 					}
 				}
 			}
