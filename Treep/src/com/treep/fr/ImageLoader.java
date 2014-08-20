@@ -142,7 +142,6 @@ public class ImageLoader {
             if(imageViewReused(photoToLoad))
                 return;
             Bitmap bmp=getBitmap(photoToLoad.url);
-            bmp = getRoundedCornerBitmap(bmp, 100);
             memoryCache.put(photoToLoad.url, bmp);
             if(imageViewReused(photoToLoad))
                 return;

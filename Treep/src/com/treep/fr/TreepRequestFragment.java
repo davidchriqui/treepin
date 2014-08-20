@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.StrictMode;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -45,7 +46,6 @@ public class TreepRequestFragment extends Fragment {
 	private ImageView ivUserProfilePicture;
 	private ImageLoader imageLoaderProfilePicture;
 	private ImageView ivUserRating;
-	private LinearLayout detourLayout;
 	private TextView tvDetour;
 	private TextView tvAddressDep;
 	private TextView tvAddressDest;
@@ -53,6 +53,8 @@ public class TreepRequestFragment extends Fragment {
 	private String username;
 	private String treepId;
 	private String treepRequestId;
+	
+	private CountDownTimer timer;
 	
 	private HashMap<String, String> mapTreepRequest = new HashMap<String, String>();
 	
@@ -65,10 +67,31 @@ public class TreepRequestFragment extends Fragment {
 		mapTreepRequest = (HashMap<String, String>) bundle.getSerializable("mapTreepRequest");
 		
 		tvInfobanner = (TextView) v.findViewById(R.id.tvInfobanner);
-		Animation blinkAnim = AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(),R.anim.blink);
         
-		tvInfobanner.startAnimation(blinkAnim);
-		tvInfobanner.setText("Temps restant : " + mapTreepRequest.get(MainActivity.KEY_TIMEREMAINING));
+		timer = new CountDownTimer(40000, 1000) {
+
+		     public void onTick(long millisUntilFinished) {
+		    	 tvInfobanner.setText(Html.fromHtml("Temps restant : <b>" + millisUntilFinished / 1000 + " sec </b>"));
+		     }
+
+		     public void onFinish() {
+		    	 tvInfobanner.setText("Demande expirée");
+		    	 
+		    	 new CountDownTimer(2000, 1000) {
+
+				     public void onTick(long millisUntilFinished) {
+				    	 
+				     }
+
+				     public void onFinish() {
+				    	 SetTreepRequestRefuseFromXML setTreepRequestRefuseFromXML = new SetTreepRequestRefuseFromXML(getActivity(), mapTreepRequest.get(MainActivity.KEY_REQUESTID));
+					    	setTreepRequestRefuseFromXML.execute();
+				     }
+				  }.start();
+		     }
+		  };
+		  
+		timer.start();
 		
 		tvUsername = (TextView) v.findViewById(R.id.tvUsername);
 		username = mapTreepRequest.get(MainActivity.KEY_FIRSTNAME) + " " + mapTreepRequest.get(MainActivity.KEY_LASTNAME).charAt(0) + ".";
@@ -134,13 +157,10 @@ public class TreepRequestFragment extends Fragment {
 		tvAddressDest.setText(mapTreepRequest.get(MainActivity.KEY_ADDRESSDESTNOW));
 		
 		tvPositionCompany = (TextView) v.findViewById(R.id.tvPositionCompany);
-		tvPositionCompany.setText(Html.fromHtml("<b>" + (mapTreepRequest.get(MainActivity.KEY_CURRENTPOSITION) + "</b> chez <b>" + mapTreepRequest.get(MainActivity.KEY_CURRENTCOMPANY) + "</b>")));
+		tvPositionCompany.setText(Html.fromHtml("<b>" + mapTreepRequest.get(MainActivity.KEY_CURRENTPOSITION) + "</b> chez <b>" + mapTreepRequest.get(MainActivity.KEY_CURRENTCOMPANY) + "</b>"));
 		
 		tvDetour = (TextView) v.findViewById(R.id.tvDetour);
-		tvDetour.setText(Html.fromHtml("Détour : <b>moins de " + (mapTreepRequest.get(MainActivity.KEY_DETOUR) + " min </b>")));
-		
-		detourLayout = (LinearLayout) v.findViewById(R.id.detourLayout);
-		detourLayout.startAnimation(blinkAnim);
+		tvDetour.setText(Html.fromHtml("moins de <b>" + mapTreepRequest.get(MainActivity.KEY_DETOUR) + " min </b>"));
 		
 		buttonRefuse = (Button) v.findViewById(R.id.buttonRefuse);
 		buttonAccept = (Button) v.findViewById(R.id.buttonAccept);
@@ -214,6 +234,23 @@ public class TreepRequestFragment extends Fragment {
 		
 		return v;
 	}
+	
+	@Override
+    public void onPause() {
+        super.onPause();
+	 	if(timer != null){
+	 		timer.cancel();
+	 	}
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(timer != null){
+	 		timer.cancel();
+	 	}
+    }
+	
 	
 	private class SetTreepRequestConfirmFromXML extends AsyncTask<Void, Integer, HashMap<String, String>> {
 		

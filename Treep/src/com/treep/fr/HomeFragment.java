@@ -21,11 +21,13 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +56,7 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -143,13 +146,13 @@ public class HomeFragment extends Fragment implements LocationListener {
  	public static ArrayList<HashMap<String,String>> alMapDriverPosition;
 	HashMap<String, String> mapUserInfo = new HashMap<String, String> ();
  	
- 	static String price;
  	
- 	static double latdep;
- 	static double lngdep;
- 	static double latdest;
- 	static double lngdest;
+ 	static double latdep = 0;
+ 	static double lngdep = 0;
+ 	static double latdest = 0;
+ 	static double lngdest = 0;
  	
+ 	private double price;
  	
  	private boolean isSetDep = false;
  	//private CountDownTimer updateDriverPositionListTimer;
@@ -973,6 +976,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 			        	
 						latLngMyPosition = new LatLng(location.getLatitude(), location.getLongitude());
 						
+						MainActivity.myLatitude = location.getLatitude();
+						MainActivity.myLongitude = location.getLongitude();
 						
 						mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 45));
 				  		// Zoom in, animating the camera.
@@ -981,6 +986,10 @@ public class HomeFragment extends Fragment implements LocationListener {
 			        else{
 			        	gps = new GPSTracker(getActivity(),ApplicationContextProvider.getContext() );
 						latLngMyPosition = new LatLng(gps.getLatitude(), gps.getLongitude());
+						
+						MainActivity.myLatitude = gps.getLatitude();
+						MainActivity.myLongitude = gps.getLongitude();
+						
 						CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngMyPosition, 15);
 						mMap.animateCamera(cameraUpdate);
 						
@@ -1288,6 +1297,9 @@ public class HomeFragment extends Fragment implements LocationListener {
 					addressDest = address + ", " + city + ", " + country;
 					//MainActivity.displayToast("DEP : " + latdep + ", " + lngdep +"\nDEST : " + latdest + ", " + lngdest);
 					
+					price = 0;
+					
+					
 					if(!MainActivity.driverMode){
 						CompareDurationForPublicTransportWithGoogle compareDurationForPublicTransport = new CompareDurationForPublicTransportWithGoogle();
 				    	compareDurationForPublicTransport.execute();
@@ -1404,6 +1416,98 @@ public class HomeFragment extends Fragment implements LocationListener {
 		    dismiss();
 		  }
 		}
+	 private class SetUserPositionFromXML extends AsyncTask<Void, Integer, HashMap<String, String>> {
+			
+			private List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			private HashMap<String,String> mapErrCode = new HashMap<String,String>();
+			private Activity activity;
+			private double lat;
+			private double lng;
+			
+			public SetUserPositionFromXML(Activity activity, double lat, double lng){
+				this.activity=activity;
+				this.lat=lat;
+				this.lng=lng;
+			}
+			
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				nameValuePairs.add(new BasicNameValuePair("userid", LoginDisplayActivity.userId));
+				if(latdep != 0 && lngdep != 0){
+					nameValuePairs.add(new BasicNameValuePair("lat", Double.toString(latdep)));
+					nameValuePairs.add(new BasicNameValuePair("lng", Double.toString(lngdep)));
+				}
+				else{
+					nameValuePairs.add(new BasicNameValuePair("lat", Double.toString(lat)));
+					nameValuePairs.add(new BasicNameValuePair("lng", Double.toString(lng)));
+				}
+			}
+
+			@Override
+			protected void onProgressUpdate(Integer... values){
+				super.onProgressUpdate(values);
+				//Toast.makeText(ApplicationContextProvider.getContext(), "traitement asynchrone", Toast.LENGTH_LONG).show();
+				
+			}
+
+			@Override
+			protected HashMap<String, String> doInBackground(Void... arg0) {
+
+				HashMap<String,String> mapTimeout = new HashMap<String,String>();
+				mapTimeout.put(MainActivity.KEY_TIMEOUT, "1");
+				
+				if (android.os.Build.VERSION.SDK_INT > 9) 
+		    	{ StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); StrictMode.setThreadPolicy(policy); }
+			
+		    	XMLParser parser = new XMLParser(nameValuePairs);
+				String xml = parser.getXmlFromUrl(MainActivity.URL_SETUSERPOSITION);
+				//debug = xml;
+				
+				if(xml == null){
+					mapErrCode = null;
+				}
+				else{
+					if(xml == "timeout"){
+						
+						mapErrCode.put(MainActivity.KEY_TIMEOUT, "1");	
+					}
+					
+					else{
+						
+						Document doc = null;
+						try{
+							doc = parser.getDomElement(xml); // getting DOM element
+						}
+						catch(DOMException e){
+							
+						}
+						
+						if(doc == null){
+							mapErrCode = null;
+						}
+						else{
+							NodeList nl_xml = doc.getElementsByTagName(MainActivity.KEY_XML);
+							// looping through all xml nodes <KEY_USER>
+							for (int i = 0; i < nl_xml.getLength(); i++) {
+								// creating new HashMap
+								
+								Element e = (Element) nl_xml.item(i);
+								// adding each child node to HashMap key => value
+								mapErrCode.put(MainActivity.KEY_ERRCODE, parser.getValue(e, MainActivity.KEY_ERRCODE));
+							}
+						}
+					}
+				}
+				
+				return mapErrCode;
+			}
+
+			@SuppressLint("NewApi")
+			protected void onPostExecute(HashMap<String, String>  result) {
+				
+			}
+		}
 
 		private class UpdateDriverPositionFromXML extends AsyncTask<Void, Integer, ArrayList<HashMap<String, String>>> {
 			
@@ -1435,15 +1539,21 @@ public class HomeFragment extends Fragment implements LocationListener {
 				if (android.os.Build.VERSION.SDK_INT > 9) 
 		    	{ StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); StrictMode.setThreadPolicy(policy); }
 			
+				String xml = "";
 		    	XMLParser parser = new XMLParser();
-		    	String xml = parser.getXmlFromUrl(MainActivity.URL_USERINFO + "?userid=" + LoginDisplayActivity.userId +"&lat=" + MainActivity.myLatitude + "&lng=" + MainActivity.myLongitude);
-				
+		    	if(latdep != 0 && lngdep != 0){
+		    		xml = parser.getXmlFromUrl(MainActivity.URL_USERINFO + "?userid=" + LoginDisplayActivity.userId +"&lat=" + latdep + "&lng=" + lngdep);		    		
+		    	}
+		    	else{
+		    		xml = parser.getXmlFromUrl(MainActivity.URL_USERINFO + "?userid=" + LoginDisplayActivity.userId +"&lat=" + MainActivity.myLatitude + "&lng=" + MainActivity.myLongitude);
+		    	}
+		    	
 				if(xml == null){
 					alDriverPosition = null;
 				}
 				else{
 					if(xml == "timeout"){
-						alDriverPosition.add(mapTimeout);
+						alDriverPosition = null;
 					}
 					
 					else{
@@ -1535,10 +1645,9 @@ public class HomeFragment extends Fragment implements LocationListener {
 			protected void onPostExecute(ArrayList<HashMap<String, String>> result) {
 				
 				if(result == null){
-					alMapDriverPosition = result;
+					
 				}
 				else{
-					alMapDriverPosition = result;
 					if(result.size() == 0){
 						for(int i = 0; i< driverMarkerList.size(); i++){
 							driverMarkerList.get(i).remove();
@@ -1585,13 +1694,13 @@ public class HomeFragment extends Fragment implements LocationListener {
 						        	 if(alDistanceTime.size() != 0){
 							        	 infobannertxt = new StringBuilder();
 							        	 if(!MainActivity.driverMode){
-												infobannertxt.append("Driver le plus proche à ").append(Collections.min(alDistanceTime)).append(" min");
+												infobannertxt.append("Driver le plus proche à <b>").append(Collections.min(alDistanceTime)).append(" min</b>");
 											}
 											else{
-												infobannertxt.append("Treeper le plus proche à ").append(Collections.min(alDistanceTime)).append(" min");
+												infobannertxt.append("Treeper le plus proche à <b>").append(Collections.min(alDistanceTime)).append(" min</b>");
 											}
 										 
-										 infobanner.setText(infobannertxt.toString());
+										 infobanner.setText(Html.fromHtml(infobannertxt.toString()));
 						        	 }
 						        	 else{
 						        		 infobannertxt = new StringBuilder();
@@ -2025,6 +2134,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 									taxiTime.setTextColor(Color.parseColor("#888888"));
 									
 									treepinPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€");
+									price = Double.parseDouble((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM));
 									
 									taxiPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*1.40 +(Double.parseDouble(result.get(MainActivity.KEY_DURATION))/60)*0.25 + 2) + "€");
 									
@@ -2032,11 +2142,11 @@ public class HomeFragment extends Fragment implements LocationListener {
 							    	if(Double.parseDouble(result.get(MainActivity.KEY_DURATION))<3600){
 							    		treepintime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
 							    		taxiTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
-							    		tvPrice.setText("Durée du trajet : " +
+							    		tvPrice.setText(Html.fromHtml("Durée du trajet : <b>" +
 							    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
 							    				
-							    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
-							    				);
+							    				+ "</b> - Prix : <b>" + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€</b>"
+							    				));
 										tvPrice.setVisibility(View.VISIBLE);
 								    }
 								    else{
@@ -2048,21 +2158,22 @@ public class HomeFragment extends Fragment implements LocationListener {
 									            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
 								    	
 								    	
-								    	tvPrice.setText("Durée du trajet : " +
+								    	tvPrice.setText(Html.fromHtml("Durée du trajet : <b>" +
 								    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
 											            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
 							    				
-							    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
-							    				);
+							    				+ "</b> - Prix : <b>" + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€</b>"
+							    				));
 										tvPrice.setVisibility(View.VISIBLE);
 								    }
 						    	}
 						    	else{
 									treepinPrice.setTextColor(Color.parseColor("#ff4cc3ef"));
-									treepinPrice.setText((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM + "€");
+									treepinPrice.setText((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€");
+									price = Double.parseDouble((new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM));
 									
-									tvPrice.setText("PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
-						    				);
+									tvPrice.setText(Html.fromHtml("Prix : <b>" + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€</b>"
+						    				));
 									tvPrice.setVisibility(View.VISIBLE);
 									
 									treepintime.setTextColor(Color.parseColor("#CDCDCD"));
@@ -2088,11 +2199,10 @@ public class HomeFragment extends Fragment implements LocationListener {
 							    		treepintime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
 							    		taxiTime.setText(String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
 										
-							    		tvPrice.setText("Durée du trajet : " +
+							    		tvPrice.setText(Html.fromHtml("Durée du trajet : <b>" +
 							    				String.format("%02d min",TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
 							    				
-							    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
-							    				);
+							    				+ "</b>"));
 										tvPrice.setVisibility(View.VISIBLE);
 								    }
 								    else{
@@ -2104,12 +2214,11 @@ public class HomeFragment extends Fragment implements LocationListener {
 								    	taxiTime.setText(String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
 									            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis))));
 									
-								    	tvPrice.setText("Durée du trajet : " +
+								    	tvPrice.setText(Html.fromHtml("Durée du trajet : <b>" +
 								    			String.format("%02dh%02dmin", TimeUnit.MILLISECONDS.toHours(durationInMillis),
 											            TimeUnit.MILLISECONDS.toMinutes(durationInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMillis)))
 							    				
-							    				+ ". PRIX : " + (new DecimalFormat("#.##")).format((Double.parseDouble(result.get(MainActivity.KEY_DISTANCE))/1000)*MainActivity.VALUE_TREEPRATEKM) + "€"
-							    				);
+							    				+ "</b>"));
 										tvPrice.setVisibility(View.VISIBLE);
 								    }
 						    		

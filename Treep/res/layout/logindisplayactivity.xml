@@ -33,22 +33,31 @@
 	</LinearLayout>
 	
     
-    <LinearLayout
+    
+     <RelativeLayout
 	    android:id="@+id/refreshLayout" 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical"
-	    android:layout_centerInParent="true"
-	    android:background="@drawable/rounded_bg_white">
+	    android:layout_centerInParent="true">
     
-	    <ImageView 
-		android:id="@+id/ivRefresh"
-		android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-		android:src="@drawable/ic_refreshbig"
-		android:layout_centerInParent="true" />
+	        <ImageView 
+				
+				android:layout_width="150dp"
+			    android:layout_height="150dp"
+				android:src="@drawable/pinrefresh"
+				android:layout_centerInParent="true" />
+	        
+		    <ImageView 
+				android:id="@+id/ivRefresh"
+				android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+				android:src="@drawable/refreshicon"
+				android:layout_centerInParent="true" />
     
-    </LinearLayout>
+    	</RelativeLayout>
+    
+    
     
     <android.support.v4.view.ViewPager
 		xmlns:android="http://schemas.android.com/apk/res/android"

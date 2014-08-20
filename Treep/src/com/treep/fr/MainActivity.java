@@ -124,6 +124,7 @@ public class MainActivity extends Activity{
 
     static final String KEY_CURRENTPOSITION = "currentposition";
     static final String KEY_CURRENTCOMPANY = "currentcompany";
+    static final String KEY_SCHOOL = "school";
     
     static final String KEY_USERMAIL = "usermail";
     static final String KEY_USERTEL = "usertel";
@@ -346,7 +347,6 @@ public class MainActivity extends Activity{
   	static boolean isTreeperOnBoard = false;
   	static boolean isDriverAccepted = false;
   	
-  	static boolean isTreepOrderedByTreeper = false;
   	
   	static final int distanceMax = 50;
   	static Boolean appQuit = true;
@@ -1814,6 +1814,7 @@ public class MainActivity extends Activity{
 							mapUserInfo.put(MainActivity.KEY_HASTOUPDATE, parser.getValue(e, MainActivity.KEY_HASTOUPDATE));
 							mapTreepRequest.put(MainActivity.KEY_CURRENTPOSITION, parser.getValue(e, MainActivity.KEY_CURRENTPOSITION));
 							mapTreepRequest.put(MainActivity.KEY_CURRENTCOMPANY, parser.getValue(e, MainActivity.KEY_CURRENTCOMPANY));
+							mapTreepRequest.put(MainActivity.KEY_SCHOOL, parser.getValue(e, MainActivity.KEY_SCHOOL));
 							mapUserInfo.put(MainActivity.KEY_APPVERSIONCODE, parser.getValue(e, MainActivity.KEY_APPVERSIONCODE));
 							
 							
@@ -2153,7 +2154,6 @@ public class MainActivity extends Activity{
 								PushService.unsubscribe(ApplicationContextProvider.getContext(), "drivers");
 								
 								if(Boolean.parseBoolean(mapResultTreepOrderInfo.get(MainActivity.KEY_ISTREEPORDERED))){
-									isTreepOrderedByTreeper = true;
 									if(Boolean.parseBoolean(mapResultTreepOrderInfo.get(MainActivity.KEY_ISTREEPNOWCONFIRMED))){
 										if(Boolean.parseBoolean(mapResultTreepOrderInfo.get(MainActivity.KEY_ISTREEPNOWCANCELEDBYDRIVER))){
 											
@@ -2352,7 +2352,6 @@ public class MainActivity extends Activity{
 										CURRENT_STEP = STEP_DRIVERTREEPREQUESTEDNOTREEPER;
 										fragment= new TreepRequestedNoMatchFragment();
 										Bundle extras = new Bundle();
-										extras.putSerializable("alDriverPosition",alMapDriverPosition);
 										
 										showFragment(0, fragment);
 										//DriverTreepRequestedNoTreeperFragment
@@ -2598,6 +2597,7 @@ public class UpdateUserInfoFromXML extends AsyncTask<Void, Integer, HashMap<Stri
 							mapUserInfo.put(MainActivity.KEY_APPVERSIONCODE, parser.getValue(e, MainActivity.KEY_APPVERSIONCODE));
 							mapTreepRequest.put(MainActivity.KEY_CURRENTPOSITION, parser.getValue(e, MainActivity.KEY_CURRENTPOSITION));
 							mapTreepRequest.put(MainActivity.KEY_CURRENTCOMPANY, parser.getValue(e, MainActivity.KEY_CURRENTCOMPANY));
+							mapTreepRequest.put(MainActivity.KEY_SCHOOL, parser.getValue(e, MainActivity.KEY_SCHOOL));
 							
 							
 						}
@@ -2982,9 +2982,8 @@ public class UpdateUserInfoFromXML extends AsyncTask<Void, Integer, HashMap<Stri
 											
 											CURRENT_STEP = STEP_USERTREEPORDERED;
 											
-											fragment = new MapUserTreepOrderedFragment();
+											fragment = new TreepRequestedNoMatchFragment();
 											Bundle extras = new Bundle();
-											extras.putSerializable("alDriverPosition",alDriverPosition);
 											extras.putSerializable("mapUserInfo",mapResultUserInfo);
 											extras.putSerializable("mapTreepOrderInfo",mapResultTreepOrderInfo);
 											fragment.setArguments(extras);

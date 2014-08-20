@@ -24,7 +24,6 @@ public class SendTreepDriverRequest extends AsyncTask<Void, Integer, HashMap<Str
 	private String lngDep;
 	private String latDest;
 	private String lngDest;
-	private Boolean pinkMode;
 	private HashMap<String,String> mapResultXML = new HashMap<String,String>();
 	
 	
@@ -40,7 +39,6 @@ public class SendTreepDriverRequest extends AsyncTask<Void, Integer, HashMap<Str
 		this.lngDep=lngDep;
 		this.latDest=latDest;
 		this.lngDest=lngDest;
-		this.pinkMode=pinkMode;
 	}
 	
 	
@@ -81,7 +79,6 @@ public class SendTreepDriverRequest extends AsyncTask<Void, Integer, HashMap<Str
 																+ "&lngdep=" + lngDep 
 																+ "&latdest=" + latDest 
 																+ "&lngdest=" + lngDest
-																+ "&pinkmode=" + String.valueOf(pinkMode)
 																);
 			
 		

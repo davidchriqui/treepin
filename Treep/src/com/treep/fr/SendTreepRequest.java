@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.text.Html;
 import android.widget.TextView;
 
 import com.parse.ParsePush;
@@ -379,7 +380,7 @@ public class SendTreepRequest extends AsyncTask<Void, Integer, HashMap<String, S
 				}
 			}
 			if(infobannercount != null){
-				infobannercount.setText("Drivers contactés : " + result.get(MainActivity.KEY_DRIVERMATCHCOUNT));
+				infobannercount.setText(Html.fromHtml("Drivers contactés : <b>" + result.get(MainActivity.KEY_DRIVERMATCHCOUNT) + "</b>"));
 			}
 			try{
 				activity.setProgressBarIndeterminateVisibility(false);

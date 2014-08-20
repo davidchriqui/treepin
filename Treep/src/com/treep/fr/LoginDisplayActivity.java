@@ -43,6 +43,7 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,7 +71,7 @@ public class LoginDisplayActivity extends Activity {
 	private ImageView pintreepin;
 	private ImageView ivRefresh;
 	private ImageView divider;
-	private LinearLayout refreshLayout;
+	private RelativeLayout refreshLayout;
 	private ViewPager viewpager;
 	//private static final String URL_PREFIX_FRIENDS = "https://graph.facebook.com/me/fields=id,name?access_token=";
 	
@@ -104,7 +105,7 @@ public class LoginDisplayActivity extends Activity {
         viewpager.setAdapter(adapter);
         viewpager.setCurrentItem(0);
         
-        refreshLayout = (LinearLayout) findViewById(R.id.refreshLayout);
+        refreshLayout = (RelativeLayout) findViewById(R.id.refreshLayout);
         refreshLayout.setVisibility(View.GONE);
         ivRefresh = (ImageView) findViewById(R.id.ivRefresh);
         Animation rotationCenter = AnimationUtils.loadAnimation(this,R.anim.rotation_center);
@@ -279,7 +280,7 @@ public class LoginDisplayActivity extends Activity {
       		          //MainActivity.displayToast(session.getAccessToken());
       		            
 						try {
-							 //userId = "601805446";
+//							userId = "100003504910623";
 							userId = json.getString("id");
 							userFirstname = json.getString("first_name");
   							userLastname = json.getString("last_name");

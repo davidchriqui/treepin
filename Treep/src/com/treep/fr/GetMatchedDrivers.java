@@ -102,6 +102,11 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 	protected void onPreExecute() {
 		super.onPreExecute();
 		
+//		StringBuilder test = new StringBuilder();
+//		for(int i=0; i <alMapDriverPosition.size(); i++){
+//			test.append(alMapDriverPosition.get(i).get(MainActivity.KEY_USERID)).append(" - ");
+//		}
+//		MainActivity.displayToast(test.toString());
 		
 		if(LoginDisplayActivity.userId == null || LoginDisplayActivity.userId == "" ){
 			this.cancel(true);
@@ -121,30 +126,28 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 			
 			// + lat2  +","+ lng2 + URLEncoder.encode("|", "UTF-8") + lat3 + "," + lng3 + "&mode=driving&sensor=false";
 			
-			
-			if(alMapDriverPosition.size() != 0){
-				for (HashMap<String, String> map : alMapDriverPosition){
-					if(!Boolean.parseBoolean(map.get(MainActivity.KEY_ISBUSY))){
-						if(Boolean.parseBoolean(map.get(MainActivity.KEY_DRIVERTREEPREQUESTED))){
-							alMapDriverPositionFiltered.add(map);
-							
-							
-							
-							//MainActivity.displayToast("userid : " + map.get(MainActivity.KEY_USERID) + "\n");
-							
-							try {
-								url.append(map.get(MainActivity.KEY_LATDEP)).append(",").append(map.get(MainActivity.KEY_LNGDEP)).append(URLEncoder.encode("|", "UTF-8"));
-							}
-							catch (UnsupportedEncodingException e) {
-								// TODO Auto-generated catch block
-								url.append(map.get(MainActivity.KEY_LATDEP)).append(",").append(map.get(MainActivity.KEY_LNGDEP)).append("|");
+			if(alMapDriverPosition != null){
+				if(alMapDriverPosition.size() != 0){
+					for (HashMap<String, String> map : alMapDriverPosition){
+						if(!Boolean.parseBoolean(map.get(MainActivity.KEY_ISBUSY))){
+							if(Boolean.parseBoolean(map.get(MainActivity.KEY_DRIVERTREEPREQUESTED))){
+								alMapDriverPositionFiltered.add(map);
 								
-								e.printStackTrace();
+								try {
+									url.append(map.get(MainActivity.KEY_LATDEP)).append(",").append(map.get(MainActivity.KEY_LNGDEP)).append(URLEncoder.encode("|", "UTF-8"));
+								}
+								catch (UnsupportedEncodingException e) {
+									// TODO Auto-generated catch block
+									url.append(map.get(MainActivity.KEY_LATDEP)).append(",").append(map.get(MainActivity.KEY_LNGDEP)).append("|");
+									
+									e.printStackTrace();
+								}
 							}
 						}
 					}
 				}
 			}
+			
 			
 			url.append("&mode=driving&sensor=false");
 			
@@ -166,7 +169,6 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 		ArrayList<HashMap<String,String>> alMapMatchedDrivers  = new ArrayList<HashMap<String,String>>();
 		
 		//Liste contenant les userid des driver dont le point de départ match avec la request
-		ArrayList<String> alMatchedDriversDep = new ArrayList<String>();
 		ArrayList<String> alMatchedDriversDepDest = new ArrayList<String>();
 		
 		StringBuilder stringBuilder = new StringBuilder();
@@ -205,7 +207,7 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 		        status = jsonObject.getString("status");
 		        
 		        if(!status.contains("OK")){
-		        	alMatchedDriversDep.add("PBDISTANCEDEP");
+		        	
 				}
 				else{
 					JSONArray JSONArrayRowsDep = jsonObject.getJSONArray("rows");
@@ -313,7 +315,7 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 			}
 	         
 	         if(alMatchedDriversDepDest.size() == 0){
-	        	 alMatchedDriversDepDest.add("NODRIVER");
+	        	 alMatchedDriversDepDest.add("NODRIVERMATCHED");
 	         }
 		}
 		else{
@@ -338,13 +340,7 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 		
 		
 		if(result == null){
-			DialogTimeout dialogTimeout = new DialogTimeout(activity);
-			try{
-				dialogTimeout.show();
-			}
-			catch(BadTokenException e){
-				MainActivity.displayToast(R.string.httpTimeOut);
-			}
+			//DO NOTHING
 		}
 		else{
 			/*
@@ -356,21 +352,21 @@ public class GetMatchedDrivers extends AsyncTask<Void, Integer, ArrayList<String
 			}
 			MainActivity.displayToast(getmatched.toString());
 			
+			
 			*/
 			
-			
 			if(result.size() != 0){				
-				if(result.get(0) == "NODRIVERMATCHED" || result.get(0) == "NODRIVER"){
+				if(result.get(0) == "NODRIVERMATCHED"){
 					SendTreepRequest sendTreepRequest = new SendTreepRequest(activity, latDep, lngDep, latDest, lngDest,addressDep, addressDest, null, null, null, infobannercount);
 					sendTreepRequest.execute();
 				}
 				else{
 					if(result.get(0) == "PBDISTANCEDEP"){
-						MainActivity.displayToast("PB DISTANCE DEP");
+						//MainActivity.displayToast("PB DISTANCE DEP");
 					}
 					else{
 						if(result.get(0) == "PBDISTANCEDEST"){
-							MainActivity.displayToast("PB DISTANCE DEST");
+							//MainActivity.displayToast("PB DISTANCE DEST");
 						}
 						else{
 							for(int i = 0 ; i < result.size(); i++){
